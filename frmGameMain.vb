@@ -29,7 +29,6 @@ Public Class frmGameMain
 
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
-
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
         player.maxHealth = 10
@@ -125,7 +124,7 @@ Public Class frmGameMain
         If shots IsNot Nothing Then
             checkWindowHit()
             If movingEnemies IsNot Nothing Then
-                checkCollision()
+                checkEnemyHits()
             End If
         End If
         'Check collisions between the shots and enemies.
@@ -144,7 +143,6 @@ Public Class frmGameMain
         End If
     End Sub
     'Add a new square enemy.
-
     Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Select Case e.KeyCode
             Case Keys.Up
@@ -215,7 +213,14 @@ Public Class frmGameMain
 
 
     '----------------------------------------------------------------------------- FUNCTIONS -----------------------------------------------------------------------------
-
+    ''' <summary>
+    ''' This function calculates the movement in x and y coordinates that the object should move by each tick.
+    ''' This is done by drawing a triangle between the <c>startPoint</c> and <c>endPoint</c> and calculating the angle between these points using trigonometry. 
+    ''' This angle is then used to find the x and y movements whihc are assigned to <c>move.X</c> and <c>move.Y</c> repectively.
+    ''' </summary>
+    ''' <param name="type">is the type of object that the movement is being calculated of</param>
+    ''' <param name="index">is the index of the object within its array</param>
+    ''' <returns></returns>
     Private Function calcMove(type As String, index As Integer) As Point
         Dim startPoint As Point
         Dim endPoint As Point
@@ -293,6 +298,12 @@ Public Class frmGameMain
         Return move
     End Function
     'Calculate the movement of the object.
+
+    ''' <summary>
+    ''' This function adds a new element to the corresponding array dictated by the <paramref name="type"/> and sets the correct values.
+    ''' </summary>
+    ''' <param name="type">is the type of the object that should be added</param>
+    ''' <returns></returns>
     Public Function addObject(type As String)
         If type = "shot" Or type = "extraShot" Then
             If shots Is Nothing Then
@@ -337,7 +348,12 @@ Public Class frmGameMain
         End If
     End Function
     'Adds the specified object as a new element in its respective array.
-    Private Function checkCollision()
+
+    ''' <summary>
+    ''' This function checks if any of the fired shots have hit an enemy. If it has, the shot is removed and the enemy's health decreases.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkEnemyHits()
         For e As Integer = 0 To movingEnemies.Length - 1
             Dim enemyHit As Boolean = False
             Dim enemy = movingEnemies(e)
@@ -358,9 +374,13 @@ Public Class frmGameMain
                 Exit For
             End If
         Next
-
     End Function
     'Check if the shots have collided with an enemy.
+
+    ''' <summary>
+    ''' This function checks to see if a shot fired by the player has collided with the edge of the window on either of the 4 sides and increases the <c>storedExtend</c> appropriately.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function checkWindowHit()
         For i = 0 To shots.Length - 1
             Dim shot = shots(i)
@@ -388,6 +408,13 @@ Public Class frmGameMain
         Next
     End Function
     'Extend the window if it has been hit by a shot.
+
+    ''' <summary>
+    ''' This function removes the element at index <paramref name="index"/> in <paramref name="arrayName"/> and redimensions the array to one smaller.
+    ''' </summary>
+    ''' <param name="arrayName">is the array that is being edited</param>
+    ''' <param name="index">is the index of element to be removed</param>
+    ''' <returns></returns>
     Private Function removeElement(arrayName As String, index As Integer)
         Dim OGSize = If(arrayName = "shots", shots, movingEnemies).Length
         If arrayName = "shots" Then
@@ -400,12 +427,12 @@ Public Class frmGameMain
             ReDim Preserve movingEnemies(originalSize - 1)
         End If
     End Function
-    'remove an element from the specified array and index.
+    'Remove an element from the specified array and index.
 
     ''' <summary>
-    ''' Updates <c>player.loc</c> by deleting the last value in the array, shifting the remaining down the index and adding <paramref name="newElement"/> to the start.
+    ''' This function updates <c>player.loc</c> by deleting the last value in the array, shifting the remaining down the index and adding <paramref name="newElement"/> to the start.
     ''' </summary>
-    ''' <param name="newElement"></param>
+    ''' <param name="newElement">is the new location</param>
     ''' <returns></returns>
     Private Function updateplayerLoc(newElement As Point)
         For i As Integer = 0 To 9
@@ -415,13 +442,14 @@ Public Class frmGameMain
                     player.loc(i) = element
                 Case 9
                     player.loc(i) = newElement
+
             End Select
         Next
-    End Function
-    'Shift all the elements in player.loc down one, deleting the first element and adding the last.
+    End Function    '
+    'Update the player's location.
 
     ''' <summary>
-    ''' Resizes the windows according to the store values found in the storedExtend variable.
+    ''' This function resizes the windows according to the store values found in the storedExtend variable.
     ''' </summary>
     ''' <returns></returns>
     Private Function extendSides()
@@ -444,6 +472,7 @@ Public Class frmGameMain
             storedExtend.right -= 1
         End If
     End Function
+    'Resize the window.
 End Class
 
 
