@@ -4,18 +4,16 @@ Public Class frmGameMain
     Dim player As New Player
     'A class to store all of the player information.
     Dim pressedKeys As New PressedKeys
-    'A class that stores whether the arrow buttons are presssed.
+    'A class that stores whether the arrow buttons are pressed.
     Dim storedExtend As New StoredExtend
     'A class that stores the value that each side of the window needs to be extended by.
+    Dim tickCount As Integer = 0
+    'Count the number of ticks
     Dim playerSpeed As Integer = 2.3
-    Dim shots() As Tuple(Of Point, Point, Point, Integer)
-    'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
-    Dim movingEnemies() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
-    'An array of tuples that stores [1] the current location, [2] calculated movement, [3] size, [4] type (square, circle, square) of the enemies (moving), [5] current health and [6] how many white frames to show (number of frames after it has been hit).
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"shot", 9},
+        {"shot", 16},
         {"extraShot", 23},
-        {"square", 2}
+        {"square", 1}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -23,14 +21,18 @@ Public Class frmGameMain
         {"square", 2}
     }
     'Initialize a dictionary that stores {object type, max health}.
-    Dim tickCount As Integer = 0
-    'Count the number of ticks
+
+    Dim shots() As Tuple(Of Point, Point, Point, Integer)
+    'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
+    Dim movingEnemies() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
+    'An array of tuples that stores [1] the current location, [2] calculated movement, [3] size, [4] type (square, circle, square) of the enemies (moving), [5] current health and [6] how many white frames to show (number of frames after it has been hit).
 
 
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
+        player.size = 14
         player.maxHealth = 10
         player.health = 10
         'Set default values for variables in the Player class.
@@ -80,15 +82,16 @@ Public Class frmGameMain
             'Draw each moving enemy and update and recalculate its position.
         End If
         Using pen As New Pen(Color.White, 14)
-            e.Graphics.DrawEllipse(pen, PointToClient(player.loc(9)).X - 7, PointToClient(player.loc(9)).Y - 7, 14, 14)
+            e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
         End Using
         Using brush As New SolidBrush(Me.BackColor)
-            e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(player.loc(9).X - 6.5, player.loc(9).Y - 6.5)), New Size(13, 13)))
+            e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(player.loc(9).X - (player.size / 2) + (player.size / 20), player.loc(9).Y - (player.size / 2) + (player.size / 20))), New Size(player.size - (player.size / 10), player.size - (player.size / 10))))
         End Using
         'Draw the player circle (circle + square).
     End Sub
     'Repaint all object on the canvas.
 
+    '---- TIMERS ----
     Private Sub tmrtick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         tickCount += 1
         Select Case tickCount
@@ -143,6 +146,31 @@ Public Class frmGameMain
         End If
     End Sub
     'Add a new square enemy.
+    Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
+        If Me.Width > 300 Then
+            Me.Width -= 2
+            Me.Left += 1
+        End If
+        If Me.Height > 300 Then
+            Me.Height -= 2
+            Me.Top += 1
+        End If
+        If player.loc(9).Y < Me.Location.Y + 40 Then
+            player.loc(9).Y += 1
+        End If
+        If player.loc(9).Y > Me.Location.Y + Me.Height - 30 Then
+            player.loc(9).Y -= 1
+        End If
+        If player.loc(9).X < Me.Location.X + 17 Then
+            player.loc(9).X += 1
+        End If
+        If player.loc(9).X > Me.Location.X + Me.Width - 33 Then
+            player.loc(9).X -= 1
+        End If
+    End Sub
+    'Shrink the window.
+
+    '---- MOUSE & KEYS----
     Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         Select Case e.KeyCode
             Case Keys.Up
@@ -186,29 +214,6 @@ Public Class frmGameMain
         End If
     End Sub
     'Stop adding shots.
-    Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
-        If Me.Width > 300 Then
-            Me.Width -= 2
-            Me.Left += 1
-        End If
-        If Me.Height > 300 Then
-            Me.Height -= 2
-            Me.Top += 1
-        End If
-        If player.loc(9).Y < Me.Location.Y + 40 Then
-            player.loc(9).Y += 1
-        End If
-        If player.loc(9).Y > Me.Location.Y + Me.Height - 30 Then
-            player.loc(9).Y -= 1
-        End If
-        If player.loc(9).X < Me.Location.X + 17 Then
-            player.loc(9).X += 1
-        End If
-        If player.loc(9).X > Me.Location.X + Me.Width - 33 Then
-            player.loc(9).X -= 1
-        End If
-    End Sub
-    'Shrink the window.
 
 
 
@@ -377,6 +382,15 @@ Public Class frmGameMain
     End Function
     'Check if the shots have collided with an enemy.
 
+    Private Function checkPlayerCollisions()
+        For e As Integer = 0 To movingEnemies.Length - 1
+            Dim enemy = movingEnemies(e)
+
+            'For playerX As Integer = playe
+
+        Next
+    End Function
+
     ''' <summary>
     ''' This function checks to see if a shot fired by the player has collided with the edge of the window on either of the 4 sides and increases the <c>storedExtend</c> appropriately.
     ''' </summary>
@@ -478,6 +492,7 @@ End Class
 
 Public Class Player
     Public Property loc As Point() 'an array that stores the last 10 (0-9) locations of the player (center).
+    Public Property size As Integer 'the size of the player.
     Public Property health As Integer 'the current health of the player.
     Public Property maxHealth As Integer 'the maximum health the player can have.
     'Public Property powerup As String

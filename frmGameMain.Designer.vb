@@ -80,7 +80,7 @@ Partial Class frmGameMain
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "frmGameMain"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "WindowBound"
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
