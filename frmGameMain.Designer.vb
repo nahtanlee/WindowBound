@@ -51,7 +51,6 @@ Partial Class frmGameMain
         '
         'tmrSquareE
         '
-        Me.tmrSquareE.Interval = 500
         '
         'tmrShrink
         '

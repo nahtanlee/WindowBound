@@ -13,7 +13,7 @@ Public Class frmGameMain
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"shot", 16},
         {"extraShot", 23},
-        {"square", 1}
+        {"square", 2}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -47,7 +47,7 @@ Public Class frmGameMain
         'Initialize the random generator.
 
         tmrTick.Enabled = True
-        'Only start the tick once all variables have been initialized to prevent null errors from occuring.
+        'Only start the tick once all variables have been initialized to prevent null errors from occurring.
     End Sub
     'On form load.
     Private Sub picCanvas_Paint(sender As Object, e As PaintEventArgs) Handles picCanvas.Paint
@@ -107,8 +107,10 @@ Public Class frmGameMain
                 'Start generating square enemies
         End Select
 
-        picCanvas.Invalidate()
-        'Redraw all the shots and player.
+        If (tickCount Mod 2) = 0 Then
+            picCanvas.Invalidate()
+        End If
+        'Redraw all the shots and player every second tick.
 
         If pressedKeys.up = True And player.loc(9).Y > Me.Location.Y + 40 Then
             updateplayerLoc(New Point(player.loc(9).X, player.loc(9).Y - playerSpeed))
@@ -122,7 +124,12 @@ Public Class frmGameMain
         If pressedKeys.right = True And player.loc(9).X < Me.Location.X + Me.Width - 33 Then
             updateplayerLoc(New Point(player.loc(9).X + playerSpeed, player.loc(9).Y))
         End If
+        If Not pressedKeys.up And Not pressedKeys.down And Not pressedKeys.left And Not pressedKeys.right Then
+            updateplayerLoc(New Point(player.loc(9).X, player.loc(9).Y))
+        End If
         'Move the player if the arrow keys are currently being pressed and make sure the player does not leave the window.
+
+
 
         If shots IsNot Nothing Then
             checkWindowHit()
@@ -130,7 +137,10 @@ Public Class frmGameMain
                 checkEnemyHits()
             End If
         End If
-        'Check collisions between the shots and enemies.
+        If movingEnemies IsNot Nothing Then
+            checkPlayerCollisions()
+        End If
+        'Check collisions between the window, shots, enemies and player.
 
         extendSides()
         'Resize the window accordingly.
@@ -300,6 +310,12 @@ Public Class frmGameMain
             movingEnemies(index) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(startPoint, move, movingEnemies(index).Item3, type, movingEnemies(index).Item5, movingEnemies(index).Item6)
         End If
 
+
+        If type = "square" Then
+            Debug.WriteLine($"move: {move.ToString}")
+        End If
+
+
         Return move
     End Function
     'Calculate the movement of the object.
@@ -341,10 +357,10 @@ Public Class frmGameMain
             End Select
 
             If movingEnemies Is Nothing Then
-                movingEnemies = {New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectSpeeds("square"), False)}
+                movingEnemies = {New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectMaxHealth("square"), 0)}
             Else
                 ReDim Preserve movingEnemies(movingEnemies.Length)
-                movingEnemies(movingEnemies.Length - 1) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectSpeeds("square"), False)
+                movingEnemies(movingEnemies.Length - 1) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectMaxHealth("square"), 0)
             End If
             'Add start and end points to the new element.
 
@@ -371,7 +387,9 @@ Public Class frmGameMain
                     Else
                         movingEnemies(e) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(movingEnemies(e).Item1, movingEnemies(e).Item2, movingEnemies(e).Item3, movingEnemies(e).Item4, movingEnemies(e).Item5 - 1, 7)
                     End If
+                    'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
                     enemyHit = True
+                    'Exit the for loops.
                     Exit For
                 End If
             Next
@@ -385,8 +403,18 @@ Public Class frmGameMain
     Private Function checkPlayerCollisions()
         For e As Integer = 0 To movingEnemies.Length - 1
             Dim enemy = movingEnemies(e)
-
-            'For playerX As Integer = playe
+            Dim hit = False
+            For enemyX As Integer = enemy.Item1.X To enemy.Item1.X + enemy.Item3
+                If Not hit Then
+                    For enemyY As Integer = enemy.Item1.Y To enemy.Item1.Y + enemy.Item3
+                        If (player.loc(1).X - (player.size / 2)) < enemyX < (player.loc(1).X + (player.size / 2)) And (player.loc(1).Y - (player.size / 2)) < enemyY < (player.loc(1).Y + (player.size / 2)) Then
+                            Debug.WriteLine("HIT")
+                            hit = True
+                            Exit For
+                        End If
+                    Next
+                End If
+            Next
 
         Next
     End Function
