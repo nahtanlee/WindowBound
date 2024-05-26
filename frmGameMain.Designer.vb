@@ -47,7 +47,8 @@ Partial Class frmGameMain
         '
         'tmrShot
         '
-        Me.tmrShot.Interval = 1000
+        Me.tmrShot.Enabled = True
+        Me.tmrShot.Interval = 600
         '
         'tmrSquareE
         '

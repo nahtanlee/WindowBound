@@ -8,14 +8,19 @@ Public Class frmGameMain
     Dim enemies() As Enemy
     'An array of the class enemy to store all the enemy information.
     Dim colors As New ColorPalette
+    Dim stats As New Statistics
     Dim fonts As New PrivateFontCollection()
 
     Dim pressedKeys As New PressedKeys
-    'A class that stores whether the arrow buttons are pressed.
+    'A class that stores whether the arrow or mouse buttons are pressed.
     Dim storedExtend As New StoredExtend
     'A class that stores the value that each side of the window needs to be extended by.
     Dim tickCount As Integer = 0
-    'Count the number of ticks
+    'Count the number of ticks.
+    Dim startTime As Date
+    'The time the game was started (used to calculate stats.timeAlive)
+    Dim shotStore As Boolean = False
+    'Stores whether or not there is a shot available.
 
     Dim playerSpeed As Integer = 2.3
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -33,6 +38,7 @@ Public Class frmGameMain
         {"player", 14},
         {"square", 18}
     }
+    'Initialize a dictionary with the size of each type of object.
 
     Dim shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
@@ -52,17 +58,12 @@ Public Class frmGameMain
         player.health = 10
         'Set default values for variables in the Player class.
 
-        pressedKeys.up = False
-        pressedKeys.down = False
-        pressedKeys.left = False
-        pressedKeys.right = False
-        'Set default values for variables.
-
         Randomize()
         'Initialize the random generator.
 
         tmrTick.Enabled = True
         'Only start the tick once all variables have been initialized to prevent null errors from occurring.
+        tmrShot.Enabled = True
     End Sub
     'On form load.
     Private Sub picCanvas_Paint(sender As Object, e As PaintEventArgs) Handles picCanvas.Paint
@@ -109,9 +110,12 @@ Public Class frmGameMain
     'Repaint all object on the canvas.
 
     '---- TIMERS ----
-    Private Sub tmrtick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
+    Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         tickCount += 1
         Select Case tickCount
+            Case 1
+                startTime = DateAndTime.Now
+                'Set the start time.
             Case 5
                 storedExtend.top = 10
                 storedExtend.bottom = 10
@@ -123,7 +127,6 @@ Public Class frmGameMain
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
         End Select
-
 
         If (tickCount Mod 2) = 0 Then
             picCanvas.Invalidate()
@@ -175,7 +178,13 @@ Public Class frmGameMain
     End Sub
     'Force redraw of all shapes and players and move the player accordingly.
     Private Sub tmrShot_Tick(sender As Object, e As EventArgs) Handles tmrShot.Tick
-        addObject("shot")
+        If pressedKeys.mouseLeft Then
+            addObject("shot")
+            stats.shotsFired += 1
+        Else
+            shotStore = True
+        End If
+        'Add a shot if the left mouse button is being pressed, else add it to the store.
     End Sub
     'Add a new shot.
     Private Sub tmrsquareE_Tick(sender As Object, e As EventArgs) Handles tmrSquareE.Tick
@@ -237,22 +246,29 @@ Public Class frmGameMain
     'Update the correct variables when a key is released.
     Private Sub picCanvas_MouseDown(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseDown
         If e.Button = MouseButtons.Left Then
-            tmrShot.Enabled = True
-            addObject("shot")
-            'Add normal sized shots
+            pressedKeys.mouseLeft = True
+            If shotStore Then
+                addObject("shot")
+                stats.shotsFired += 1
+                tmrShot.Enabled = False
+                tmrShot.Enabled = True
+                'Reset the timer to ensure that the interval starts at 0 again.
+                shotStore = False
+            End If
         ElseIf e.Button = MouseButtons.Right Then
-            addObject("extraShot")
-            'Add a large shot.
+            pressedKeys.mouseRight = True
         End If
     End Sub
-    'Add the correct shot based on which mouse is pressed.
+    'Update the correct variables when a mouse button is pressed.
+
     Private Sub picCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseUp
         If e.Button = MouseButtons.Left Then
-            tmrShot.Enabled = False
+            pressedKeys.mouseLeft = False
+        ElseIf e.Button = MouseButtons.Right Then
+            pressedKeys.mouseRight = False
         End If
     End Sub
-    'Stop adding shots.
-
+    'Update the correct variables when a mouse button is released.
 
 
     '----------------------------------------------------------------------------- FUNCTIONS -----------------------------------------------------------------------------
@@ -415,13 +431,14 @@ Public Class frmGameMain
     ''' <returns></returns>
     Private Function checkEnemyHits()
         For e As Integer = 0 To enemies.Length - 1
-            Dim enemyHit As Boolean = False
+            Dim enemyHit As Boolean = False = False
             For s As Integer = 0 To shots.Length - 1
                 Dim shot = shots(s)
                 If enemies(e).loc.X <= shot.Item1.X And shot.Item1.X <= (enemies(e).loc.X + enemies(e).size) And enemies(e).loc.Y <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size) Then
                     removeElement("shots", s)
                     If enemies(e).health <= 1 Then
                         removeElement("enemies", e)
+                        stats.enemiesKilled += 1
                     Else
                         enemies(e).health -= 1
                         enemies(e).white = 7
@@ -457,8 +474,16 @@ Public Class frmGameMain
 
                             player.red = 10
                             player.health -= 1
+                            stats.livesLost += 1
                             lblHealth.Text = ($"{player.health}/{player.maxHealth}")
-                            'update the player's health
+                            'Update the player's health.
+                            If player.health < 1 Then
+                                tmrTick.Enabled = False
+                                tmrShrink.Enabled = False
+                                tmrShot.Enabled = False
+                                stats.timeAlive = DateAndTime.Now - startTime
+                            End If
+                            'End the game if the player's health reaches 0
 
                             hit = True
                             Exit For
@@ -590,10 +615,12 @@ Public Class Enemy
 End Class
 'Class to store enemy information.
 Public Class PressedKeys
-    Public Property up As Boolean
-    Public Property down As Boolean
-    Public Property left As Boolean
-    Public Property right As Boolean
+    Public Property up As Boolean = False
+    Public Property down As Boolean = False
+    Public Property left As Boolean = False
+    Public Property right As Boolean = False
+    Public Property mouseLeft As Boolean = False
+    Public Property mouseRight As Boolean = False
 End Class
 'Class to store the current state of buttons.
 Public Class StoredExtend
@@ -605,10 +632,11 @@ End Class
 'Class to store the resize values of each side.
 Public Class Statistics
     Public Property timeAlive As TimeSpan
-    Public Property shotsFired As Integer
-    Public Property enemiesKilled As Integer
-    Public Property bossesKilled As Integer
-    Public Property xpCollected As Integer
+    Public Property shotsFired As Integer = 0
+    Public Property enemiesKilled As Integer = 0
+    Public Property bossesKilled As Integer = 0
+    Public Property livesLost As Integer = 0
+    Public Property xpCollected As Integer = 0
 End Class
 'Class to store all of the current game statistics.
 Public Class ColorPalette
