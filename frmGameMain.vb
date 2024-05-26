@@ -1,10 +1,12 @@
-﻿Imports System.Globalization
+﻿Imports System.Drawing.Imaging
+Imports System.Globalization
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
     Dim player As New Player
     'A class to store all of the player information.
     Dim enemies() As Enemy
     'An array of the class enemy to store all the enemy information.
+    Dim colors As New ColorPalette
 
     Dim pressedKeys As New PressedKeys
     'A class that stores whether the arrow buttons are pressed.
@@ -12,6 +14,7 @@ Public Class frmGameMain
     'A class that stores the value that each side of the window needs to be extended by.
     Dim tickCount As Integer = 0
     'Count the number of ticks
+
     Dim playerSpeed As Integer = 2.3
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"shot", 16},
@@ -29,12 +32,10 @@ Public Class frmGameMain
         {"square", 18}
     }
 
-
     Dim shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
     Dim bhhhahha() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
     'An array of tuples that stores [1] the current location, [2] calculated movement, [3] size, [4] type (square, circle, square) of the enemies (moving), [5] current health and [6] how many white frames to show (number of frames after it has been hit).
-
 
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Public Class frmGameMain
             For i As Integer = 0 To (shots.Length - 1)
                 Dim shot = shots(i)
                 shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
-                Using pen As New SolidBrush(Color.LawnGreen)
+                Using pen As New SolidBrush(colors.primary)
                     e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
                 End Using
                 shots(i) = shot
@@ -74,27 +75,27 @@ Public Class frmGameMain
 
         If enemies IsNot Nothing Then
             For i As Integer = 0 To (enemies.Length - 1)
-                Dim pen As New Pen(If(enemies(i).white > 0, Color.White, Color.Blue), 7)
-                'Make the pen white if it has just been hit.
+                Dim pen As New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 7)
+                'Make the pen secondary if it has just been hit.
                 enemies(i).loc = New Point(enemies(i).loc.X + enemies(i).mov.X, enemies(i).loc.Y + enemies(i).mov.Y)
                 'Update the position of the enemy
                 e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
-                calcMove("square", i)
+                calcMove(enemies(i).type, i)
             Next
             'Draw each moving enemy and update and recalculate its position.
         End If
         'Draw the moving enemies and update properties.
 
         If player.red > 0 Then
-            Using pen As New Pen(Color.Red, 14)
+            Using pen As New Pen(colors.red, 14)
                 e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
             End Using
         Else
-            Using pen As New Pen(Color.White, 14)
+            Using pen As New Pen(colors.primary, 14)
                 e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
             End Using
         End If
-        Using brush As New SolidBrush(Me.BackColor)
+        Using brush As New SolidBrush(colors.background)
             e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(player.loc(9).X - (player.size / 2) + (player.size / 20), player.loc(9).Y - (player.size / 2) + (player.size / 20))), New Size(player.size - (player.size / 10), player.size - (player.size / 10))))
         End Using
         'Draw the player circle (circle + square).
@@ -112,10 +113,11 @@ Public Class frmGameMain
                 storedExtend.right = 10
                 tmrShrink.Enabled = True
                 'Delay the initial window expand animation and start the shrinking of the window.
-            Case 50
+            Case 10
                 tmrSquareE.Enabled = True
-                'Start generating square enemies
+                'Start generating square enemies.
         End Select
+
 
         If (tickCount Mod 2) = 0 Then
             picCanvas.Invalidate()
@@ -329,12 +331,6 @@ Public Class frmGameMain
         ElseIf type = "square" Then
             enemies(index).mov = move
         End If
-
-
-        If type = "square" Then
-            Debug.WriteLine($"move: {move.ToString}")
-        End If
-
 
         Return move
     End Function
@@ -578,7 +574,6 @@ Public Class Player
     'Public Property powerup As String
 End Class
 'Class to store the player information.
-
 Public Class Enemy
     Public Property type As String 'the type of the enemy (square).
     Public Property loc As Point 'the current location of the enemy (top-left).
@@ -588,7 +583,6 @@ Public Class Enemy
     Public Property white As Integer 'the number of white frames to show.
 End Class
 'Class to store enemy information.
-
 Public Class PressedKeys
     Public Property up As Boolean
     Public Property down As Boolean
@@ -610,4 +604,15 @@ Public Class Statistics
     Public Property bossesKilled As Integer
     Public Property xpCollected As Integer
 End Class
-'Class to store the resize values of each side.
+'Class to store all of the current game statistics.
+Public Class ColorPalette
+    Public Property primary As Color = Color.FromArgb(255, 255, 255, 255)
+    Public Property secondary As Color = Color.FromArgb(255, 217, 217, 217)
+    Public Property tertiary As Color = Color.FromArgb(255, 176, 176, 176)
+    Public Property background As Color = Color.FromArgb(255, 0, 0, 0)
+    Public Property blue As Color = Color.FromArgb(255, 156, 243, 255)
+    Public Property green As Color = Color.FromArgb(255, 158, 255, 156)
+    Public Property yellow As Color = Color.FromArgb(255, 255, 213, 131)
+    Public Property red As Color = Color.FromArgb(255, 255, 156, 156)
+End Class
+'Class to store all the custom colors.
