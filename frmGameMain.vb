@@ -3,6 +3,9 @@ Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
     Dim player As New Player
     'A class to store all of the player information.
+    Dim enemies() As Enemy
+    'An array of the class enemy to store all the enemy information.
+
     Dim pressedKeys As New PressedKeys
     'A class that stores whether the arrow buttons are pressed.
     Dim storedExtend As New StoredExtend
@@ -21,10 +24,15 @@ Public Class frmGameMain
         {"square", 2}
     }
     'Initialize a dictionary that stores {object type, max health}.
+    Dim objectSizes As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
+        {"player", 14},
+        {"square", 18}
+    }
+
 
     Dim shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
-    Dim movingEnemies() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
+    Dim bhhhahha() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
     'An array of tuples that stores [1] the current location, [2] calculated movement, [3] size, [4] type (square, circle, square) of the enemies (moving), [5] current health and [6] how many white frames to show (number of frames after it has been hit).
 
 
@@ -32,7 +40,7 @@ Public Class frmGameMain
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
-        player.size = 14
+        player.size = objectSizes("player")
         player.maxHealth = 10
         player.health = 10
         'Set default values for variables in the Player class.
@@ -64,19 +72,13 @@ Public Class frmGameMain
         End If
         'Draw the shots.
 
-        If movingEnemies IsNot Nothing Then
-            For i As Integer = 0 To (movingEnemies.Length - 1)
-                Dim movingEnemy = movingEnemies(i)
-                Dim pen As New Pen(Color.Cyan, 7)
-                If movingEnemies(i).Item6 > 0 Then
-                    pen = New Pen(Color.White, 7)
-                    movingEnemy = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemy.Item1.X + movingEnemy.Item2.X, movingEnemy.Item1.Y + movingEnemy.Item2.Y), movingEnemy.Item2, movingEnemy.Item3, movingEnemy.Item4, movingEnemy.Item5, movingEnemy.Item6)
-                Else
-                    movingEnemy = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemy.Item1.X + movingEnemy.Item2.X, movingEnemy.Item1.Y + movingEnemy.Item2.Y), movingEnemy.Item2, movingEnemy.Item3, movingEnemy.Item4, movingEnemy.Item5, 0)
-                End If
+        If enemies IsNot Nothing Then
+            For i As Integer = 0 To (enemies.Length - 1)
+                Dim pen As New Pen(If(enemies(i).white > 0, Color.White, Color.Blue), 7)
                 'Make the pen white if it has just been hit.
-                e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(movingEnemy.Item1), New Size(movingEnemy.Item3, movingEnemy.Item3)))
-                movingEnemies(i) = movingEnemy
+                enemies(i).loc = New Point(enemies(i).loc.X + enemies(i).mov.X, enemies(i).loc.Y + enemies(i).mov.Y)
+                'Update the position of the enemy
+                e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
                 calcMove("square", i)
             Next
             'Draw each moving enemy and update and recalculate its position.
@@ -123,10 +125,10 @@ Public Class frmGameMain
         If player.red > 0 Then
             player.red -= 1
         End If
-        If movingEnemies IsNot Nothing Then
-            For i As Integer = 0 To (movingEnemies.Length - 1)
-                If movingEnemies(i).Item6 > 0 Then
-                    movingEnemies(i) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemies(i).Item1.X, movingEnemies(i).Item1.Y), movingEnemies(i).Item2, movingEnemies(i).Item3, movingEnemies(i).Item4, movingEnemies(i).Item5, movingEnemies(i).Item6 - 1)
+        If enemies IsNot Nothing Then
+            For i As Integer = 0 To (enemies.Length - 1)
+                If enemies(i).white > 0 Then
+                    enemies(i).white -= 1
                 End If
             Next
         End If
@@ -151,11 +153,11 @@ Public Class frmGameMain
 
         If shots IsNot Nothing Then
             checkWindowHit()
-            If movingEnemies IsNot Nothing Then
+            If enemies IsNot Nothing Then
                 checkEnemyHits()
             End If
         End If
-        If movingEnemies IsNot Nothing Then
+        If enemies IsNot Nothing Then
             checkPlayerCollisions()
         End If
         'Check collisions between the window, shots, enemies and player.
@@ -266,7 +268,7 @@ Public Class frmGameMain
             endPoint = shots(index).Item2
             shotSize = shots(index).Item4
         ElseIf type = "square" Then
-            startPoint = movingEnemies(index).Item1
+            startPoint = enemies(index).loc
             endPoint = New Point(player.loc(0).X, player.loc(0).Y)
         End If
 
@@ -325,7 +327,7 @@ Public Class frmGameMain
         If type = "shot" Or type = "extraShot" Then
             shots(index) = New Tuple(Of Point, Point, Point, Integer)(startPoint, endPoint, move, shotSize)
         ElseIf type = "square" Then
-            movingEnemies(index) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(startPoint, move, movingEnemies(index).Item3, type, movingEnemies(index).Item5, movingEnemies(index).Item6)
+            enemies(index).mov = move
         End If
 
 
@@ -374,15 +376,32 @@ Public Class frmGameMain
                     locY = Rnd() * Me.Height
             End Select
 
-            If movingEnemies Is Nothing Then
-                movingEnemies = {New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectMaxHealth("square"), 0)}
+            If enemies Is Nothing Then
+                enemies = {New Enemy}
+                enemies(0).type = type
+                enemies(0).loc = PointToScreen(New Point(locX, locY))
+                enemies(0).size = objectSizes(type)
+                enemies(0).health = objectMaxHealth(type)
+                enemies = {New Enemy With {
+                     .type = type,
+                     .loc = PointToScreen(New Point(locX, locY)),
+                     .size = objectSizes(type),
+                     .health = objectMaxHealth(type)
+                   }
+                }
             Else
-                ReDim Preserve movingEnemies(movingEnemies.Length)
-                movingEnemies(movingEnemies.Length - 1) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(PointToScreen(New Point(locX, locY)), Nothing, 18, "square", objectMaxHealth("square"), 0)
+                ReDim Preserve enemies(enemies.Length)
+                enemies(enemies.Length - 1) = New Enemy With {
+                    .type = type,
+                    .loc = PointToScreen(New Point(locX, locY)),
+                    .size = objectSizes(type),
+                    .health = objectMaxHealth(type)
+                }
             End If
-            'Add start and end points to the new element.
 
-            calcMove(type, movingEnemies.Length - 1)
+            'Create a new enemy of the specified with default values 
+
+            calcMove(type, enemies.Length - 1)
             'Calculate the movement of the shot.
         End If
     End Function
@@ -393,17 +412,17 @@ Public Class frmGameMain
     ''' </summary>
     ''' <returns></returns>
     Private Function checkEnemyHits()
-        For e As Integer = 0 To movingEnemies.Length - 1
+        For e As Integer = 0 To enemies.Length - 1
             Dim enemyHit As Boolean = False
-            Dim enemy = movingEnemies(e)
             For s As Integer = 0 To shots.Length - 1
                 Dim shot = shots(s)
-                If enemy.Item1.X <= shot.Item1.X And shot.Item1.X <= (enemy.Item1.X + enemy.Item3) And enemy.Item1.Y <= shot.Item1.Y And shot.Item1.Y <= (enemy.Item1.Y + enemy.Item3) Then
+                If enemies(e).loc.X <= shot.Item1.X And shot.Item1.X <= (enemies(e).loc.X + enemies(e).size) And enemies(e).loc.Y <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size) Then
                     removeElement("shots", s)
-                    If enemy.Item5 <= 1 Then
-                        removeElement("movingEnemies", e)
+                    If enemies(e).health <= 1 Then
+                        removeElement("enemies", e)
                     Else
-                        movingEnemies(e) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(movingEnemies(e).Item1, movingEnemies(e).Item2, movingEnemies(e).Item3, movingEnemies(e).Item4, movingEnemies(e).Item5 - 1, 7)
+                        enemies(e).health -= 1
+                        enemies(e).white = 7
                     End If
                     'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
                     enemyHit = True
@@ -418,17 +437,20 @@ Public Class frmGameMain
     End Function
     'Check if the shots have collided with an enemy.
 
+    ''' <summary>
+    ''' This function checks if the player has collided with any of the enemies. If they have, the players health decreases.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function checkPlayerCollisions()
-        For e As Integer = 0 To movingEnemies.Length - 1
-            Dim enemy = movingEnemies(e)
+        For e As Integer = 0 To enemies.Length - 1
+            Dim enemy = enemies(e)
             Dim hit = False
-            For enemyX As Integer = enemy.Item1.X To enemy.Item1.X + enemy.Item3
+            For enemyX As Integer = enemies(e).loc.X To enemies(e).loc.X + enemies(e).size
                 If Not hit Then
-                    For enemyY As Integer = enemy.Item1.Y To enemy.Item1.Y + enemy.Item3
+                    For enemyY As Integer = enemies(e).loc.Y To enemies(e).loc.Y + enemies(e).size
                         If ((player.loc(0).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(0).X + (player.size / 2))) And ((player.loc(0).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(0).Y + (player.size / 2))) Then
-                            Debug.WriteLine("HIT")
-                            movingEnemies(e) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemies(e).Item1.X - (movingEnemies(e).Item2.X * 15), movingEnemies(e).Item1.Y - (movingEnemies(e).Item2.Y * 15)), movingEnemies(e).Item2, movingEnemies(e).Item3, movingEnemies(e).Item4, movingEnemies(e).Item5, movingEnemies(e).Item6)
-                            updatePlayerLoc(New Point(player.loc(0).X + (movingEnemies(e).Item2.X * 15), player.loc(0).Y + (movingEnemies(e).Item2.Y * 15)))
+                            enemies(e).loc = New Point(enemies(e).loc.X - (enemies(e).mov.X * 15), enemies(e).loc.Y - (enemies(e).mov.Y * 15))
+                            updatePlayerLoc(New Point(player.loc(0).X + (enemies(e).mov.X * 15), player.loc(0).Y + (enemies(e).mov.Y * 15)))
                             'Move the enemy and player.
 
                             player.red = 10
@@ -446,6 +468,7 @@ Public Class frmGameMain
 
         Next
     End Function
+    'Check if the player has collided with an enemy.
 
     ''' <summary>
     ''' This function checks to see if a shot fired by the player has collided with the edge of the window on either of the 4 sides and increases the <c>storedExtend</c> appropriately.
@@ -486,15 +509,15 @@ Public Class frmGameMain
     ''' <param name="index">is the index of element to be removed</param>
     ''' <returns></returns>
     Private Function removeElement(arrayName As String, index As Integer)
-        Dim OGSize = If(arrayName = "shots", shots, movingEnemies).Length
+        Dim OGSize = If(arrayName = "shots", shots, enemies).Length
         If arrayName = "shots" Then
             Dim originalSize As Integer = shots.Length - 1
             shots(index) = shots(shots.Length - 1)
             ReDim Preserve shots(originalSize - 1)
-        ElseIf arrayName = "movingEnemies" Then
-            Dim originalSize As Integer = movingEnemies.Length - 1
-            movingEnemies(index) = movingEnemies(movingEnemies.Length - 1)
-            ReDim Preserve movingEnemies(originalSize - 1)
+        ElseIf arrayName = "enemies" Then
+            Dim originalSize As Integer = enemies.Length - 1
+            enemies(index) = enemies(enemies.Length - 1)
+            ReDim Preserve enemies(originalSize - 1)
         End If
     End Function
     'Remove an element from the specified array and index.
@@ -555,6 +578,17 @@ Public Class Player
     'Public Property powerup As String
 End Class
 'Class to store the player information.
+
+Public Class Enemy
+    Public Property type As String 'the type of the enemy (square).
+    Public Property loc As Point 'the current location of the enemy (top-left).
+    Public Property mov As Point 'the calculated x and y axis movements of the enemy.
+    Public Property size As Integer 'the size of the enemy.
+    Public Property health As Integer 'the current health of the enemy.
+    Public Property white As Integer 'the number of white frames to show.
+End Class
+'Class to store enemy information.
+
 Public Class PressedKeys
     Public Property up As Boolean
     Public Property down As Boolean
