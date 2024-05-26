@@ -56,13 +56,13 @@ Public Class frmGameMain
                 Dim shot = shots(i)
                 shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
                 Using pen As New SolidBrush(Color.LawnGreen)
-                    e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(shot.Item1).X - shot.Item3.X, PointToClient(shot.Item1).Y - shot.Item3.Y, shot.Item4, shot.Item4))
                     e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
                 End Using
                 shots(i) = shot
             Next
-            'Draw each shot with a trail and update its position.
+            'Draw each shot and update its position.
         End If
+        'Draw the shots.
 
         If movingEnemies IsNot Nothing Then
             For i As Integer = 0 To (movingEnemies.Length - 1)
@@ -70,7 +70,7 @@ Public Class frmGameMain
                 Dim pen As New Pen(Color.Cyan, 7)
                 If movingEnemies(i).Item6 > 0 Then
                     pen = New Pen(Color.White, 7)
-                    movingEnemy = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemy.Item1.X + movingEnemy.Item2.X, movingEnemy.Item1.Y + movingEnemy.Item2.Y), movingEnemy.Item2, movingEnemy.Item3, movingEnemy.Item4, movingEnemy.Item5, movingEnemy.Item6 - 1)
+                    movingEnemy = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemy.Item1.X + movingEnemy.Item2.X, movingEnemy.Item1.Y + movingEnemy.Item2.Y), movingEnemy.Item2, movingEnemy.Item3, movingEnemy.Item4, movingEnemy.Item5, movingEnemy.Item6)
                 Else
                     movingEnemy = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemy.Item1.X + movingEnemy.Item2.X, movingEnemy.Item1.Y + movingEnemy.Item2.Y), movingEnemy.Item2, movingEnemy.Item3, movingEnemy.Item4, movingEnemy.Item5, 0)
                 End If
@@ -81,9 +81,17 @@ Public Class frmGameMain
             Next
             'Draw each moving enemy and update and recalculate its position.
         End If
-        Using pen As New Pen(Color.White, 14)
-            e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
-        End Using
+        'Draw the moving enemies and update properties.
+
+        If player.red > 0 Then
+            Using pen As New Pen(Color.Red, 14)
+                e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
+            End Using
+        Else
+            Using pen As New Pen(Color.White, 14)
+                e.Graphics.DrawEllipse(pen, CInt(PointToClient(player.loc(9)).X - player.size / 2), CInt(PointToClient(player.loc(9)).Y - (player.size / 2)), player.size, player.size)
+            End Using
+        End If
         Using brush As New SolidBrush(Me.BackColor)
             e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(player.loc(9).X - (player.size / 2) + (player.size / 20), player.loc(9).Y - (player.size / 2) + (player.size / 20))), New Size(player.size - (player.size / 10), player.size - (player.size / 10))))
         End Using
@@ -112,24 +120,34 @@ Public Class frmGameMain
         End If
         'Redraw all the shots and player every second tick.
 
+        If player.red > 0 Then
+            player.red -= 1
+        End If
+        If movingEnemies IsNot Nothing Then
+            For i As Integer = 0 To (movingEnemies.Length - 1)
+                If movingEnemies(i).Item6 > 0 Then
+                    movingEnemies(i) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemies(i).Item1.X, movingEnemies(i).Item1.Y), movingEnemies(i).Item2, movingEnemies(i).Item3, movingEnemies(i).Item4, movingEnemies(i).Item5, movingEnemies(i).Item6 - 1)
+                End If
+            Next
+        End If
+        'Lower the number of red/white frames for the player and enemies by 1.
+
         If pressedKeys.up = True And player.loc(9).Y > Me.Location.Y + 40 Then
-            updateplayerLoc(New Point(player.loc(9).X, player.loc(9).Y - playerSpeed))
+            updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y - playerSpeed))
         End If
         If pressedKeys.down = True And player.loc(9).Y < Me.Location.Y + Me.Height - 30 Then
-            updateplayerLoc(New Point(player.loc(9).X, player.loc(9).Y + playerSpeed))
+            updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y + playerSpeed))
         End If
         If pressedKeys.left = True And player.loc(9).X > Me.Location.X + 17 Then
-            updateplayerLoc(New Point(player.loc(9).X - playerSpeed, player.loc(9).Y))
+            updatePlayerLoc(New Point(player.loc(9).X - playerSpeed, player.loc(9).Y))
         End If
         If pressedKeys.right = True And player.loc(9).X < Me.Location.X + Me.Width - 33 Then
-            updateplayerLoc(New Point(player.loc(9).X + playerSpeed, player.loc(9).Y))
+            updatePlayerLoc(New Point(player.loc(9).X + playerSpeed, player.loc(9).Y))
         End If
         If Not pressedKeys.up And Not pressedKeys.down And Not pressedKeys.left And Not pressedKeys.right Then
-            updateplayerLoc(New Point(player.loc(9).X, player.loc(9).Y))
+            updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y))
         End If
         'Move the player if the arrow keys are currently being pressed and make sure the player does not leave the window.
-
-
 
         If shots IsNot Nothing Then
             checkWindowHit()
@@ -407,10 +425,20 @@ Public Class frmGameMain
             For enemyX As Integer = enemy.Item1.X To enemy.Item1.X + enemy.Item3
                 If Not hit Then
                     For enemyY As Integer = enemy.Item1.Y To enemy.Item1.Y + enemy.Item3
-                        If (player.loc(1).X - (player.size / 2)) < enemyX < (player.loc(1).X + (player.size / 2)) And (player.loc(1).Y - (player.size / 2)) < enemyY < (player.loc(1).Y + (player.size / 2)) Then
+                        If ((player.loc(0).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(0).X + (player.size / 2))) And ((player.loc(0).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(0).Y + (player.size / 2))) Then
                             Debug.WriteLine("HIT")
+                            movingEnemies(e) = New Tuple(Of Point, Point, Integer, String, Integer, Integer)(New Point(movingEnemies(e).Item1.X - (movingEnemies(e).Item2.X * 15), movingEnemies(e).Item1.Y - (movingEnemies(e).Item2.Y * 15)), movingEnemies(e).Item2, movingEnemies(e).Item3, movingEnemies(e).Item4, movingEnemies(e).Item5, movingEnemies(e).Item6)
+                            updatePlayerLoc(New Point(player.loc(0).X + (movingEnemies(e).Item2.X * 15), player.loc(0).Y + (movingEnemies(e).Item2.Y * 15)))
+                            'Move the enemy and player.
+
+                            player.red = 10
+                            player.health -= 1
+                            lblHealth.Text = ($"{player.health}/{player.maxHealth}")
+                            'update the player's health
+
                             hit = True
                             Exit For
+                            'Exit the loops.
                         End If
                     Next
                 End If
@@ -476,7 +504,7 @@ Public Class frmGameMain
     ''' </summary>
     ''' <param name="newElement">is the new location</param>
     ''' <returns></returns>
-    Private Function updateplayerLoc(newElement As Point)
+    Private Function updatePlayerLoc(newElement As Point)
         For i As Integer = 0 To 9
             Select Case i
                 Case 0 To 8
@@ -484,7 +512,6 @@ Public Class frmGameMain
                     player.loc(i) = element
                 Case 9
                     player.loc(i) = newElement
-
             End Select
         Next
     End Function    '
@@ -515,6 +542,7 @@ Public Class frmGameMain
         End If
     End Function
     'Resize the window.
+
 End Class
 
 
@@ -522,6 +550,7 @@ Public Class Player
     Public Property loc As Point() 'an array that stores the last 10 (0-9) locations of the player (center).
     Public Property size As Integer 'the size of the player.
     Public Property health As Integer 'the current health of the player.
+    Public Property red As Integer 'number of red frames to show.
     Public Property maxHealth As Integer 'the maximum health the player can have.
     'Public Property powerup As String
 End Class

@@ -58,14 +58,14 @@ Partial Class frmGameMain
         'lblHealth
         '
         Me.lblHealth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblHealth.AutoSize = True
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(293, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(276, 9)
         Me.lblHealth.Name = "lblHealth"
-        Me.lblHealth.Size = New System.Drawing.Size(52, 24)
+        Me.lblHealth.Size = New System.Drawing.Size(69, 24)
         Me.lblHealth.TabIndex = 1
-        Me.lblHealth.Text = "5/10"
+        Me.lblHealth.Text = "10/10"
+        Me.lblHealth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'frmGameMain
         '
@@ -83,7 +83,6 @@ Partial Class frmGameMain
         Me.Text = "WindowBound"
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
