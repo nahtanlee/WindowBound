@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing.Imaging
+Imports System.Drawing.Text
 Imports System.Globalization
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
@@ -7,6 +8,7 @@ Public Class frmGameMain
     Dim enemies() As Enemy
     'An array of the class enemy to store all the enemy information.
     Dim colors As New ColorPalette
+    Dim fonts As New PrivateFontCollection()
 
     Dim pressedKeys As New PressedKeys
     'A class that stores whether the arrow buttons are pressed.
@@ -34,12 +36,16 @@ Public Class frmGameMain
 
     Dim shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
-    Dim bhhhahha() As Tuple(Of Point, Point, Integer, String, Integer, Integer)
-    'An array of tuples that stores [1] the current location, [2] calculated movement, [3] size, [4] type (square, circle, square) of the enemies (moving), [5] current health and [6] how many white frames to show (number of frames after it has been hit).
 
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
+        fonts.AddFontFile("Fonts/Pressario.ttf") 'Title
+        fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers
+        fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text
+        lblHealth.Font = New Font(fonts.Families(1), 16, FontStyle.Bold)
+        'Import fonts.
+
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
         player.size = objectSizes("player")
         player.maxHealth = 10

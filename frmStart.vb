@@ -6,9 +6,9 @@
 
         currentMedia = "IN"
         mediaIN.uiMode = "none"
-        mediaIN.URL = "TitleScreen_IN.mp4"
+        mediaIN.URL = "Animations/TitleScreen_IN.mp4"
         mediaOUT.uiMode = "none"
-        mediaOUT.URL = "TitleScreen_OUT.mp4"
+        mediaOUT.URL = "Animations/TitleScreen_OUT.mp4"
     End Sub
     'show the startup animation.
 
