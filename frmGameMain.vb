@@ -24,16 +24,18 @@ Public Class frmGameMain
 
     Dim playerSpeed As Integer = 2.3
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"shot", 16},
+        {"shot", 7},
         {"extraShot", 23},
         {"circle", 3},
-        {"square", 2}
+        {"square", 2},
+        {"triangle", 4}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"player", 10},
         {"circle", 1},
-        {"square", 2}
+        {"square", 2},
+        {"triangle", 4}
     }
     'Initialize a dictionary that stores {object type, max health}.
     Dim objectSizes As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -41,7 +43,8 @@ Public Class frmGameMain
         {"shot", 10},
         {"extraShot", 17},
         {"circle", 16},
-        {"square", 18}
+        {"square", 18},
+        {"triangle", 20}
     }
     'Initialize a dictionary with the size of each type of object.
 
@@ -92,14 +95,17 @@ Public Class frmGameMain
                 'Update the position of the enemy
 
                 Select Case enemies(i).type
-                    Case "circle"
-                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.blue), 5)
-                        e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
-                        'Draw a blue circle.
                     Case "square"
-                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 7)
+                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.blue), 7)
                         e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
-                        'Draw a green square.
+                        'Draw a blue square.
+                    Case "circle"
+                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 5)
+                        e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+                        'Draw a green circle.
+                    Case "triangle"
+                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.yellow), 7)
+                        e.Graphics.DrawPolygon(pen, {New Point(PointToClient(enemies(i).loc).X + (enemies(i).size / 2), PointToClient(enemies(i).loc).Y), New Point(PointToClient(enemies(i).loc).X, PointToClient(enemies(i).loc).Y + enemies(i).size), New Point(PointToClient(enemies(i).loc).X + enemies(i).size, PointToClient(enemies(i).loc).Y + enemies(i).size)})
                 End Select
 
                 calcMove(enemies(i).type, i)
@@ -139,11 +145,14 @@ Public Class frmGameMain
                 tmrShrink.Enabled = True
                 'Delay the initial window expand animation and start the shrinking of the window.
             Case 10
-                tmrCircleE.Enabled = True
-                'Start generating circle enemies.
-            Case 100
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
+            Case 100
+                tmrCircleE.Enabled = True
+                'Start generating circle enemies.
+            Case 400
+                tmrTriE.Enabled = True
+                'Start generating triangle enemies.
         End Select
 
         If (tickCount Mod 2) = 0 Then
@@ -205,13 +214,6 @@ Public Class frmGameMain
         'Add a shot if the left mouse button is being pressed, else add it to the store.
     End Sub
     'Add a new shot.
-    Private Sub tmrCircleE_Tick(sender As Object, e As EventArgs) Handles tmrCircleE.Tick
-        If Rnd() > 0.91 Then
-            addObject("circle")
-        End If
-        'Add circle enemies randomly
-    End Sub
-    'Add a new circle enemy.
     Private Sub tmrSquareE_Tick(sender As Object, e As EventArgs) Handles tmrSquareE.Tick
         If Rnd() > 0.9 Then
             addObject("square")
@@ -219,6 +221,20 @@ Public Class frmGameMain
         'Add square enemies randomly
     End Sub
     'Add a new square enemy.
+    Private Sub tmrCircleE_Tick(sender As Object, e As EventArgs) Handles tmrCircleE.Tick
+        If Rnd() > 0.91 Then
+            addObject("circle")
+        End If
+        'Add circle enemies randomly
+    End Sub
+    'Add a new circle enemy.
+    Private Sub tmrTriE_Tick(sender As Object, e As EventArgs) Handles tmrTriE.Tick
+        If Rnd() > 0.86 Then
+            addObject("triangle")
+        End If
+        'Add triangle enemies randomly
+    End Sub
+    'Add a new triangle enemy.
     Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
         If Me.Width > 300 Then
             Me.Width -= 2

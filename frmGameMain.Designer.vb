@@ -30,6 +30,7 @@ Partial Class frmGameMain
         Me.tmrShrink = New System.Windows.Forms.Timer(Me.components)
         Me.lblHealth = New System.Windows.Forms.Label()
         Me.tmrCircleE = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrTriE = New System.Windows.Forms.Timer(Me.components)
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -53,7 +54,7 @@ Partial Class frmGameMain
         '
         'tmrSquareE
         '
-        Me.tmrSquareE.Interval = 1800
+        Me.tmrSquareE.Interval = 700
         '
         'tmrShrink
         '
@@ -63,16 +64,20 @@ Partial Class frmGameMain
         Me.lblHealth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(276, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(265, 9)
         Me.lblHealth.Name = "lblHealth"
-        Me.lblHealth.Size = New System.Drawing.Size(69, 24)
+        Me.lblHealth.Size = New System.Drawing.Size(80, 24)
         Me.lblHealth.TabIndex = 1
         Me.lblHealth.Text = "10/10"
         Me.lblHealth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'tmrCircleE
         '
-        Me.tmrCircleE.Interval = 700
+        Me.tmrCircleE.Interval = 1800
+        '
+        'tmrTriE
+        '
+        Me.tmrTriE.Interval = 3000
         '
         'frmGameMain
         '
@@ -100,4 +105,5 @@ Partial Class frmGameMain
     Friend WithEvents tmrShrink As Timer
     Friend WithEvents lblHealth As Label
     Friend WithEvents tmrCircleE As Timer
+    Friend WithEvents tmrTriE As Timer
 End Class
