@@ -54,7 +54,7 @@ Partial Class frmGameMain
         '
         'tmrSquareE
         '
-        Me.tmrSquareE.Interval = 700
+        Me.tmrSquareE.Interval = 600
         '
         'tmrShrink
         '
@@ -64,9 +64,9 @@ Partial Class frmGameMain
         Me.lblHealth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(265, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(247, 9)
         Me.lblHealth.Name = "lblHealth"
-        Me.lblHealth.Size = New System.Drawing.Size(80, 24)
+        Me.lblHealth.Size = New System.Drawing.Size(98, 24)
         Me.lblHealth.TabIndex = 1
         Me.lblHealth.Text = "10/10"
         Me.lblHealth.TextAlign = System.Drawing.ContentAlignment.MiddleRight

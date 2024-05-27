@@ -22,13 +22,13 @@ Public Class frmGameMain
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
 
-    Dim playerSpeed As Integer = 2.3
+    Dim playerSpeed As Integer = 2.8
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"shot", 7},
+        {"shot", 12},
         {"extraShot", 23},
-        {"circle", 3},
-        {"square", 2},
-        {"triangle", 4}
+        {"circle", 1.8},
+        {"square", 1.1},
+        {"triangle", 2.2}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -147,10 +147,10 @@ Public Class frmGameMain
             Case 10
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
-            Case 100
+            Case 200
                 tmrCircleE.Enabled = True
                 'Start generating circle enemies.
-            Case 400
+            Case 1000
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
         End Select
@@ -229,7 +229,7 @@ Public Class frmGameMain
     End Sub
     'Add a new circle enemy.
     Private Sub tmrTriE_Tick(sender As Object, e As EventArgs) Handles tmrTriE.Tick
-        If Rnd() > 0.86 Then
+        If Rnd() > 0.93 Then
             addObject("triangle")
         End If
         'Add triangle enemies randomly
@@ -472,17 +472,18 @@ Public Class frmGameMain
     ''' <returns></returns>
     Private Function checkEnemyHits()
         For e As Integer = 0 To enemies.Length - 1
-            Dim enemyHit As Boolean = False = False
+            Dim enemyHit As Boolean = False
             For s As Integer = 0 To shots.Length - 1
                 Dim shot = shots(s)
-                If enemies(e).loc.X <= shot.Item1.X And shot.Item1.X <= (enemies(e).loc.X + enemies(e).size) And enemies(e).loc.Y <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size) Then
+                If enemies(e).loc.X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (enemies(e).loc.X + enemies(e).size) And (enemies(e).loc.Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size + shot.Item3.X + 10) Then
+                    Debug.WriteLine("Hit")
                     removeElement("shots", s)
                     If enemies(e).health <= 1 Then
                         removeElement("enemies", e)
                         stats.enemiesKilled += 1
                     Else
                         enemies(e).health -= 1
-                        enemies(e).white = 7
+                        enemies(e).white = 10
                     End If
                     'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
                     enemyHit = True
