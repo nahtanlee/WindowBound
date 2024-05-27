@@ -29,6 +29,7 @@ Partial Class frmGameMain
         Me.tmrSquareE = New System.Windows.Forms.Timer(Me.components)
         Me.tmrShrink = New System.Windows.Forms.Timer(Me.components)
         Me.lblHealth = New System.Windows.Forms.Label()
+        Me.tmrCircleE = New System.Windows.Forms.Timer(Me.components)
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -52,6 +53,7 @@ Partial Class frmGameMain
         '
         'tmrSquareE
         '
+        Me.tmrSquareE.Interval = 1800
         '
         'tmrShrink
         '
@@ -67,6 +69,10 @@ Partial Class frmGameMain
         Me.lblHealth.TabIndex = 1
         Me.lblHealth.Text = "10/10"
         Me.lblHealth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'tmrCircleE
+        '
+        Me.tmrCircleE.Interval = 700
         '
         'frmGameMain
         '
@@ -93,4 +99,5 @@ Partial Class frmGameMain
     Friend WithEvents tmrSquareE As Timer
     Friend WithEvents tmrShrink As Timer
     Friend WithEvents lblHealth As Label
+    Friend WithEvents tmrCircleE As Timer
 End Class

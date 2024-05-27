@@ -26,16 +26,21 @@ Public Class frmGameMain
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"shot", 16},
         {"extraShot", 23},
+        {"circle", 3},
         {"square", 2}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"player", 10},
+        {"circle", 1},
         {"square", 2}
     }
     'Initialize a dictionary that stores {object type, max health}.
     Dim objectSizes As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"player", 14},
+        {"shot", 10},
+        {"extraShot", 17},
+        {"circle", 16},
         {"square", 18}
     }
     'Initialize a dictionary with the size of each type of object.
@@ -49,7 +54,7 @@ Public Class frmGameMain
         fonts.AddFontFile("Fonts/Pressario.ttf") 'Title
         fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers
         fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text
-        lblHealth.Font = New Font(fonts.Families(1), 16, FontStyle.Bold)
+        lblHealth.Font = New Font(fonts.Families(1), 15.75, FontStyle.Bold)
         'Import fonts.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
@@ -82,11 +87,21 @@ Public Class frmGameMain
 
         If enemies IsNot Nothing Then
             For i As Integer = 0 To (enemies.Length - 1)
-                Dim pen As New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 7)
-                'Make the pen secondary if it has just been hit.
+                Dim pen As Pen
                 enemies(i).loc = New Point(enemies(i).loc.X + enemies(i).mov.X, enemies(i).loc.Y + enemies(i).mov.Y)
                 'Update the position of the enemy
-                e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+
+                Select Case enemies(i).type
+                    Case "circle"
+                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.blue), 5)
+                        e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+                        'Draw a blue circle.
+                    Case "square"
+                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 7)
+                        e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+                        'Draw a green square.
+                End Select
+
                 calcMove(enemies(i).type, i)
             Next
             'Draw each moving enemy and update and recalculate its position.
@@ -124,6 +139,9 @@ Public Class frmGameMain
                 tmrShrink.Enabled = True
                 'Delay the initial window expand animation and start the shrinking of the window.
             Case 10
+                tmrCircleE.Enabled = True
+                'Start generating circle enemies.
+            Case 100
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
         End Select
@@ -187,10 +205,18 @@ Public Class frmGameMain
         'Add a shot if the left mouse button is being pressed, else add it to the store.
     End Sub
     'Add a new shot.
-    Private Sub tmrsquareE_Tick(sender As Object, e As EventArgs) Handles tmrSquareE.Tick
+    Private Sub tmrCircleE_Tick(sender As Object, e As EventArgs) Handles tmrCircleE.Tick
+        If Rnd() > 0.91 Then
+            addObject("circle")
+        End If
+        'Add circle enemies randomly
+    End Sub
+    'Add a new circle enemy.
+    Private Sub tmrSquareE_Tick(sender As Object, e As EventArgs) Handles tmrSquareE.Tick
         If Rnd() > 0.9 Then
             addObject("square")
         End If
+        'Add square enemies randomly
     End Sub
     'Add a new square enemy.
     Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
@@ -260,7 +286,6 @@ Public Class frmGameMain
         End If
     End Sub
     'Update the correct variables when a mouse button is pressed.
-
     Private Sub picCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseUp
         If e.Button = MouseButtons.Left Then
             pressedKeys.mouseLeft = False
@@ -291,7 +316,7 @@ Public Class frmGameMain
             startPoint = shots(index).Item1
             endPoint = shots(index).Item2
             shotSize = shots(index).Item4
-        ElseIf type = "square" Then
+        Else
             startPoint = enemies(index).loc
             endPoint = New Point(player.loc(0).X, player.loc(0).Y)
         End If
@@ -350,7 +375,7 @@ Public Class frmGameMain
 
         If type = "shot" Or type = "extraShot" Then
             shots(index) = New Tuple(Of Point, Point, Point, Integer)(startPoint, endPoint, move, shotSize)
-        ElseIf type = "square" Then
+        Else
             enemies(index).mov = move
         End If
 
@@ -376,7 +401,7 @@ Public Class frmGameMain
 
             calcMove(type, shots.Length - 1)
             'Calculate the movement of the shot.
-        ElseIf type = "square" Then
+        Else
             Dim locX As Integer
             Dim locY As Integer
             Select Case Math.Round(Rnd() * 4)

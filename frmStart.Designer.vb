@@ -112,7 +112,7 @@ Partial Class frmStart
         Me.Name = "frmStart"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "WindowBound"
+        Me.Text = resources.GetString("$this.Text")
         CType(Me.mediaIN, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBTNexit, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBTNsettings, System.ComponentModel.ISupportInitialize).EndInit()
