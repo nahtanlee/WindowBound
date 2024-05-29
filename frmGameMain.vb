@@ -408,7 +408,7 @@ Public Class frmGameMain
     ''' </summary>
     ''' <param name="type">is the type of the object that should be added</param>
     ''' <returns></returns>
-    Public Function addObject(type As String)
+    Private Function addObject(type As String)
         If type = "shot" Or type = "extraShot" Then
             If shots Is Nothing Then
                 shots = {New Tuple(Of Point, Point, Point, Integer)(New Point(player.loc(9).X, player.loc(9).Y), MousePosition, Nothing, If(type = "extraShot", 17, 10))}

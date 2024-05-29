@@ -89,6 +89,7 @@ Partial Class frmGameMain
         Me.Controls.Add(Me.lblHealth)
         Me.Controls.Add(Me.picCanvas)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
         Me.Name = "frmGameMain"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
