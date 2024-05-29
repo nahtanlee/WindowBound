@@ -153,7 +153,11 @@ Public Class frmGameMain
             Case 1000
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
+            Case 30
+                addObject("boss")
+                'Generate a boss in a new window.
         End Select
+        'Delay actions.
 
         If (tickCount Mod 2) = 0 Then
             picCanvas.Invalidate()
@@ -417,6 +421,12 @@ Public Class frmGameMain
 
             calcMove(type, shots.Length - 1)
             'Calculate the movement of the shot.
+        ElseIf type = "boss" Then
+            Dim newBossFrm As New frmGameBoss
+            newBossFrm.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (newBossFrm.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (newBossFrm.Height + 50))))
+            newBossFrm.Show()
+            'Create a new boss form, set a random location and show the form.
+
         Else
             Dim locX As Integer
             Dim locY As Integer
