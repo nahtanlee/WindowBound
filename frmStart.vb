@@ -4,10 +4,18 @@ Public Class frmStart
     Public fonts As New PrivateFontCollection()
     'Collection to store local fonts.
 
+
+    Public selectedScreen As Screen
+
     Dim currentMedia As String
     Dim counter As Integer = 0
     Private Sub frmStart_Load(sender As Object, e As EventArgs) Handles Me.Load
+        selectedScreen = Screen.PrimaryScreen
+        'Set the screen as the primary screen.
+
+        Me.Location = New Point(selectedScreen.WorkingArea.Width / 2 - 335, selectedScreen.WorkingArea.Height / 2 - 244.5)
         frmGameMain.Location = New Point(Me.Location.X + 148.5, Me.Location.Y + 64)
+        'Set the locations of the forms
 
         currentMedia = "IN"
         mediaIN.uiMode = "none"

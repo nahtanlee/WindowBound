@@ -51,8 +51,9 @@ Public Class frmGameMain
     }
     'Initialize a dictionary with the size of each type of object.
 
-    Dim shots() As Tuple(Of Point, Point, Point, Integer)
+    Public shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
+
 
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
@@ -325,7 +326,7 @@ Public Class frmGameMain
     ''' <param name="type">is the type of object that the movement is being calculated of</param>
     ''' <param name="index">is the index of the object within its array</param>
     ''' <returns></returns>
-    Private Function calcMove(type As String, index As Integer) As Point
+    Public Function calcMove(type As String, index As Integer) As Point
         Dim startPoint As Point
         Dim endPoint As Point
         Dim move As Point
@@ -666,6 +667,14 @@ Public Class Enemy
     Public Property white As Integer 'the number of white frames to show.
 End Class
 'Class to store enemy information.
+Public Class Shot
+    Public Property loc As Point 'the current location of the shot.
+    Public Property endLoc As Point 'the end destination of shot (used to calculate the movement of the shot).
+    Public Property mov As Point 'the calculated x and y axis movements of the shot.
+    Public Property size As Integer 'the size of the shot.
+    Public Property fromBoss As Boolean 'whether or not the shot is generated from a boss.
+End Class
+'Class to store shot information.
 Public Class PressedKeys
     Public Property up As Boolean = False
     Public Property down As Boolean = False

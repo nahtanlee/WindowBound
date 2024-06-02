@@ -24,55 +24,55 @@
         End Using
 
         If frmGameMain.shots IsNot Nothing Then
-            For i As Integer = 0 To (shots.Length - 1)
-                Dim shot = shots(i)
+            For i As Integer = 0 To (frmGameMain.shots.Length - 1)
+                Dim shot = frmGameMain.shots(i)
                 shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
                 Using pen As New SolidBrush(colors.primary)
                     e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
                 End Using
-                shots(i) = shot
+                frmGameMain.shots(i) = shot
             Next
             'Draw each shot and update its position.
         End If
         'Draw the shots.
 
-        If enemies IsNot Nothing Then
-            For i As Integer = 0 To (enemies.Length - 1)
+        If frmGameMain.enemies IsNot Nothing Then
+            For i As Integer = 0 To (frmGameMain.enemies.Length - 1)
                 Dim pen As Pen
-                enemies(i).loc = New Point(enemies(i).loc.X + enemies(i).mov.X, enemies(i).loc.Y + enemies(i).mov.Y)
+                frmGameMain.enemies(i).loc = New Point(frmGameMain.enemies(i).loc.X + frmGameMain.enemies(i).mov.X, frmGameMain.enemies(i).loc.Y + frmGameMain.enemies(i).mov.Y)
                 'Update the position of the enemy
 
-                Select Case enemies(i).type
+                Select Case frmGameMain.enemies(i).type
                     Case "square"
-                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.blue), 7)
-                        e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+                        pen = New Pen(If(frmGameMain.enemies(i).white > 0, colors.secondary, colors.blue), 7)
+                        e.Graphics.DrawRectangle(pen, New Rectangle(PointToClient(frmGameMain.enemies(i).loc), New Size(frmGameMain.enemies(i).size, frmGameMain.enemies(i).size)))
                         'Draw a blue square.
                     Case "circle"
-                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.green), 5)
-                        e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(enemies(i).loc), New Size(enemies(i).size, enemies(i).size)))
+                        pen = New Pen(If(frmGameMain.enemies(i).white > 0, colors.secondary, colors.green), 5)
+                        e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(frmGameMain.enemies(i).loc), New Size(frmGameMain.enemies(i).size, frmGameMain.enemies(i).size)))
                         'Draw a green circle.
                     Case "triangle"
-                        pen = New Pen(If(enemies(i).white > 0, colors.secondary, colors.yellow), 7)
-                        e.Graphics.DrawPolygon(pen, {New Point(PointToClient(enemies(i).loc).X + (enemies(i).size / 2), PointToClient(enemies(i).loc).Y), New Point(PointToClient(enemies(i).loc).X, PointToClient(enemies(i).loc).Y + enemies(i).size), New Point(PointToClient(enemies(i).loc).X + enemies(i).size, PointToClient(enemies(i).loc).Y + enemies(i).size)})
+                        pen = New Pen(If(frmGameMain.enemies(i).white > 0, colors.secondary, colors.yellow), 7)
+                        e.Graphics.DrawPolygon(pen, {New Point(PointToClient(frmGameMain.enemies(i).loc).X + (frmGameMain.enemies(i).size / 2), PointToClient(frmGameMain.enemies(i).loc).Y), New Point(PointToClient(frmGameMain.enemies(i).loc).X, PointToClient(frmGameMain.enemies(i).loc).Y + frmGameMain.enemies(i).size), New Point(PointToClient(frmGameMain.enemies(i).loc).X + frmGameMain.enemies(i).size, PointToClient(frmGameMain.enemies(i).loc).Y + frmGameMain.enemies(i).size)})
                 End Select
 
-                calcMove(enemies(i).type, i)
+                frmGameMain.calcMove(frmGameMain.enemies(i).type, i)
             Next
             'Draw each moving enemy and update and recalculate its position.
         End If
         'Draw the moving enemies and update properties.
 
-        If Player.red > 0 Then
+        If frmGameMain.player.red > 0 Then
             Using pen As New Pen(colors.red, 14)
-                e.Graphics.DrawEllipse(pen, CInt(PointToClient(Player.loc(9)).X - Player.size / 2), CInt(PointToClient(Player.loc(9)).Y - (Player.size / 2)), Player.size, Player.size)
+                e.Graphics.DrawEllipse(pen, CInt(PointToClient(frmGameMain.player.loc(9)).X - frmGameMain.player.size / 2), CInt(PointToClient(frmGameMain.player.loc(9)).Y - (frmGameMain.player.size / 2)), frmGameMain.player.size, frmGameMain.player.size)
             End Using
         Else
             Using pen As New Pen(colors.primary, 14)
-                e.Graphics.DrawEllipse(pen, CInt(PointToClient(Player.loc(9)).X - Player.size / 2), CInt(PointToClient(Player.loc(9)).Y - (Player.size / 2)), Player.size, Player.size)
+                e.Graphics.DrawEllipse(pen, CInt(PointToClient(frmGameMain.player.loc(9)).X - frmGameMain.player.size / 2), CInt(PointToClient(frmGameMain.player.loc(9)).Y - (frmGameMain.player.size / 2)), frmGameMain.player.size, frmGameMain.player.size)
             End Using
         End If
         Using brush As New SolidBrush(colors.background)
-            e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(Player.loc(9).X - (Player.size / 2) + (Player.size / 20), Player.loc(9).Y - (Player.size / 2) + (Player.size / 20))), New Size(Player.size - (Player.size / 10), Player.size - (Player.size / 10))))
+            e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2) + (frmGameMain.player.size / 20), frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2) + (frmGameMain.player.size / 20))), New Size(frmGameMain.player.size - (frmGameMain.player.size / 10), frmGameMain.player.size - (frmGameMain.player.size / 10))))
         End Using
         'Draw the player circle (circle + square).
     End Sub
