@@ -3,13 +3,12 @@ Imports System.Drawing.Text
 Imports System.Globalization
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
-    Dim player As New Player
+    Public player As New Player
     'A class to store all of the player information.
-    Dim enemies() As Enemy
+    Public enemies() As Enemy
     'An array of the class enemy to store all the enemy information.
     Dim colors As New ColorPalette
-    Dim stats As New Statistics
-    Dim fonts As New PrivateFontCollection()
+    Public stats As New Statistics
 
     Dim pressedKeys As New PressedKeys
     'A class that stores whether the arrow or mouse buttons are pressed.
@@ -22,13 +21,17 @@ Public Class frmGameMain
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
 
-    Dim playerSpeed As Integer = 2.8
+    Dim newFrmGameBoss As New frmGameBoss
+    'The window to show to the boss in.
+
+
+    Dim playerSpeed As Integer = 3
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"shot", 12},
+        {"shot", 14},
         {"extraShot", 23},
-        {"circle", 1.8},
-        {"square", 1.1},
-        {"triangle", 2.2}
+        {"circle", 2.4},
+        {"square", 2},
+        {"triangle", 2.9}
     }
     'Initialize a dictionary that stores {object type, speeed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -54,10 +57,7 @@ Public Class frmGameMain
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
-        fonts.AddFontFile("Fonts/Pressario.ttf") 'Title
-        fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers
-        fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text
-        lblHealth.Font = New Font(fonts.Families(1), 15.75, FontStyle.Bold)
+        lblHealth.Font = New Font(frmStart.fonts.Families(1), 15.75, FontStyle.Bold)
         'Import fonts.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}

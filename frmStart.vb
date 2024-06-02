@@ -1,4 +1,9 @@
-﻿Public Class frmStart
+﻿Imports System.Drawing.Text
+
+Public Class frmStart
+    Public fonts As New PrivateFontCollection()
+    'Collection to store local fonts.
+
     Dim currentMedia As String
     Dim counter As Integer = 0
     Private Sub frmStart_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -9,6 +14,12 @@
         mediaIN.URL = "Animations/TitleScreen_IN.mp4"
         mediaOUT.uiMode = "none"
         mediaOUT.URL = "Animations/TitleScreen_OUT.mp4"
+        'Set default values for media players.
+
+        fonts.AddFontFile("Fonts/Pressario.ttf") 'Title
+        fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers
+        fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text
+        'Import local fonts.
     End Sub
     'show the startup animation.
 

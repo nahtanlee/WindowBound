@@ -54,6 +54,7 @@ Partial Class frmGameBoss
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Boss"
+        Me.TopMost = True
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
