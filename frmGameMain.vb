@@ -418,7 +418,6 @@ Public Class frmGameMain
                 shots(shots.Length - 1) = New Tuple(Of Point, Point, Point, Integer)(New Point(player.loc(9).X, player.loc(9).Y), MousePosition, Nothing, If(type = "extraShot", 17, 10))
             End If
             'Add start and end points to the new element.
-            Debug.WriteLine($"Number of shots: {shots.Length}")
 
             calcMove(type, shots.Length - 1)
             'Calculate the movement of the shot.

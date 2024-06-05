@@ -25,6 +25,7 @@ Partial Class frmGameBoss
         Me.components = New System.ComponentModel.Container()
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.picCanvas = New System.Windows.Forms.PictureBox()
+        Me.tmrShot = New System.Windows.Forms.Timer(Me.components)
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -39,6 +40,10 @@ Partial Class frmGameBoss
         Me.picCanvas.Size = New System.Drawing.Size(174, 165)
         Me.picCanvas.TabIndex = 0
         Me.picCanvas.TabStop = False
+        '
+        'tmrShot
+        '
+        Me.tmrShot.Interval = 1000
         '
         'frmGameBoss
         '
@@ -62,4 +67,5 @@ Partial Class frmGameBoss
 
     Friend WithEvents tmrTick As Timer
     Friend WithEvents picCanvas As PictureBox
+    Friend WithEvents tmrShot As Timer
 End Class
