@@ -1,9 +1,9 @@
 ﻿Public Class frmGameBoss
     Dim bossLoc As Point
-    Dim bossRadius As Integer = 50
+    Dim bossRadius As Integer = 55
     Dim bossPoints(8) As Point
 
-    Dim speed As Integer = 3
+    Dim speed As Integer = 3.5
     Dim colors As New ColorPalette
 
     Public shots() As Tuple(Of Point, Point, Point, Integer)
@@ -26,48 +26,30 @@
     End Sub
 
     Private Sub tmrShot_Tick(sender As Object, e As EventArgs) Handles tmrShot.Tick
-        If shotCount < 8 Then
-            shotCount += 1
-        Else
-            shotCount = 1
-        End If
         For i As Integer = 1 To 8
-            'Dim angle As Double = ((45 * i)) / 360
-            'Debug.WriteLine($"{i}: {angle} - {Math.Floor(angle)} = {angle - Math.Floor(angle)}")
-            Dim cycle As Integer = i
-            For v As Integer = 1 To shotCount
-                Select Case cycle
-                    Case 1 To 7
-                        cycle += 1
-                    Case 8
-                        cycle = 1
-                End Select
-            Next
 
-            ' angle -= Math.Floor(angle)
             Dim move As Point
-            'Calculate the angle of the shot where 0 is 0 degrees and 1 is 360 degrees.
-            Select Case cycle
+            Select Case i
                 Case 1
                     move.X = 0
-                    move.Y = -(1 * speed)
+                    move.Y = -(1 * speed / 1.44)
                 Case 2
                     move.X = 0.5 * speed
                     move.Y = -(0.5 * speed)
                 Case 3
-                    move.X = 1 * speed
+                    move.X = 1 * speed / 1.44
                     move.Y = 0
                 Case 4
                     move.X = 0.5 * speed
                     move.Y = 0.5 * speed
                 Case 5
                     move.X = 0
-                    move.Y = 1 * speed
+                    move.Y = 1 * speed / 1.44
                 Case 6
                     move.X = -(0.5 * speed)
                     move.Y = 0.5 * speed
                 Case 7
-                    move.X = -(1 * speed)
+                    move.X = -(1 * speed / 1.44)
                     move.Y = 0
                 Case 8
                     move.X = -(0.5 * speed)
@@ -75,45 +57,27 @@
             End Select
             'Calculate the movement per tick of the shot.
 
-            'Select Case angle
-            '    Case Is <= 0.25
-            '        move.X = (4 * angle) * speed
-            '        move.Y = ((4 * angle) - 1) * speed
-            '    Case Is <= 0.5
-            '        move.Y = (1 - 4 * (angle - 0.25)) * speed
-            '        move.X = (4 * (angle - 0.25)) * speed
-            '    Case Is <= 0.75
-            '        move.X = (-4 * (angle - 0.5)) * speed
-            '        move.Y = (1 - 4 * (angle - 0.5)) * speed
-            '    Case Is <= 1
-            '        move.Y = (-1 + 4 * (angle - 0.75)) * speed
-            '        move.X = (-4 * (angle - 0.75)) * speed
-            'End Select
-            ''Calculate the movement per tick of the shot.
-
-            Debug.WriteLine($"shotCount: {shotCount}, i: {i}, cycle: {cycle}, move: {move}")
 
             If shots Is Nothing Then
-                    shots = {New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)}
-                Else
-                    ReDim Preserve shots(shots.Length)
-                    shots(shots.Length - 1) = New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)
-                End If
-                'Add a new shot
-            Next
+                shots = {New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)}
+            Else
+                ReDim Preserve shots(shots.Length)
+                shots(shots.Length - 1) = New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)
+            End If
+            'Add a new shot
+        Next
         'Add 8 shots firing outwards.
 
     End Sub
     'Add 8 new shots
 
     Private Sub picCanvas_Paint(sender As Object, e As PaintEventArgs) Handles picCanvas.Paint
-        Using pen As New Pen(colors.red, 10)
-            e.Graphics.DrawPolygon(pen, bossPoints)
-        End Using
+
 
         If frmGameMain.shots IsNot Nothing Then
             For i As Integer = 0 To (frmGameMain.shots.Length - 1)
                 Dim shot = frmGameMain.shots(i)
+
                 shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
                 Using pen As New SolidBrush(colors.primary)
                     e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
@@ -136,6 +100,14 @@
             'Draw each shot and update its position.
         End If
         'Draw the shots from the boss.
+
+        Using pen As New Pen(colors.red, 20)
+            e.Graphics.DrawPolygon(pen, bossPoints)
+        End Using
+        Using brush As New SolidBrush(colors.background)
+            e.Graphics.FillPolygon(brush, bossPoints)
+        End Using
+        'Draw the octagon boss.
 
         If frmGameMain.enemies IsNot Nothing Then
             For i As Integer = 0 To (frmGameMain.enemies.Length - 1)
