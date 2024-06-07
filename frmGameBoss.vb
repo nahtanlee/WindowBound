@@ -2,26 +2,52 @@
     Dim bossLoc As Point
     Dim bossRadius As Integer = 55
     Dim bossPoints(8) As Point
+    Dim bossShrink As Boolean = True
+    Dim wait As Integer = 2
 
     Dim speed As Integer = 3.5
     Dim colors As New ColorPalette
 
     Public shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
-    Dim shotCount As Integer = 0
+    Dim tickCount As Integer = 0
 
     Private Sub frmGameBoss_Load(sender As Object, e As EventArgs) Handles Me.Load
         bossLoc = New Point(Me.Width / 2 - 15, Me.Height / 2 - 15)
-        For i As Integer = 0 To 7
-            bossPoints(i) = New Point(CInt(bossLoc.X + bossRadius * Math.Cos(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))), CInt(bossLoc.Y + bossRadius * Math.Sin(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))))
-        Next
-        bossPoints(8) = bossPoints(0)
-        'Generate the points of the octagon.
+        calcOctagon()
         tmrTick.Enabled = True
         tmrShot.Enabled = True
         'Start the timers.
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
+        tickCount += 1
+
+        If tickCount Mod 3 = 0 Then
+            If wait = 20 Then
+                If bossShrink Then
+                    bossRadius -= 1.4
+                    If bossRadius < 48 Then
+                        wait = 19
+                        Debug.WriteLine("shrink")
+                    End If
+                Else
+                    bossRadius += 1.4
+                    If bossRadius > 50 Then
+                        bossShrink = True
+                    End If
+                End If
+            Else
+                If wait > 0 Then
+                    wait -= 1
+                Else
+                    bossShrink = False
+                    wait = 20
+                End If
+            End If
+
+        End If
+        calcOctagon()
+
         picCanvas.Invalidate()
     End Sub
 
@@ -84,9 +110,9 @@
                 End Using
                 frmGameMain.shots(i) = shot
             Next
-            'Draw each shot and update its position.
+            'draw each shot and update its position.
         End If
-        'Draw the shots from the player.
+        'draw the shots from the player.
 
         If shots IsNot Nothing Then
             For i As Integer = 0 To (shots.Length - 1)
@@ -149,4 +175,12 @@
         End Using
         'Draw the player circle (circle + square).
     End Sub
+
+    Private Function calcOctagon()
+        For i As Integer = 0 To 7
+            bossPoints(i) = New Point(CInt(bossLoc.X + bossRadius * Math.Cos(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))), CInt(bossLoc.Y + bossRadius * Math.Sin(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))))
+        Next
+        bossPoints(8) = bossPoints(0)
+    End Function
+    'Generate the points of the octagon.
 End Class

@@ -23,6 +23,7 @@ Partial Class frmGameBoss
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmGameBoss))
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.tmrShot = New System.Windows.Forms.Timer(Me.components)
@@ -43,16 +44,17 @@ Partial Class frmGameBoss
         '
         'tmrShot
         '
-        Me.tmrShot.Interval = 1600
+        Me.tmrShot.Interval = 1317
         '
         'frmGameBoss
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(655, 517)
+        Me.ClientSize = New System.Drawing.Size(225, 213)
         Me.Controls.Add(Me.picCanvas)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmGameBoss"
