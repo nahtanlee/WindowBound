@@ -1,7 +1,7 @@
 ﻿Public Class frmGameBoss
     Dim bossLoc As Point
     Dim bossRadius As Integer = 55
-    Dim bossPoints(8) As Point
+    Public bossPoints(8) As Point
     Dim bossShrink As Boolean = True
     Dim wait As Integer = 2
 
@@ -13,7 +13,7 @@
     Dim tickCount As Integer = 0
 
     Private Sub frmGameBoss_Load(sender As Object, e As EventArgs) Handles Me.Load
-        bossLoc = New Point(Me.Width / 2 - 15, Me.Height / 2 - 15)
+        bossLoc = PointToScreen(New Point(Me.Width / 2 - 15, Me.Height / 2 - 15))
         calcOctagon()
         tmrTick.Enabled = True
         tmrShot.Enabled = True
@@ -85,10 +85,10 @@
 
 
             If shots Is Nothing Then
-                shots = {New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)}
+                shots = {New Tuple(Of Point, Point, Point, Integer)(New Point(bossLoc.X - 5, bossLoc.Y - 5), Nothing, move, 8)}
             Else
                 ReDim Preserve shots(shots.Length)
-                shots(shots.Length - 1) = New Tuple(Of Point, Point, Point, Integer)(PointToScreen(New Point(bossLoc.X - 5, bossLoc.Y - 5)), Nothing, move, 8)
+                shots(shots.Length - 1) = New Tuple(Of Point, Point, Point, Integer)(New Point(bossLoc.X - 5, bossLoc.Y - 5), Nothing, move, 8)
             End If
             'Add a new shot
         Next
@@ -128,10 +128,10 @@
         'Draw the shots from the boss.
 
         Using pen As New Pen(colors.red, 20)
-            e.Graphics.DrawPolygon(pen, bossPoints)
+            e.Graphics.DrawPolygon(pen, {PointToClient(bossPoints(1)), PointToClient(bossPoints(2)), PointToClient(bossPoints(3)), PointToClient(bossPoints(4)), PointToClient(bossPoints(5)), PointToClient(bossPoints(6)), PointToClient(bossPoints(7)), PointToClient(bossPoints(8))})
         End Using
         Using brush As New SolidBrush(colors.background)
-            e.Graphics.FillPolygon(brush, bossPoints)
+            e.Graphics.FillPolygon(brush, {PointToClient(bossPoints(1)), PointToClient(bossPoints(2)), PointToClient(bossPoints(3)), PointToClient(bossPoints(4)), PointToClient(bossPoints(5)), PointToClient(bossPoints(6)), PointToClient(bossPoints(7)), PointToClient(bossPoints(8))})
         End Using
         'Draw the octagon boss.
 

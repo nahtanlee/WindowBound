@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing.Imaging
 Imports System.Drawing.Text
 Imports System.Globalization
+Imports System.Security.Authentication.ExtendedProtection
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
     Public player As New Player
@@ -21,7 +22,7 @@ Public Class frmGameMain
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
 
-    Dim newFrmGameBoss As New frmGameBoss
+    Dim gameBossForms() As frmGameBoss
     'The window to show to the boss in.
 
 
@@ -88,6 +89,32 @@ Public Class frmGameMain
             'Draw each shot and update its position.
         End If
         'Draw the shots.
+
+        If gameBossForms IsNot Nothing Then
+            For Each boss In gameBossForms
+                If boss.shots IsNot Nothing Then
+                    For i As Integer = 0 To (boss.shots.Length - 1)
+                        Dim shot = boss.shots(i)
+                        shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
+                        Using pen As New Pen(colors.red, 2)
+                            e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
+                        End Using
+                        boss.shots(i) = shot
+                    Next
+                    'Draw each shot and update its position.
+                End If
+                'Draw the shots from the boss.
+
+                Using pen As New Pen(colors.red, 20)
+                    e.Graphics.DrawPolygon(pen, {PointToClient(boss.bossPoints(1)), PointToClient(boss.bossPoints(2)), PointToClient(boss.bossPoints(3)), PointToClient(boss.bossPoints(4)), PointToClient(boss.bossPoints(5)), PointToClient(boss.bossPoints(6)), PointToClient(boss.bossPoints(7)), PointToClient(boss.bossPoints(8))})
+                End Using
+                Using brush As New SolidBrush(colors.background)
+                    e.Graphics.FillPolygon(brush, {PointToClient(boss.bossPoints(1)), PointToClient(boss.bossPoints(2)), PointToClient(boss.bossPoints(3)), PointToClient(boss.bossPoints(4)), PointToClient(boss.bossPoints(5)), PointToClient(boss.bossPoints(6)), PointToClient(boss.bossPoints(7)), PointToClient(boss.bossPoints(8))})
+                End Using
+                'Draw the octagon boss.
+            Next
+        End If
+        'Draw the elements from the boss forms.
 
         If enemies IsNot Nothing Then
             For i As Integer = 0 To (enemies.Length - 1)
@@ -422,9 +449,17 @@ Public Class frmGameMain
             calcMove(type, shots.Length - 1)
             'Calculate the movement of the shot.
         ElseIf type = "boss" Then
-            Dim newBossFrm As New frmGameBoss
-            newBossFrm.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (newBossFrm.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (newBossFrm.Height + 50))))
-            newBossFrm.Show()
+
+            If gameBossForms Is Nothing Then
+                gameBossForms = {New frmGameBoss}
+                gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
+                gameBossForms.Last.Show()
+            Else
+                ReDim Preserve gameBossForms(gameBossForms.Length)
+                gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
+                gameBossForms.Last.Show()
+            End If
+
             'Create a new boss form, set a random location and show the form.
 
         Else
