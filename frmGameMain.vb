@@ -802,5 +802,6 @@ Public Class ColorPalette
     Public Property green As Color = Color.FromArgb(255, 158, 255, 156)
     Public Property yellow As Color = Color.FromArgb(255, 255, 213, 131)
     Public Property red As Color = Color.FromArgb(255, 255, 156, 156)
+    Public Property purple As Color = Color.FromArgb(255, 241, 156, 255)
 End Class
 'Class to store all the custom colors.
