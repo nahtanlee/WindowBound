@@ -5,7 +5,7 @@
     Dim bossShrink As Boolean = True
     Dim wait As Integer = 2
 
-    Dim speed As Integer = 3.5
+    Dim speed As Integer = 2.8
     Dim colors As New ColorPalette
 
     Public shots() As Tuple(Of Point, Point, Point, Integer)
@@ -21,6 +21,10 @@
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         tickCount += 1
+        If frmGameMain.tmrTick.Enabled = False Then
+            tmrTick.Enabled = False
+        End If
+        'Stop the game.
 
         If tickCount Mod 3 = 0 Then
             If wait = 20 Then
@@ -44,9 +48,13 @@
                     wait = 20
                 End If
             End If
-
         End If
+        'Make the boss 'pulse'.
+
         calcOctagon()
+        'Calculate the points to draw the boss.
+        checkPlayerCollisions()
+        'Check for collision between the boss and the player.
 
         picCanvas.Invalidate()
     End Sub
@@ -135,6 +143,18 @@
         End Using
         'Draw the octagon boss.
 
+        'Using pen As New Pen(colors.green, 2)
+        '    e.Graphics.DrawPolygon(pen, {PointToClient(New Point(bossPoints(1).X, bossPoints(2).Y)), PointToClient(New Point(bossPoints(4).X, bossPoints(3).Y)), PointToClient(New Point(bossPoints(5).X, bossPoints(6).Y)), PointToClient(New Point(bossPoints(8).X, bossPoints(7).Y))})
+
+        'End Using
+        Using pen As New Pen(colors.green, 2)
+            e.Graphics.DrawPolygon(pen, {PointToClient(New Point(bossPoints(1).X + 15, bossPoints(2).Y)), PointToClient(New Point(bossPoints(1).X + 15, bossPoints(6).Y)), PointToClient(New Point(bossPoints(3).X - 15, bossPoints(6).Y)), PointToClient(New Point(bossPoints(3).X - 15, bossPoints(2).Y))})
+
+        End Using
+        'Using pen As New Pen(colors.primary, 2)
+        '    e.Graphics.DrawEllipse(pen, PointToClient(bossPoints(1)).X, PointToClient(bossPoints(2)).Y, 2, 2)
+        'End Using
+
         If frmGameMain.enemies IsNot Nothing Then
             For i As Integer = 0 To (frmGameMain.enemies.Length - 1)
                 Dim pen As Pen
@@ -155,7 +175,7 @@
                         e.Graphics.DrawPolygon(pen, {New Point(PointToClient(frmGameMain.enemies(i).loc).X + (frmGameMain.enemies(i).size / 2), PointToClient(frmGameMain.enemies(i).loc).Y), New Point(PointToClient(frmGameMain.enemies(i).loc).X, PointToClient(frmGameMain.enemies(i).loc).Y + frmGameMain.enemies(i).size), New Point(PointToClient(frmGameMain.enemies(i).loc).X + frmGameMain.enemies(i).size, PointToClient(frmGameMain.enemies(i).loc).Y + frmGameMain.enemies(i).size)})
                 End Select
 
-                frmGameMain.calcMove(frmGameMain.enemies(i).type, i)
+                frmGameMain.calcMoveObject(frmGameMain.enemies(i).type, i)
             Next
             'Draw each moving enemy and update and recalculate its position.
         End If
@@ -183,4 +203,42 @@
         bossPoints(8) = bossPoints(0)
     End Function
     'Generate the points of the octagon.
+
+
+    Private Function checkPlayerCollisions()
+        Dim hit = False
+        For bossX As Integer = (bossPoints(3).X - 15) To (bossPoints(1).X + 15)
+            If Not hit Then
+                For bossY As Integer = bossPoints(6).Y To bossPoints(2).Y
+                    If ((frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2)) < bossX) And (bossX < (frmGameMain.player.loc(9).X + (frmGameMain.player.size / 2))) And ((frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2)) < bossY) And (bossY < (frmGameMain.player.loc(9).Y + (frmGameMain.player.size / 2))) Then
+
+                        Dim move As Point = frmGameMain.calcMovePoint(bossLoc, frmGameMain.player.loc(7))
+                        frmGameMain.updatePlayerLoc(New Point(frmGameMain.player.loc(0).X + (move.X * 40), frmGameMain.player.loc(0).Y + (move.Y * 40)))
+                        'Move the enemy and player.
+
+                        frmGameMain.player.red = 10
+                        frmGameMain.player.health -= 1
+                        frmGameMain.stats.livesLost += 1
+                        frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
+                        'Update the player's health.
+                        If frmGameMain.player.health < 1 Then
+                            frmGameMain.tmrTick.Enabled = False
+                            frmGameMain.tmrShrink.Enabled = False
+                            frmGameMain.tmrShot.Enabled = False
+                            frmGameMain.stats.timeAlive = DateAndTime.Now - frmGameMain.startTime
+                        End If
+                        'End the game if the player's health reaches 0.
+
+                        hit = True
+                        Exit For
+                        'Exit the loops.
+                    End If
+                Next
+            Else
+                Exit For
+            End If
+        Next
+    End Function
+    'Check if the player has collided with the boss.
+
 End Class

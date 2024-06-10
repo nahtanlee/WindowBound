@@ -94,6 +94,7 @@ Partial Class frmGameMain
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "WindowBound"
+        Me.TopMost = True
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 

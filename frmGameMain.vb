@@ -17,7 +17,7 @@ Public Class frmGameMain
     'A class that stores the value that each side of the window needs to be extended by.
     Dim tickCount As Integer = 0
     'Count the number of ticks.
-    Dim startTime As Date
+    Public startTime As Date
     'The time the game was started (used to calculate stats.timeAlive)
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
@@ -136,7 +136,7 @@ Public Class frmGameMain
                         e.Graphics.DrawPolygon(pen, {New Point(PointToClient(enemies(i).loc).X + (enemies(i).size / 2), PointToClient(enemies(i).loc).Y), New Point(PointToClient(enemies(i).loc).X, PointToClient(enemies(i).loc).Y + enemies(i).size), New Point(PointToClient(enemies(i).loc).X + enemies(i).size, PointToClient(enemies(i).loc).Y + enemies(i).size)})
                 End Select
 
-                calcMove(enemies(i).type, i)
+                calcMoveObject(enemies(i).type, i)
             Next
             'Draw each moving enemy and update and recalculate its position.
         End If
@@ -348,12 +348,12 @@ Public Class frmGameMain
     ''' <summary>
     ''' This function calculates the movement in x and y coordinates that the object should move by each tick.
     ''' This is done by drawing a triangle between the <c>startPoint</c> and <c>endPoint</c> and calculating the angle between these points using trigonometry. 
-    ''' This angle is then used to find the x and y movements whihc are assigned to <c>move.X</c> and <c>move.Y</c> repectively.
+    ''' This angle is then used to find the x and y movements which are assigned to <c>move.X</c> and <c>move.Y</c> respectively.
     ''' </summary>
     ''' <param name="type">is the type of object that the movement is being calculated of</param>
     ''' <param name="index">is the index of the object within its array</param>
     ''' <returns></returns>
-    Public Function calcMove(type As String, index As Integer) As Point
+    Public Function calcMoveObject(type As String, index As Integer) As Point
         Dim startPoint As Point
         Dim endPoint As Point
         Dim move As Point
@@ -372,10 +372,10 @@ Public Class frmGameMain
         Try
             speed = objectSpeeds(type)
         Catch err As System.Collections.Generic.KeyNotFoundException
-            Console.WriteLine($"Type not found as a key in objectSpeeds: '{type}', default speed automatically set...")
+            Console.WriteLine($"Type not found as a key in objectSpeeds: '{type}', defau automatically set...")
             speed = 10
         End Try
-        'Stop errors when finding the speed of an object
+        'Stop errors when finding t of an object
 
         Dim b As Integer = endPoint.Y - startPoint.Y
         Dim c As Integer = endPoint.X - startPoint.X
@@ -432,6 +432,65 @@ Public Class frmGameMain
     'Calculate the movement of the object.
 
     ''' <summary>
+    ''' This function calculates the movement in x and y coordinates between two points.
+    ''' This is done by drawing a triangle between the <c>startPoint</c> and <c>endPoint</c> and calculating the angle between these points using trigonometry. 
+    ''' This angle is then used to find the x and y movements is returned.
+    ''' </summary>
+    ''' <param name="startPoint">is the first point.</param>
+    ''' <param name="endPoint">is the second point.</param>
+    ''' <returns>The calculated movement as a point.</returns>
+    Public Function calcMovePoint(startPoint As Point, endPoint As Point) As Point
+        Dim move As Point
+
+        Dim b As Integer = endPoint.Y - startPoint.Y
+        Dim c As Integer = endPoint.X - startPoint.X
+
+        Dim radians As Double = Math.Atan(Math.Abs(c / b))
+        Dim degrees As Double = radians * (180 / Math.PI)
+        'the degrees from the closest axis (rounded down/clockwise)
+
+        Dim quadrant As Integer
+        'Quadrant 1..<5
+        If c <= 0 And b <= 0 Then
+            quadrant = 1
+            degrees += 270
+        ElseIf c >= 0 And b <= 0 Then
+            quadrant = 2
+            degrees += 0
+        ElseIf c >= 0 And b >= 0 Then
+            quadrant = 3
+            degrees += 90
+        ElseIf c <= 0 And b >= 0 Then
+            quadrant = 4
+            degrees += 180
+        End If
+        'Calculate the quadrant that the endPoint lies in relative to the startPoint and add the corresponding degrees.
+        'If b < 0 then the endPoint is above the startPoint and if c < 0 then the endPoint is to the left of the startPoint
+
+        Dim v As Double = degrees / 360
+        'Convert the degrees to a double from 0..<1 where 1 is a full revolution.
+
+        Select Case v
+            Case Is <= 0.25
+                move.X = (4 * v)
+                move.Y = ((4 * v) - 1)
+            Case Is <= 0.5
+                move.Y = (1 - 4 * (v - 0.25))
+                move.X = (4 * (v - 0.25))
+            Case Is <= 0.75
+                move.X = (-4 * (v - 0.5))
+                move.Y = (1 - 4 * (v - 0.5))
+            Case Is <= 1
+                move.Y = (-1 + 4 * (v - 0.75))
+                move.X = (-4 * (v - 0.75))
+        End Select
+        'Calculate the movement per tick of the shot.
+
+        Return move
+    End Function
+    'Calculate the movement between two points.
+
+    ''' <summary>
     ''' This function adds a new element to the corresponding array dictated by the <paramref name="type"/> and sets the correct values.
     ''' </summary>
     ''' <param name="type">is the type of the object that should be added</param>
@@ -446,10 +505,9 @@ Public Class frmGameMain
             End If
             'Add start and end points to the new element.
 
-            calcMove(type, shots.Length - 1)
+            calcMoveObject(type, shots.Length - 1)
             'Calculate the movement of the shot.
         ElseIf type = "boss" Then
-
             If gameBossForms Is Nothing Then
                 gameBossForms = {New frmGameBoss}
                 gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
@@ -458,8 +516,8 @@ Public Class frmGameMain
                 ReDim Preserve gameBossForms(gameBossForms.Length)
                 gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
                 gameBossForms.Last.Show()
+                Me.Activate()
             End If
-
             'Create a new boss form, set a random location and show the form.
 
         Else
@@ -505,7 +563,7 @@ Public Class frmGameMain
 
             'Create a new enemy of the specified with default values 
 
-            calcMove(type, enemies.Length - 1)
+            calcMoveObject(type, enemies.Length - 1)
             'Calculate the movement of the shot.
         End If
     End Function
@@ -554,7 +612,7 @@ Public Class frmGameMain
             For enemyX As Integer = enemies(e).loc.X To enemies(e).loc.X + enemies(e).size
                 If Not hit Then
                     For enemyY As Integer = enemies(e).loc.Y To enemies(e).loc.Y + enemies(e).size
-                        If ((player.loc(0).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(0).X + (player.size / 2))) And ((player.loc(0).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(0).Y + (player.size / 2))) Then
+                        If ((player.loc(9).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(9).X + (player.size / 2))) And ((player.loc(9).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(9).Y + (player.size / 2))) Then
                             enemies(e).loc = New Point(enemies(e).loc.X - (enemies(e).mov.X * 15), enemies(e).loc.Y - (enemies(e).mov.Y * 15))
                             updatePlayerLoc(New Point(player.loc(0).X + (enemies(e).mov.X * 15), player.loc(0).Y + (enemies(e).mov.Y * 15)))
                             'Move the enemy and player.
@@ -594,22 +652,22 @@ Public Class frmGameMain
             If shot.Item1.X < (Me.Location.X - 10) Then 'shot collided with left of the window.
                 Debug.WriteLine("left")
                 removeElement("shots", i)
-                storedExtend.left = 7
+                storedExtend.left = 9.5
                 Exit For
             ElseIf shot.Item1.X > (Me.Location.X + Me.Width + 10) Then 'shot collided with right of the window.
                 Debug.WriteLine("right")
                 removeElement("shots", i)
-                storedExtend.right = 7
+                storedExtend.right = 9.5
                 Exit For
             ElseIf shot.Item1.Y < (Me.Location.Y - 10) Then 'shot collided with top of the the window.
                 Debug.WriteLine("top")
                 removeElement("shots", i)
-                storedExtend.top = 7
+                storedExtend.top = 9.5
                 Exit For
             ElseIf shot.Item1.Y > (Me.Location.Y + Me.Height + 10) Then 'shot collided with bottom of the window.
                 Debug.WriteLine("bottom")
                 removeElement("shots", i)
-                storedExtend.bottom = 7
+                storedExtend.bottom = 9.5
                 Exit For
             End If
         Next
@@ -641,7 +699,7 @@ Public Class frmGameMain
     ''' </summary>
     ''' <param name="newElement">is the new location</param>
     ''' <returns></returns>
-    Private Function updatePlayerLoc(newElement As Point)
+    Public Function updatePlayerLoc(newElement As Point)
         For i As Integer = 0 To 9
             Select Case i
                 Case 0 To 8
