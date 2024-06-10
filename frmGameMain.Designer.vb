@@ -23,7 +23,7 @@ Partial Class frmGameMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.picCanvas = New System.Windows.Forms.PictureBox()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmGameMain))
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.tmrShot = New System.Windows.Forms.Timer(Me.components)
         Me.tmrSquareE = New System.Windows.Forms.Timer(Me.components)
@@ -31,17 +31,9 @@ Partial Class frmGameMain
         Me.lblHealth = New System.Windows.Forms.Label()
         Me.tmrCircleE = New System.Windows.Forms.Timer(Me.components)
         Me.tmrTriE = New System.Windows.Forms.Timer(Me.components)
+        Me.picCanvas = New System.Windows.Forms.PictureBox()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'picCanvas
-        '
-        Me.picCanvas.BackColor = System.Drawing.Color.Transparent
-        Me.picCanvas.Location = New System.Drawing.Point(1, 0)
-        Me.picCanvas.Name = "picCanvas"
-        Me.picCanvas.Size = New System.Drawing.Size(1350, 781)
-        Me.picCanvas.TabIndex = 0
-        Me.picCanvas.TabStop = False
         '
         'tmrTick
         '
@@ -79,6 +71,15 @@ Partial Class frmGameMain
         '
         Me.tmrTriE.Interval = 3000
         '
+        'picCanvas
+        '
+        Me.picCanvas.BackColor = System.Drawing.Color.Transparent
+        Me.picCanvas.Location = New System.Drawing.Point(1, 0)
+        Me.picCanvas.Name = "picCanvas"
+        Me.picCanvas.Size = New System.Drawing.Size(1350, 781)
+        Me.picCanvas.TabIndex = 0
+        Me.picCanvas.TabStop = False
+        '
         'frmGameMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -89,6 +90,7 @@ Partial Class frmGameMain
         Me.Controls.Add(Me.lblHealth)
         Me.Controls.Add(Me.picCanvas)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "frmGameMain"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide

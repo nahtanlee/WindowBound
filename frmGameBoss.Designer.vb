@@ -25,14 +25,18 @@ Partial Class frmGameBoss
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmGameBoss))
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
-        Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.tmrShot = New System.Windows.Forms.Timer(Me.components)
+        Me.picCanvas = New System.Windows.Forms.PictureBox()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'tmrTick
         '
         Me.tmrTick.Interval = 1
+        '
+        'tmrShot
+        '
+        Me.tmrShot.Interval = 1317
         '
         'picCanvas
         '
@@ -41,10 +45,6 @@ Partial Class frmGameBoss
         Me.picCanvas.Size = New System.Drawing.Size(657, 518)
         Me.picCanvas.TabIndex = 0
         Me.picCanvas.TabStop = False
-        '
-        'tmrShot
-        '
-        Me.tmrShot.Interval = 1317
         '
         'frmGameBoss
         '

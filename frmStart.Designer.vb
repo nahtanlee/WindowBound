@@ -26,15 +26,16 @@ Partial Class frmStart
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmStart))
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.mediaIN = New AxWMPLib.AxWindowsMediaPlayer()
+        Me.mediaOUT = New AxWMPLib.AxWindowsMediaPlayer()
+        Me.picBTNplay = New System.Windows.Forms.PictureBox()
         Me.picBTNexit = New System.Windows.Forms.PictureBox()
         Me.picBTNsettings = New System.Windows.Forms.PictureBox()
-        Me.picBTNplay = New System.Windows.Forms.PictureBox()
-        Me.mediaOUT = New AxWMPLib.AxWindowsMediaPlayer()
+        Me.tmrFade = New System.Windows.Forms.Timer(Me.components)
         CType(Me.mediaIN, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.mediaOUT, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picBTNplay, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBTNexit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBTNsettings, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.picBTNplay, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.mediaOUT, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'tmrTick
@@ -50,6 +51,27 @@ Partial Class frmStart
         Me.mediaIN.OcxState = CType(resources.GetObject("mediaIN.OcxState"), System.Windows.Forms.AxHost.State)
         Me.mediaIN.Size = New System.Drawing.Size(631, 416)
         Me.mediaIN.TabIndex = 0
+        '
+        'mediaOUT
+        '
+        Me.mediaOUT.Enabled = True
+        Me.mediaOUT.Location = New System.Drawing.Point(12, 22)
+        Me.mediaOUT.Name = "mediaOUT"
+        Me.mediaOUT.OcxState = CType(resources.GetObject("mediaOUT.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.mediaOUT.Size = New System.Drawing.Size(631, 416)
+        Me.mediaOUT.TabIndex = 5
+        Me.mediaOUT.Visible = False
+        '
+        'picBTNplay
+        '
+        Me.picBTNplay.Image = CType(resources.GetObject("picBTNplay.Image"), System.Drawing.Image)
+        Me.picBTNplay.Location = New System.Drawing.Point(258, 307)
+        Me.picBTNplay.Name = "picBTNplay"
+        Me.picBTNplay.Size = New System.Drawing.Size(133, 26)
+        Me.picBTNplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picBTNplay.TabIndex = 1
+        Me.picBTNplay.TabStop = False
+        Me.picBTNplay.Visible = False
         '
         'picBTNexit
         '
@@ -73,26 +95,9 @@ Partial Class frmStart
         Me.picBTNsettings.TabStop = False
         Me.picBTNsettings.Visible = False
         '
-        'picBTNplay
+        'tmrFade
         '
-        Me.picBTNplay.Image = CType(resources.GetObject("picBTNplay.Image"), System.Drawing.Image)
-        Me.picBTNplay.Location = New System.Drawing.Point(258, 307)
-        Me.picBTNplay.Name = "picBTNplay"
-        Me.picBTNplay.Size = New System.Drawing.Size(133, 26)
-        Me.picBTNplay.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picBTNplay.TabIndex = 1
-        Me.picBTNplay.TabStop = False
-        Me.picBTNplay.Visible = False
-        '
-        'mediaOUT
-        '
-        Me.mediaOUT.Enabled = True
-        Me.mediaOUT.Location = New System.Drawing.Point(12, 22)
-        Me.mediaOUT.Name = "mediaOUT"
-        Me.mediaOUT.OcxState = CType(resources.GetObject("mediaOUT.OcxState"), System.Windows.Forms.AxHost.State)
-        Me.mediaOUT.Size = New System.Drawing.Size(631, 416)
-        Me.mediaOUT.TabIndex = 5
-        Me.mediaOUT.Visible = False
+        Me.tmrFade.Interval = 22
         '
         'frmStart
         '
@@ -114,10 +119,10 @@ Partial Class frmStart
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = resources.GetString("$this.Text")
         CType(Me.mediaIN, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.mediaOUT, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picBTNplay, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBTNexit, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBTNsettings, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.picBTNplay, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.mediaOUT, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -127,4 +132,5 @@ Partial Class frmStart
     Friend WithEvents picBTNsettings As PictureBox
     Friend WithEvents picBTNexit As PictureBox
     Friend WithEvents mediaOUT As AxWMPLib.AxWindowsMediaPlayer
+    Friend WithEvents tmrFade As Timer
 End Class

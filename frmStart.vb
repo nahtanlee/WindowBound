@@ -46,6 +46,11 @@ Public Class frmStart
             frmGameMain.Show()
             Me.Hide()
         End If
+        If mediaOUT.Ctlcontrols.currentPosition > 2.7 And currentMedia = "OUT" And tmrFade.Enabled = False Then
+            tmrFade.Enabled = True
+            Me.TopMost = True
+            frmGameBackground.Show()
+        End If
         Select Case counter
             Case 2
                 picBTNplay.Visible = True
@@ -54,7 +59,13 @@ Public Class frmStart
             Case 6
                 picBTNexit.Visible = True
         End Select
-        'offset the change visibilty of the buttons to avoid flickering.
+        'Offset the changing the visibility of the buttons to avoid flickering.
+    End Sub
+
+    Private Sub tmrFade_Tick(sender As Object, e As EventArgs) Handles tmrFade.Tick
+        If frmGameBackground.Opacity < 0.68 Then
+            frmGameBackground.Opacity += 0.01
+        End If
     End Sub
 
     Private Sub picBTNplay_Click(sender As Object, e As EventArgs) Handles picBTNplay.Click
@@ -73,4 +84,5 @@ Public Class frmStart
         End
     End Sub
     'Close/end the application.
+
 End Class

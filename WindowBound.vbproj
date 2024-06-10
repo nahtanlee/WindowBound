@@ -80,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="frmGameBackground.Designer.vb">
+      <DependentUpon>frmGameBackground.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmGameBackground.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmGameBoss.Designer.vb">
       <DependentUpon>frmGameBoss.vb</DependentUpon>
     </Compile>
@@ -117,6 +123,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmGameBackground.resx">
+      <DependentUpon>frmGameBackground.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmGameBoss.resx">
       <DependentUpon>frmGameBoss.vb</DependentUpon>
     </EmbeddedResource>
@@ -167,6 +176,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Resources\Image1.bmp" />
+    <None Include="Assets\AppIcon_Player.ico" />
+    <None Include="Assets\AppIcon_Boss.ico" />
     <None Include="bin\Debug\TitleScreen_IN.mp4" />
     <None Include="Assets\BTN_settings.png" />
     <None Include="Assets\BTN_play.png" />
