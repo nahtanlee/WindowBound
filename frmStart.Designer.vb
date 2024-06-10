@@ -97,7 +97,7 @@ Partial Class frmStart
         '
         'tmrFade
         '
-        Me.tmrFade.Interval = 22
+        Me.tmrFade.Interval = 25
         '
         'frmStart
         '

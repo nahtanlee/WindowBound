@@ -204,7 +204,6 @@
     End Function
     'Generate the points of the octagon.
 
-
     Private Function checkPlayerCollisions()
         Dim hit = False
         For bossX As Integer = (bossPoints(3).X - 15) To (bossPoints(1).X + 15)

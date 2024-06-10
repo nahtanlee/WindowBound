@@ -673,7 +673,7 @@ Public Class frmGameMain
             End If
         Next
     End Function
-    'Extend the window if it has been hit by a shot.
+    'Check if the window has been hit by a shot.
 
     ''' <summary>
     ''' This function removes the element at index <paramref name="index"/> in <paramref name="arrayName"/> and redimensions the array to one smaller.
@@ -719,21 +719,29 @@ Public Class frmGameMain
     ''' <returns></returns>
     Private Function extendSides()
         If storedExtend.top > 0 Then
-            Me.Height += storedExtend.top
-            Me.Top -= storedExtend.top
+            If Me.Top - storedExtend.top > 0 Then
+                Me.Height += storedExtend.top
+                Me.Top -= storedExtend.top
+            End If
             storedExtend.top -= 1
         End If
         If storedExtend.bottom > 0 Then
-            Me.Height += storedExtend.bottom
+            If Me.Bottom + storedExtend.bottom < frmStart.selectedScreen.WorkingArea.Height Then
+                Me.Height += storedExtend.bottom
+            End If
             storedExtend.bottom -= 1
         End If
         If storedExtend.left > 0 Then
-            Me.Width += storedExtend.left
-            Me.Left -= storedExtend.left
+            If Me.Left - storedExtend.left > 0 Then
+                Me.Width += storedExtend.left
+                Me.Left -= storedExtend.left
+            End If
             storedExtend.left -= 1
-        End If
+            End If
         If storedExtend.right > 0 Then
-            Me.Width += storedExtend.right
+            If Me.Right + storedExtend.right < frmStart.selectedScreen.WorkingArea.Width Then
+                Me.Width += storedExtend.right
+            End If
             storedExtend.right -= 1
         End If
     End Function
