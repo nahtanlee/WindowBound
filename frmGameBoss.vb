@@ -55,6 +55,10 @@
         'Calculate the points to draw the boss.
         checkPlayerCollisions()
         'Check for collision between the boss and the player.
+        If shots IsNot Nothing Then
+            checkShotHits()
+        End If
+        'Check for collisions between the shots fired from the boss and the player.
 
         picCanvas.Invalidate()
     End Sub
@@ -106,8 +110,6 @@
     'Add 8 new shots
 
     Private Sub picCanvas_Paint(sender As Object, e As PaintEventArgs) Handles picCanvas.Paint
-
-
         If frmGameMain.shots IsNot Nothing Then
             For i As Integer = 0 To (frmGameMain.shots.Length - 1)
                 Dim shot = frmGameMain.shots(i)
@@ -142,18 +144,6 @@
             e.Graphics.FillPolygon(brush, {PointToClient(bossPoints(1)), PointToClient(bossPoints(2)), PointToClient(bossPoints(3)), PointToClient(bossPoints(4)), PointToClient(bossPoints(5)), PointToClient(bossPoints(6)), PointToClient(bossPoints(7)), PointToClient(bossPoints(8))})
         End Using
         'Draw the octagon boss.
-
-        'Using pen As New Pen(colors.green, 2)
-        '    e.Graphics.DrawPolygon(pen, {PointToClient(New Point(bossPoints(1).X, bossPoints(2).Y)), PointToClient(New Point(bossPoints(4).X, bossPoints(3).Y)), PointToClient(New Point(bossPoints(5).X, bossPoints(6).Y)), PointToClient(New Point(bossPoints(8).X, bossPoints(7).Y))})
-
-        'End Using
-        Using pen As New Pen(colors.green, 2)
-            e.Graphics.DrawPolygon(pen, {PointToClient(New Point(bossPoints(1).X + 15, bossPoints(2).Y)), PointToClient(New Point(bossPoints(1).X + 15, bossPoints(6).Y)), PointToClient(New Point(bossPoints(3).X - 15, bossPoints(6).Y)), PointToClient(New Point(bossPoints(3).X - 15, bossPoints(2).Y))})
-
-        End Using
-        'Using pen As New Pen(colors.primary, 2)
-        '    e.Graphics.DrawEllipse(pen, PointToClient(bossPoints(1)).X, PointToClient(bossPoints(2)).Y, 2, 2)
-        'End Using
 
         If frmGameMain.enemies IsNot Nothing Then
             For i As Integer = 0 To (frmGameMain.enemies.Length - 1)
@@ -195,7 +185,16 @@
         End Using
         'Draw the player circle (circle + square).
     End Sub
+    'Paint all the objects on the canvas.
+    Private Sub frmGameBoss_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        frmGameMain.Focus()
+    End Sub
+    'Ensure the bosses are never the topmost form.
 
+    ''' <summary>
+    ''' This function calculates the points of the 8 vertices of the octagon using <c>bossLoc</c> and <c>bossRadius</c> and stores them in <c>bossPoints()</c>.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function calcOctagon()
         For i As Integer = 0 To 7
             bossPoints(i) = New Point(CInt(bossLoc.X + bossRadius * Math.Cos(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))), CInt(bossLoc.Y + bossRadius * Math.Sin(i * ((2 * Math.PI / 12) + (15 * Math.PI / 180)))))
@@ -204,6 +203,10 @@
     End Function
     'Generate the points of the octagon.
 
+    ''' <summary>
+    ''' This function checks if the player has collided with the boss. If they have, the players health decreases.
+    ''' </summary>
+    ''' <returns></returns>
     Private Function checkPlayerCollisions()
         Dim hit = False
         For bossX As Integer = (bossPoints(3).X - 15) To (bossPoints(1).X + 15)
@@ -240,10 +243,47 @@
     End Function
     'Check if the player has collided with the boss.
 
-    Private Sub frmGameBoss_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
-        frmGameMain.Focus()
-    End Sub
-    'Ensure the bosses are never the topmost form.
+    ''' <summary>
+    ''' This function checks if any of the fired shots from the boss have hit the player. If it has, the shot is removed and the player's health decreases.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkShotHits()
+        For s As Integer = 0 To shots.Length - 1
+            Dim shot = shots(s)
+            'If frmGameMain.player.loc(9).X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (frmGameMain.player.loc(9).X + frmGameMain.player.size) And (frmGameMain.player.loc(9).Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (frmGameMain.player.loc(9).Y + frmGameMain.player.size + shot.Item3.X + 10) Then
+            If shot.Item1.X >= (frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2) - 5) And shot.Item1.X <= (frmGameMain.player.loc(9).X + (frmGameMain.player.size / 2) + 5) And shot.Item1.Y >= (frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2) - 5) And shot.Item1.Y <= (frmGameMain.player.loc(9).Y + (frmGameMain.player.size / 2) + 5) Then
+                removeShot(s)
 
+                frmGameMain.player.red = 10
+                frmGameMain.player.health -= 1
+                frmGameMain.stats.livesLost += 1
+                frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
+                'Update the player's health.
+                If frmGameMain.player.health < 1 Then
+                    frmGameMain.tmrTick.Enabled = False
+                    frmGameMain.tmrShrink.Enabled = False
+                    frmGameMain.tmrShot.Enabled = False
+                    frmGameMain.stats.timeAlive = DateAndTime.Now - frmGameMain.startTime
+                End If
+                'End the game if the player's health reaches 0.
+
+                Exit For
+            End If
+        Next
+    End Function
+    'Check if the shots have collided with the player.
+
+    ''' <summary>
+    ''' This function removes the shot at index <paramref name="index"/> and redimensions the array to one smaller.
+    ''' </summary>
+    ''' <param name="index">is the index of shot to be removed</param>
+    ''' <returns></returns>
+    Private Function removeShot(index As Integer)
+        Dim OGSize = shots.Length
+        Dim originalSize As Integer = shots.Length - 1
+        shots(index) = shots(shots.Length - 1)
+        ReDim Preserve shots(originalSize - 1)
+    End Function
+    'Remove a shot from the specified index.
 
 End Class
