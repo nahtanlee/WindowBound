@@ -3,6 +3,7 @@
     Dim bossRadius As Integer = 55
     Public bossPoints(8) As Point
     Dim bossShrink As Boolean = True
+    Dim bossHealth As Integer = 8
     Dim wait As Integer = 2
 
     Dim speed As Integer = 2.8
@@ -56,9 +57,13 @@
         checkPlayerCollisions()
         'Check for collision between the boss and the player.
         If shots IsNot Nothing Then
-            checkShotHits()
+            checkBossShotHits()
         End If
         'Check for collisions between the shots fired from the boss and the player.
+        If frmGameMain.shots IsNot Nothing Then
+            checkPlayerShotHits()
+        End If
+        'Check for collisions between the shots fired from the player and the boss.
 
         picCanvas.Invalidate()
     End Sub
@@ -212,7 +217,7 @@
         For bossX As Integer = (bossPoints(3).X - 15) To (bossPoints(1).X + 15)
             If Not hit Then
                 For bossY As Integer = bossPoints(6).Y To bossPoints(2).Y
-                    If ((frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2)) < bossX) And (bossX < (frmGameMain.player.loc(9).X + (frmGameMain.player.size / 2))) And ((frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2)) < bossY) And (bossY < (frmGameMain.player.loc(9).Y + (frmGameMain.player.size / 2))) Then
+                    If ((frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2)) <= bossX) And (bossX <= (frmGameMain.player.loc(9).X + (frmGameMain.player.size / 2))) And ((frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2)) <= bossY) And (bossY <= (frmGameMain.player.loc(9).Y + (frmGameMain.player.size / 2))) Then
 
                         Dim move As Point = frmGameMain.calcMovePoint(bossLoc, frmGameMain.player.loc(7))
                         frmGameMain.updatePlayerLoc(New Point(frmGameMain.player.loc(0).X + (move.X * 40), frmGameMain.player.loc(0).Y + (move.Y * 40)))
@@ -244,13 +249,40 @@
     'Check if the player has collided with the boss.
 
     ''' <summary>
+    ''' This function checks any of the shots fired from the player have hit the boss. If they have, the bosses health decreases.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkPlayerShotHits()
+        For s As Integer = 0 To frmGameMain.shots.Length - 1
+            Dim shot = frmGameMain.shots(s)
+            If (bossPoints(3).X - 15) <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (bossPoints(1).X + 15) And (bossPoints(6).Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (bossPoints(2).Y + shot.Item3.X + 10) Then
+                frmGameMain.removeElement("shots", s)
+                'Remove the shot.
+
+                bossHealth -= 1
+                'Decrease the health of the boss
+
+                'Update the player's health.
+                If bossHealth < 1 Then
+                    frmGameMain.stats.bossesKilled += 1
+                    frmGameMain.removeElement("gameBossForms", Me.Tag)
+                    Me.Hide()
+                End If
+                'Hide the boss if its health reaches 0.
+
+                Exit For
+            End If
+        Next
+    End Function
+    'Check if any of the player shots have collided with the boss.
+
+    ''' <summary>
     ''' This function checks if any of the fired shots from the boss have hit the player. If it has, the shot is removed and the player's health decreases.
     ''' </summary>
     ''' <returns></returns>
-    Private Function checkShotHits()
+    Private Function checkBossShotHits()
         For s As Integer = 0 To shots.Length - 1
             Dim shot = shots(s)
-            'If frmGameMain.player.loc(9).X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (frmGameMain.player.loc(9).X + frmGameMain.player.size) And (frmGameMain.player.loc(9).Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (frmGameMain.player.loc(9).Y + frmGameMain.player.size + shot.Item3.X + 10) Then
             If shot.Item1.X >= (frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2) - 5) And shot.Item1.X <= (frmGameMain.player.loc(9).X + (frmGameMain.player.size / 2) + 5) And shot.Item1.Y >= (frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2) - 5) And shot.Item1.Y <= (frmGameMain.player.loc(9).Y + (frmGameMain.player.size / 2) + 5) Then
                 removeShot(s)
 
@@ -271,7 +303,7 @@
             End If
         Next
     End Function
-    'Check if the shots have collided with the player.
+    'Check if any of the boss shots have collided with the player.
 
     ''' <summary>
     ''' This function removes the shot at index <paramref name="index"/> and redimensions the array to one smaller.

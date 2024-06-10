@@ -210,16 +210,16 @@ Public Class frmGameMain
         End If
         'Lower the number of red/white frames for the player and enemies by 1.
 
-        If pressedKeys.up = True And player.loc(9).Y > Me.Location.Y + 40 Then
+        If pressedKeys.up = True And player.loc(9).Y > Me.Location.Y + 50 Then
             updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y - playerSpeed))
         End If
         If pressedKeys.down = True And player.loc(9).Y < Me.Location.Y + Me.Height - 30 Then
             updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y + playerSpeed))
         End If
-        If pressedKeys.left = True And player.loc(9).X > Me.Location.X + 17 Then
+        If pressedKeys.left = True And player.loc(9).X > Me.Location.X + 30 Then
             updatePlayerLoc(New Point(player.loc(9).X - playerSpeed, player.loc(9).Y))
         End If
-        If pressedKeys.right = True And player.loc(9).X < Me.Location.X + Me.Width - 33 Then
+        If pressedKeys.right = True And player.loc(9).X < Me.Location.X + Me.Width - 32 Then
             updatePlayerLoc(New Point(player.loc(9).X + playerSpeed, player.loc(9).Y))
         End If
         If Not pressedKeys.up And Not pressedKeys.down And Not pressedKeys.left And Not pressedKeys.right Then
@@ -517,14 +517,15 @@ Public Class frmGameMain
             If gameBossForms Is Nothing Then
                 gameBossForms = {New frmGameBoss}
                 gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
+                gameBossForms.Last.Tag = (gameBossForms.Length - 1)
                 gameBossForms.Last.Show()
             Else
                 ReDim Preserve gameBossForms(gameBossForms.Length)
                 gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
+                gameBossForms.Last.Tag = (gameBossForms.Length - 1)
                 gameBossForms.Last.Show()
-                Me.Activate()
             End If
-            'Create a new boss form, set a random location and show the form.
+            'Create a new boss form, set a random location, set its tag as its index and show the form.
 
         Else
             Dim locX As Integer
@@ -687,8 +688,7 @@ Public Class frmGameMain
     ''' <param name="arrayName">is the array that is being edited</param>
     ''' <param name="index">is the index of element to be removed</param>
     ''' <returns></returns>
-    Private Function removeElement(arrayName As String, index As Integer)
-        Dim OGSize = If(arrayName = "shots", shots, enemies).Length
+    Public Function removeElement(arrayName As String, index As Integer)
         If arrayName = "shots" Then
             Dim originalSize As Integer = shots.Length - 1
             shots(index) = shots(shots.Length - 1)
@@ -697,6 +697,14 @@ Public Class frmGameMain
             Dim originalSize As Integer = enemies.Length - 1
             enemies(index) = enemies(enemies.Length - 1)
             ReDim Preserve enemies(originalSize - 1)
+        ElseIf arrayName = "gameBossForms" Then
+            If gameBossForms.Length <= 1 Then
+                gameBossForms = {}
+            Else
+                Dim originalSize As Integer = gameBossForms.Length - 1
+                gameBossForms(index) = gameBossForms(gameBossForms.Length - 1)
+                ReDim Preserve gameBossForms(originalSize - 1)
+            End If
         End If
     End Function
     'Remove an element from the specified array and index.
