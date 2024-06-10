@@ -36,7 +36,7 @@ Partial Class frmGameBackground
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmGameBackground"
-        Me.Opacity = 0R
+        Me.Opacity = 0.73R
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.ResumeLayout(False)

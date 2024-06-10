@@ -4,6 +4,8 @@ Imports System.Globalization
 Imports System.Security.Authentication.ExtendedProtection
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
+    Dim WithEvents formMainBackground As New frmGameBackground
+
     Public player As New Player
     'A class to store all of the player information.
     Public enemies() As Enemy
@@ -59,6 +61,10 @@ Public Class frmGameMain
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
+        formMainBackground.Show()
+        frmGameBackground.Hide()
+        'Switch the background forms.
+
         lblHealth.Font = New Font(frmStart.fonts.Families(1), 15.75, FontStyle.Bold)
         'Import fonts.
 
@@ -292,7 +298,7 @@ Public Class frmGameMain
     'Shrink the window.
 
     '---- MOUSE & KEYS----
-    Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+    Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown, formMainBackground.KeyDown
         Select Case e.KeyCode
             Case Keys.Up
                 pressedKeys.up = True
@@ -305,7 +311,7 @@ Public Class frmGameMain
         End Select
     End Sub
     'Update the correct variables when a key is pressed.
-    Private Sub frmGameMain_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
+    Private Sub frmGameMain_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp, formMainBackground.KeyUp
         Select Case e.KeyCode
             Case Keys.Up
                 pressedKeys.up = False
@@ -318,7 +324,7 @@ Public Class frmGameMain
         End Select
     End Sub
     'Update the correct variables when a key is released.
-    Private Sub picCanvas_MouseDown(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseDown
+    Public Sub picCanvas_MouseDown(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseDown, formMainBackground.MouseDown
         If e.Button = MouseButtons.Left Then
             pressedKeys.mouseLeft = True
             If shotStore Then
@@ -334,7 +340,7 @@ Public Class frmGameMain
         End If
     End Sub
     'Update the correct variables when a mouse button is pressed.
-    Private Sub picCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseUp
+    Private Sub picCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseUp, formMainBackground.MouseUp
         If e.Button = MouseButtons.Left Then
             pressedKeys.mouseLeft = False
         ElseIf e.Button = MouseButtons.Right Then

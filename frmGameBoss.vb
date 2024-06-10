@@ -240,4 +240,10 @@
     End Function
     'Check if the player has collided with the boss.
 
+    Private Sub frmGameBoss_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        frmGameMain.Focus()
+    End Sub
+    'Ensure the bosses are never the topmost form.
+
+
 End Class

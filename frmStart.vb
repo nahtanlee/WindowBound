@@ -4,8 +4,8 @@ Public Class frmStart
     Public fonts As New PrivateFontCollection()
     'Collection to store local fonts.
 
-
     Public selectedScreen As Screen
+    'The main screen to show the game on.
 
     Dim currentMedia As String
     Dim counter As Integer = 0
@@ -49,6 +49,7 @@ Public Class frmStart
         If mediaOUT.Ctlcontrols.currentPosition > 2.7 And currentMedia = "OUT" And tmrFade.Enabled = False Then
             tmrFade.Enabled = True
             Me.TopMost = True
+            frmGameBackground.Opacity = 0
             frmGameBackground.Show()
         End If
         Select Case counter
@@ -63,7 +64,7 @@ Public Class frmStart
     End Sub
 
     Private Sub tmrFade_Tick(sender As Object, e As EventArgs) Handles tmrFade.Tick
-        If frmGameBackground.Opacity < 0.68 Then
+        If frmGameBackground.Opacity < 0.73 Then
             frmGameBackground.Opacity += 0.01
         End If
     End Sub

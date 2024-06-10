@@ -83,9 +83,7 @@
     <Compile Include="frmGameBackground.Designer.vb">
       <DependentUpon>frmGameBackground.vb</DependentUpon>
     </Compile>
-    <Compile Include="frmGameBackground.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="frmGameBackground.vb" />
     <Compile Include="frmGameBoss.Designer.vb">
       <DependentUpon>frmGameBoss.vb</DependentUpon>
     </Compile>
