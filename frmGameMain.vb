@@ -613,8 +613,9 @@ Public Class frmGameMain
                 If Not hit Then
                     For enemyY As Integer = enemies(e).loc.Y To enemies(e).loc.Y + enemies(e).size
                         If ((player.loc(9).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(9).X + (player.size / 2))) And ((player.loc(9).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(9).Y + (player.size / 2))) Then
-                            enemies(e).loc = New Point(enemies(e).loc.X - (enemies(e).mov.X * 15), enemies(e).loc.Y - (enemies(e).mov.Y * 15))
-                            updatePlayerLoc(New Point(player.loc(0).X + (enemies(e).mov.X * 15), player.loc(0).Y + (enemies(e).mov.Y * 15)))
+                            Dim move As Point = calcMovePoint(enemies(e).loc, player.loc(9))
+                            enemies(e).loc = New Point(enemies(e).loc.X - (move.X * 35), enemies(e).loc.Y - (move.Y * 35))
+                            updatePlayerLoc(New Point(player.loc(0).X + (move.X * 35), player.loc(0).Y + (move.Y * 35)))
                             'Move the enemy and player.
 
                             player.red = 10
