@@ -10,6 +10,8 @@ Public Class frmGameMain
     'A class to store all of the player information.
     Public enemies() As Enemy
     'An array of the class enemy to store all the enemy information.
+    Public XPs() As XP
+    'An array of the class XP to store all of the XP dot information.
     Dim colors As New ColorPalette
     Public stats As New Statistics
 
@@ -787,9 +789,13 @@ Public Class Shot
     Public Property endLoc As Point 'the end destination of shot (used to calculate the movement of the shot).
     Public Property mov As Point 'the calculated x and y axis movements of the shot.
     Public Property size As Integer 'the size of the shot.
-    Public Property fromBoss As Boolean 'whether or not the shot is generated from a boss.
 End Class
 'Class to store shot information.
+Public Class XP
+    Public Property loc As Point 'the location of the XP dot.
+    Public Property size As Integer 'the size of the XP dot.
+    Public Property mov As Point '(0, 0) if the XP hasn't been 'picked up'.
+End Class
 Public Class PressedKeys
     Public Property up As Boolean = False
     Public Property down As Boolean = False
