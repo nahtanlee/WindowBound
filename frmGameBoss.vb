@@ -229,10 +229,7 @@
                         frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
                         'Update the player's health.
                         If frmGameMain.player.health < 1 Then
-                            frmGameMain.tmrTick.Enabled = False
-                            frmGameMain.tmrShrink.Enabled = False
-                            frmGameMain.tmrShot.Enabled = False
-                            frmGameMain.stats.timeAlive = DateAndTime.Now - frmGameMain.startTime
+                            frmGameMain.endGame()
                         End If
                         'End the game if the player's health reaches 0.
 
@@ -266,7 +263,8 @@
                 If bossHealth < 1 Then
                     frmGameMain.stats.bossesKilled += 1
                     frmGameMain.removeElement("gameBossForms", Me.Tag)
-                    Me.Hide()
+                    tmrTick.Enabled = False
+                    Me.Close()
                 End If
                 'Hide the boss if its health reaches 0.
 

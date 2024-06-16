@@ -103,6 +103,12 @@
     <Compile Include="frmStart.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmStats.Designer.vb">
+      <DependentUpon>frmStats.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmStats.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmStart.resx">
       <DependentUpon>frmStart.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStats.resx">
+      <DependentUpon>frmStats.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -174,6 +183,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Assets\ICN_star.png" />
+    <None Include="Assets\BGR_stats.png" />
     <None Include="Resources\Image1.bmp" />
     <None Include="Assets\AppIcon_Player.ico" />
     <None Include="Assets\AppIcon_Boss.ico" />

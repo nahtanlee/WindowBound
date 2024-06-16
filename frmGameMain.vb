@@ -633,10 +633,7 @@ Public Class frmGameMain
                             lblHealth.Text = ($"{player.health}/{player.maxHealth}")
                             'Update the player's health.
                             If player.health < 1 Then
-                                tmrTick.Enabled = False
-                                tmrShrink.Enabled = False
-                                tmrShot.Enabled = False
-                                stats.timeAlive = DateAndTime.Now - startTime
+                                endGame()
                             End If
                             'End the game if the player's health reaches 0
 
@@ -763,6 +760,22 @@ Public Class frmGameMain
     End Function
     'Resize the window.
 
+    ''' <summary>
+    ''' This function ends the game by stopping all the timers and showing the end/stats screen.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function endGame()
+        tmrTick.Enabled = False
+        tmrShrink.Enabled = False
+        tmrShot.Enabled = False
+        stats.timeAlive = DateAndTime.Now - startTime
+        For Each boss In gameBossForms
+            boss.tmrTick.Enabled = False
+        Next
+        frmStats.Show()
+    End Function
+    'End the game
+
 End Class
 
 
@@ -824,7 +837,7 @@ End Class
 Public Class ColorPalette
     Public Property primary As Color = Color.FromArgb(255, 255, 255, 255)
     Public Property secondary As Color = Color.FromArgb(255, 217, 217, 217)
-    Public Property tertiary As Color = Color.FromArgb(255, 176, 176, 176)
+    Public Property tertiary As Color = Color.FromArgb(255, 151, 151, 151)
     Public Property background As Color = Color.FromArgb(255, 0, 0, 0)
     Public Property blue As Color = Color.FromArgb(255, 156, 243, 255)
     Public Property green As Color = Color.FromArgb(255, 158, 255, 156)

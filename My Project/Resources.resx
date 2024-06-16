@@ -121,6 +121,9 @@
   <data name="AppIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\AppIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BGR_stats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\BGR_stats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BTN_exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\BTN_exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -129,5 +132,8 @@
   </data>
   <data name="BTN_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\BTN_settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ICN_star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\ICN_star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
