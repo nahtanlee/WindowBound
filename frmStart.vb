@@ -24,9 +24,9 @@ Public Class frmStart
         mediaOUT.URL = "Animations/TitleScreen_OUT.mp4"
         'Set default values for media players.
 
-        fonts.AddFontFile("Fonts/Pressario.ttf") 'Title
-        fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers
-        fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text
+        fonts.AddFontFile("Fonts/Pressario.ttf") 'Title [1]
+        fonts.AddFontFile("Fonts/BoldenaBold.ttf") 'Numbers [2]
+        fonts.AddFontFile("Fonts/VarelaRound.ttf") 'Text [0]
         'Import local fonts.
     End Sub
     'show the startup animation.

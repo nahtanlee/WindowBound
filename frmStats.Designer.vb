@@ -104,7 +104,7 @@ Partial Class frmStats
         Me.statVal1.Name = "statVal1"
         Me.statVal1.Size = New System.Drawing.Size(83, 14)
         Me.statVal1.TabIndex = 4
-        Me.statVal1.Text = "00:00:00"
+        Me.statVal1.Text = "00:00"
         Me.statVal1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'statBest1
@@ -114,9 +114,9 @@ Partial Class frmStats
         Me.statBest1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(151, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(151, Byte), Integer))
         Me.statBest1.Location = New System.Drawing.Point(268, 99)
         Me.statBest1.Name = "statBest1"
-        Me.statBest1.Size = New System.Drawing.Size(52, 14)
+        Me.statBest1.Size = New System.Drawing.Size(58, 14)
         Me.statBest1.TabIndex = 5
-        Me.statBest1.Text = "00:00:00"
+        Me.statBest1.Text = "00:00"
         Me.statBest1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'statBest2
@@ -412,7 +412,9 @@ Partial Class frmStats
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmStats"
-        Me.Text = "="
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Game Over"
+        Me.TopMost = True
         CType(Me.statStar6, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.statStar5, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.statStar4, System.ComponentModel.ISupportInitialize).EndInit()

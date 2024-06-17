@@ -1,4 +1,6 @@
-﻿Public Class frmGameBoss
+﻿Imports System.ComponentModel
+
+Public Class frmGameBoss
     Dim bossLoc As Point
     Dim bossRadius As Integer = 55
     Public bossPoints(8) As Point
@@ -12,6 +14,17 @@
     Public shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
     Dim tickCount As Integer = 0
+
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        If (m.Msg = &H112) AndAlso (m.WParam.ToInt32() = &HF010) Then
+            Return
+        End If
+        If (m.Msg = &HA1) AndAlso (m.WParam.ToInt32() = &H2) Then
+            Return
+        End If
+        MyBase.WndProc(m)
+    End Sub
+    'Disable window dragging.
 
     Private Sub frmGameBoss_Load(sender As Object, e As EventArgs) Handles Me.Load
         bossLoc = PointToScreen(New Point(Me.Width / 2 - 15, Me.Height / 2 - 15))
@@ -195,6 +208,10 @@
         frmGameMain.Focus()
     End Sub
     'Ensure the bosses are never the topmost form.
+    Private Sub frmGameBoss_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        e.Cancel = True
+    End Sub
+    'Do not allow the user to close the form
 
     ''' <summary>
     ''' This function calculates the points of the 8 vertices of the octagon using <c>bossLoc</c> and <c>bossRadius</c> and stores them in <c>bossPoints()</c>.
@@ -225,7 +242,7 @@
 
                         frmGameMain.player.red = 10
                         frmGameMain.player.health -= 1
-                        frmGameMain.stats.livesLost += 1
+                        frmStats.stats.livesLost += 1
                         frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
                         'Update the player's health.
                         If frmGameMain.player.health < 1 Then
@@ -261,7 +278,7 @@
 
                 'Update the player's health.
                 If bossHealth < 1 Then
-                    frmGameMain.stats.bossesKilled += 1
+                    frmStats.stats.bossesKilled += 1
                     frmGameMain.removeElement("gameBossForms", Me.Tag)
                     tmrTick.Enabled = False
                     Me.Close()
@@ -286,14 +303,11 @@
 
                 frmGameMain.player.red = 10
                 frmGameMain.player.health -= 1
-                frmGameMain.stats.livesLost += 1
+                frmStats.stats.livesLost += 1
                 frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
                 'Update the player's health.
                 If frmGameMain.player.health < 1 Then
-                    frmGameMain.tmrTick.Enabled = False
-                    frmGameMain.tmrShrink.Enabled = False
-                    frmGameMain.tmrShot.Enabled = False
-                    frmGameMain.stats.timeAlive = DateAndTime.Now - frmGameMain.startTime
+                    frmGameMain.endGame()
                 End If
                 'End the game if the player's health reaches 0.
 

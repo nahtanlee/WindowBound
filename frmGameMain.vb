@@ -1,7 +1,10 @@
-﻿Imports System.Drawing.Imaging
+﻿Imports System.ComponentModel
+Imports System.Drawing.Imaging
 Imports System.Drawing.Text
 Imports System.Globalization
 Imports System.Security.Authentication.ExtendedProtection
+
+
 Public Class frmGameMain
     '---------------------------------------------------------------------------- VARIABLES ----------------------------------------------------------------------------
     Dim WithEvents formMainBackground As New frmGameBackground
@@ -13,7 +16,7 @@ Public Class frmGameMain
     Public XPs() As XP
     'An array of the class XP to store all of the XP dot information.
     Dim colors As New ColorPalette
-    Public stats As New Statistics
+
 
     Dim pressedKeys As New PressedKeys
     'A class that stores whether the arrow or mouse buttons are pressed.
@@ -59,7 +62,16 @@ Public Class frmGameMain
     Public shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
 
-
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        If (m.Msg = &H112) AndAlso (m.WParam.ToInt32() = &HF010) Then
+            Return
+        End If
+        If (m.Msg = &HA1) AndAlso (m.WParam.ToInt32() = &H2) Then
+            Return
+        End If
+        MyBase.WndProc(m)
+    End Sub
+    'Disable window dragging.
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameMain_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -67,7 +79,7 @@ Public Class frmGameMain
         frmGameBackground.Hide()
         'Switch the background forms.
 
-        lblHealth.Font = New Font(frmStart.fonts.Families(1), 15.75, FontStyle.Bold)
+        lblHealth.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
         'Import fonts.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
@@ -247,7 +259,7 @@ Public Class frmGameMain
     Private Sub tmrShot_Tick(sender As Object, e As EventArgs) Handles tmrShot.Tick
         If pressedKeys.mouseLeft Then
             addObject("shot")
-            stats.shotsFired += 1
+            frmStats.stats.shotsFired += 1
         Else
             shotStore = True
         End If
@@ -331,7 +343,7 @@ Public Class frmGameMain
             pressedKeys.mouseLeft = True
             If shotStore Then
                 addObject("shot")
-                stats.shotsFired += 1
+                frmStats.stats.shotsFired += 1
                 tmrShot.Enabled = False
                 tmrShot.Enabled = True
                 'Reset the timer to ensure that the interval starts at 0 again.
@@ -592,7 +604,7 @@ Public Class frmGameMain
                     removeElement("shots", s)
                     If enemies(e).health <= 1 Then
                         removeElement("enemies", e)
-                        stats.enemiesKilled += 1
+                        frmStats.stats.enemiesKilled += 1
                     Else
                         enemies(e).health -= 1
                         enemies(e).white = 10
@@ -629,7 +641,7 @@ Public Class frmGameMain
 
                             player.red = 10
                             player.health -= 1
-                            stats.livesLost += 1
+                            frmStats.stats.livesLost += 1
                             lblHealth.Text = ($"{player.health}/{player.maxHealth}")
                             'Update the player's health.
                             If player.health < 1 Then
@@ -750,7 +762,7 @@ Public Class frmGameMain
                 Me.Left -= storedExtend.left
             End If
             storedExtend.left -= 1
-            End If
+        End If
         If storedExtend.right > 0 Then
             If Me.Right + storedExtend.right < frmStart.selectedScreen.WorkingArea.Width Then
                 Me.Width += storedExtend.right
@@ -768,12 +780,18 @@ Public Class frmGameMain
         tmrTick.Enabled = False
         tmrShrink.Enabled = False
         tmrShot.Enabled = False
-        stats.timeAlive = DateAndTime.Now - startTime
+        frmStats.stats.timeAlive = $"{(DateAndTime.Now - startTime).Minutes}:{Format((DateAndTime.Now - startTime).Seconds, "00")}"
         For Each boss In gameBossForms
             boss.tmrTick.Enabled = False
         Next
+
+
         frmStats.Show()
     End Function
+
+    Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        e.Cancel = True
+    End Sub
     'End the game
 
 End Class
@@ -826,7 +844,7 @@ Public Class StoredExtend
 End Class
 'Class to store the resize values of each side.
 Public Class Statistics
-    Public Property timeAlive As TimeSpan
+    Public Property timeAlive As String = "0:00"
     Public Property shotsFired As Integer = 0
     Public Property enemiesKilled As Integer = 0
     Public Property bossesKilled As Integer = 0
