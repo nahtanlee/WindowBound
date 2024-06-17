@@ -26,6 +26,7 @@ Public Class frmGameBoss
     End Sub
     'Disable window dragging.
 
+    '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameBoss_Load(sender As Object, e As EventArgs) Handles Me.Load
         bossLoc = PointToScreen(New Point(Me.Width / 2 - 15, Me.Height / 2 - 15))
         calcOctagon()
@@ -213,6 +214,7 @@ Public Class frmGameBoss
     End Sub
     'Do not allow the user to close the form
 
+    '----------------------------------------------------------------------------- FUNCTIONS -----------------------------------------------------------------------------
     ''' <summary>
     ''' This function calculates the points of the 8 vertices of the octagon using <c>bossLoc</c> and <c>bossRadius</c> and stores them in <c>bossPoints()</c>.
     ''' </summary>

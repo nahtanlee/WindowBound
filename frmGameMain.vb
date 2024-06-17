@@ -201,7 +201,7 @@ Public Class frmGameMain
             Case 1000
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
-            Case 30
+            Case 2000
                 addObject("boss")
                 'Generate a boss in a new window.
         End Select
@@ -288,13 +288,13 @@ Public Class frmGameMain
     End Sub
     'Add a new triangle enemy.
     Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
-        If Me.Width > 300 Then
-            Me.Width -= 2
-            Me.Left += 1
+        If Me.Width > 200 Then
+            Me.Width -= 4
+            Me.Left += 2
         End If
-        If Me.Height > 300 Then
-            Me.Height -= 2
-            Me.Top += 1
+        If Me.Height > 200 Then
+            Me.Height -= 4
+            Me.Top += 2
         End If
         If player.loc(9).Y < Me.Location.Y + 40 Then
             player.loc(9).Y += 1
