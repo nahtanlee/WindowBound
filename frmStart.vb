@@ -10,7 +10,7 @@ Public Class frmStart
     Dim currentMedia As String
     Dim counter As Integer = 0
     Private Sub frmStart_Load(sender As Object, e As EventArgs) Handles Me.Load
-        selectedScreen = Screen.PrimaryScreen
+        selectedScreen = Screen.AllScreens(0)
         'Set the screen as the primary screen.
 
         Me.Location = New Point(selectedScreen.WorkingArea.Width / 2 - 335, selectedScreen.WorkingArea.Height / 2 - 244.5)

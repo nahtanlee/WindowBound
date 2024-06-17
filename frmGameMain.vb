@@ -202,8 +202,8 @@ Public Class frmGameMain
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
             Case 2000
-                addObject("boss")
-                'Generate a boss in a new window.
+                tmrBoss.Enabled = True
+                'Start generating bosses in a new window.
         End Select
         'Delay actions.
 
@@ -287,6 +287,13 @@ Public Class frmGameMain
         'Add triangle enemies randomly
     End Sub
     'Add a new triangle enemy.
+    Private Sub tmrBoss_Tick(sender As Object, e As EventArgs) Handles tmrBoss.Tick
+        If Rnd() > 0.52 Then
+            addObject("boss")
+        End If
+        'Add bosses randomly
+    End Sub
+    'Add a new boss.
     Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
         If Me.Width > 200 Then
             Me.Width -= 4
@@ -535,9 +542,11 @@ Public Class frmGameMain
                 gameBossForms.Last.Show()
             Else
                 ReDim Preserve gameBossForms(gameBossForms.Length)
-                gameBossForms.Last.Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
-                gameBossForms.Last.Tag = (gameBossForms.Length - 1)
-                gameBossForms.Last.Show()
+                gameBossForms(gameBossForms.Length - 1) = New frmGameBoss With {
+                    .Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50)))),
+                    .Tag = (gameBossForms.Length - 1)
+                }
+                gameBossForms(gameBossForms.Length - 1).Show()
             End If
             'Create a new boss form, set a random location, set its tag as its index and show the form.
 
@@ -780,6 +789,10 @@ Public Class frmGameMain
         tmrTick.Enabled = False
         tmrShrink.Enabled = False
         tmrShot.Enabled = False
+        tmrCircleE.Enabled = False
+        tmrTriE.Enabled = False
+        tmrSquareE.Enabled = False
+        tmrBoss.Enabled = False
         frmStats.stats.timeAlive = $"{(DateAndTime.Now - startTime).Minutes}:{Format((DateAndTime.Now - startTime).Seconds, "00")}"
         For Each boss In gameBossForms
             boss.tmrTick.Enabled = False

@@ -32,6 +32,7 @@ Partial Class frmGameMain
         Me.tmrCircleE = New System.Windows.Forms.Timer(Me.components)
         Me.tmrTriE = New System.Windows.Forms.Timer(Me.components)
         Me.picCanvas = New System.Windows.Forms.PictureBox()
+        Me.tmrBoss = New System.Windows.Forms.Timer(Me.components)
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -76,9 +77,13 @@ Partial Class frmGameMain
         Me.picCanvas.BackColor = System.Drawing.Color.Transparent
         Me.picCanvas.Location = New System.Drawing.Point(1, 0)
         Me.picCanvas.Name = "picCanvas"
-        Me.picCanvas.Size = New System.Drawing.Size(1350, 781)
+        Me.picCanvas.Size = New System.Drawing.Size(43690, 43690)
         Me.picCanvas.TabIndex = 0
         Me.picCanvas.TabStop = False
+        '
+        'tmrBoss
+        '
+        Me.tmrBoss.Interval = 4000
         '
         'frmGameMain
         '
@@ -110,4 +115,5 @@ Partial Class frmGameMain
     Friend WithEvents lblHealth As Label
     Friend WithEvents tmrCircleE As Timer
     Friend WithEvents tmrTriE As Timer
+    Friend WithEvents tmrBoss As Timer
 End Class
