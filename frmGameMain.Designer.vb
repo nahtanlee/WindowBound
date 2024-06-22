@@ -97,6 +97,7 @@ Partial Class frmGameMain
         Me.lblToolTip.Size = New System.Drawing.Size(180, 13)
         Me.lblToolTip.TabIndex = 2
         Me.lblToolTip.Text = "use the arrows or WASD to move"
+        Me.lblToolTip.Visible = False
         '
         'frmGameMain
         '

@@ -16,6 +16,7 @@ Public Class frmGameMain
     Public XPs() As XP
     'An array of the class XP to store all of the XP dot information.
     Dim colors As New ColorPalette
+    Dim toolTips As New ToolTips
     'A class to store the tooltips to show.
 
 
@@ -82,7 +83,8 @@ Public Class frmGameMain
 
         lblHealth.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
         lblToolTip.Font = New Font(frmStart.fonts.Families(0), 9, FontStyle.Regular)
-        'Import fonts.
+        lblToolTip.ForeColor = colors.tertiary
+        'Import fonts and colors.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
         player.size = objectSizes("player")
@@ -195,11 +197,28 @@ Public Class frmGameMain
                 tmrShrink.Enabled = True
                 'Delay the initial window expand animation and start the shrinking of the window.
             Case 10
+                tmrCircleE.Enabled = True
+                'Start generating circle enemies.
+            Case > 200
+                If toolTips.moveShow Then
+                    lblToolTip.Text = toolTips.moveText
+                    lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+                    lblToolTip.Visible = True
+                ElseIf toolTips.moveDelay = 0 Then
+                    lblToolTip.Visible = False
+                    toolTips.moveDelay = tickCount
+                End If
+                If Not toolTips.moveShow And toolTips.shotShow And tickCount > (toolTips.moveDelay + 50) Then
+                    lblToolTip.Text = toolTips.shotText
+                    lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+                    lblToolTip.Visible = True
+                ElseIf toolTips.shotDelay = 0 And Not toolTips.shotShow Then
+                    lblToolTip.Visible = False
+                    toolTips.shotDelay = tickCount
+                End If
+            Case 200
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
-            Case 200
-                tmrCircleE.Enabled = True
-                'Start generatin~g circle enemies.
             Case 1000
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
@@ -228,20 +247,24 @@ Public Class frmGameMain
 
         If pressedKeys.up = True And player.loc(9).Y > Me.Location.Y + 50 Then
             updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y - playerSpeed))
+            toolTips.moveShow = False
         End If
         If pressedKeys.down = True And player.loc(9).Y < Me.Location.Y + Me.Height - 30 Then
             updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y + playerSpeed))
+            toolTips.moveShow = False
         End If
         If pressedKeys.left = True And player.loc(9).X > Me.Location.X + 30 Then
             updatePlayerLoc(New Point(player.loc(9).X - playerSpeed, player.loc(9).Y))
+            toolTips.moveShow = False
         End If
         If pressedKeys.right = True And player.loc(9).X < Me.Location.X + Me.Width - 32 Then
             updatePlayerLoc(New Point(player.loc(9).X + playerSpeed, player.loc(9).Y))
+            toolTips.moveShow = False
         End If
         If Not pressedKeys.up And Not pressedKeys.down And Not pressedKeys.left And Not pressedKeys.right Then
             updatePlayerLoc(New Point(player.loc(9).X, player.loc(9).Y))
         End If
-        'Move the player if the arrow keys are currently being pressed and make sure the player does not leave the window.
+        'Move the player if the arrow keys are currently being pressed, make sure the player does not leave the window and hide the tooltip.
 
         If shots IsNot Nothing Then
             checkWindowHit()
@@ -321,7 +344,7 @@ Public Class frmGameMain
     End Sub
     'Shrink the window.
 
-    '---- MOUSE & KEYS----
+    '---- MOUSE & KEYS ----
     Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown, formMainBackground.KeyDown
         Select Case e.KeyCode
             Case Keys.Up, Keys.W
@@ -537,6 +560,8 @@ Public Class frmGameMain
 
             calcMoveObject(type, shots.Length - 1)
             'Calculate the movement of the shot.
+            toolTips.shotShow = False
+            'Do not show the move tooltip.
         ElseIf type = "boss" Then
             If gameBossForms Is Nothing Then
                 gameBossForms = {New frmGameBoss}
@@ -748,7 +773,7 @@ Public Class frmGameMain
                     player.loc(i) = newElement
             End Select
         Next
-    End Function    '
+    End Function
     'Update the player's location.
 
     ''' <summary>
@@ -808,15 +833,24 @@ Public Class frmGameMain
         frmStats.Show()
     End Function
     'End the game
-
+    ''' <summary>
+    ''' This function cancels the close event when the user tries to close the form.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         e.Cancel = True
     End Sub
     'Do not allow the player to close the form.
-
+    ''' <summary>
+    ''' This function adjusts the location of <c>lblToolTip</c>
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
     End Sub
+    'Anchor lblToolTip to the bottom center of the window.
 
 End Class
 
@@ -889,8 +923,10 @@ Public Class ColorPalette
 End Class
 'Class to store all the custom colors.
 Public Class ToolTips
-    Public Property moveText As String = "use the arrows keys or WASD to move"
-    Public Property moveShow As Boolean = True
-    Public Property shotText As String = "hold/click the left mouse button to shoot bullets"
-    Public Property shotShow As Boolean = True
+    Public Property moveText As String = "use the arrows keys or WASD to move" 'the text to display on the tooltip.
+    Public Property moveShow As Boolean = True 'whether or not the move tooltip should be shown.
+    Public Property moveDelay As Integer = 0 'the tick count that the move tooltip was hidden to delay any consequent tooltips.
+    Public Property shotText As String = "hold/click the left mouse button to shoot bullets" 'the text to display on the tooltip.
+    Public Property shotShow As Boolean = True 'whether or not the move tooltip should be shown.
+    Public Property shotDelay As Integer = 0 'the tick count that the shot tooltip was hidden to delay any consequent tooltips.
 End Class
