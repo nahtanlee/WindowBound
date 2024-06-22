@@ -322,13 +322,13 @@ Public Class frmGameMain
     '---- MOUSE & KEYS----
     Private Sub frmGameMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown, formMainBackground.KeyDown
         Select Case e.KeyCode
-            Case Keys.Up
+            Case Keys.Up, Keys.W
                 pressedKeys.up = True
-            Case Keys.Down
+            Case Keys.Down, Keys.S
                 pressedKeys.down = True
-            Case Keys.Left
+            Case Keys.Left, Keys.A
                 pressedKeys.left = True
-            Case Keys.Right
+            Case Keys.Right, Keys.D
                 pressedKeys.right = True
         End Select
     End Sub
@@ -803,11 +803,12 @@ Public Class frmGameMain
 
         frmStats.Show()
     End Function
+    'End the game
 
     Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         e.Cancel = True
     End Sub
-    'End the game
+    'Do not allow the player to close the form.
 
 End Class
 
@@ -879,3 +880,9 @@ Public Class ColorPalette
     Public Property purple As Color = Color.FromArgb(255, 241, 156, 255)
 End Class
 'Class to store all the custom colors.
+Public Class ToolTips
+    Public Property moveText As String = "use ←↑↓→ or WASD to move"
+    Public Property moveShow As Boolean = True
+    Public Property shotText As String = "hold/click the left mouse button to shoot bullets"
+    Public Property shotShow As Boolean = True
+End Class
