@@ -35,6 +35,7 @@ Public Class frmGameBoss
         'Start the timers.
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
+
         tickCount += 1
         If frmGameMain.tmrTick.Enabled = False Then
             tmrTick.Enabled = False
@@ -69,17 +70,19 @@ Public Class frmGameBoss
         calcOctagon()
         'Calculate the points to draw the boss.
         checkPlayerCollisions()
-        'Check for collision between the boss and the player.
+        'Check for collision between the boss And the player.
         If shots IsNot Nothing Then
             checkBossShotHits()
         End If
-        'Check for collisions between the shots fired from the boss and the player.
+        'Check for collisions between the shots fired from the boss And the player.
         If frmGameMain.shots IsNot Nothing Then
             checkPlayerShotHits()
         End If
         'Check for collisions between the shots fired from the player and the boss.
 
         picCanvas.Invalidate()
+
+
     End Sub
 
     Private Sub tmrShot_Tick(sender As Object, e As EventArgs) Handles tmrShot.Tick
@@ -283,7 +286,8 @@ Public Class frmGameBoss
                     frmStats.stats.bossesKilled += 1
                     frmGameMain.removeElement("gameBossForms", Me.Tag)
                     tmrTick.Enabled = False
-                    Me.Close()
+                    tmrShot.Enabled = False
+                    Me.Hide()
                 End If
                 'Hide the boss if its health reaches 0.
 
@@ -331,5 +335,4 @@ Public Class frmGameBoss
         ReDim Preserve shots(originalSize - 1)
     End Function
     'Remove a shot from the specified index.
-
 End Class

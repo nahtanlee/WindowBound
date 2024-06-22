@@ -197,7 +197,7 @@ Public Class frmGameMain
                 'Start generating square enemies.
             Case 200
                 tmrCircleE.Enabled = True
-                'Start generating circle enemies.
+                'Start generatin~g circle enemies.
             Case 1000
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
@@ -288,7 +288,7 @@ Public Class frmGameMain
     End Sub
     'Add a new triangle enemy.
     Private Sub tmrBoss_Tick(sender As Object, e As EventArgs) Handles tmrBoss.Tick
-        If Rnd() > 0.52 Then
+        If Rnd() > 0.52 And gameBossForms Is Nothing Then
             addObject("boss")
         End If
         'Add bosses randomly
@@ -296,25 +296,26 @@ Public Class frmGameMain
     'Add a new boss.
     Private Sub tmrShrink_Tick(sender As Object, e As EventArgs) Handles tmrShrink.Tick
         If Me.Width > 200 Then
-            Me.Width -= 4
-            Me.Left += 2
+            Me.Width -= 2
+            Me.Left += 1
         End If
         If Me.Height > 200 Then
-            Me.Height -= 4
-            Me.Top += 2
+            Me.Height -= 2
+            Me.Top += 1
         End If
-        If player.loc(9).Y < Me.Location.Y + 40 Then
+        If (player.loc(9).Y - player.size) < Me.Location.Y + 40 Then
             player.loc(9).Y += 1
         End If
         If player.loc(9).Y > Me.Location.Y + Me.Height - 30 Then
             player.loc(9).Y -= 1
         End If
-        If player.loc(9).X < Me.Location.X + 17 Then
+        If player.loc(9).X < Me.Location.X + 24 Then
             player.loc(9).X += 1
         End If
         If player.loc(9).X > Me.Location.X + Me.Width - 33 Then
             player.loc(9).X -= 1
         End If
+        'Push the player if it is at the edge of the window.
     End Sub
     'Shrink the window.
 
@@ -542,10 +543,10 @@ Public Class frmGameMain
                 gameBossForms.Last.Show()
             Else
                 ReDim Preserve gameBossForms(gameBossForms.Length)
-                gameBossForms(gameBossForms.Length - 1) = New frmGameBoss With {
-                    .Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50)))),
-                    .Tag = (gameBossForms.Length - 1)
-                }
+                gameBossForms(gameBossForms.Length - 1) = New frmGameBoss
+                gameBossForms(gameBossForms.Length - 1).Location = New Point(Rnd() * (My.Computer.Screen.WorkingArea.Width - (2 * (gameBossForms.Last.Width + 50))), Rnd() * (My.Computer.Screen.WorkingArea.Height - (2 * (gameBossForms.Last.Height + 50))))
+                gameBossForms(gameBossForms.Length - 1).Tag = (gameBossForms.Length - 1)
+
                 gameBossForms(gameBossForms.Length - 1).Show()
             End If
             'Create a new boss form, set a random location, set its tag as its index and show the form.
@@ -719,6 +720,7 @@ Public Class frmGameMain
             ReDim Preserve enemies(originalSize - 1)
         ElseIf arrayName = "gameBossForms" Then
             If gameBossForms.Length <= 1 Then
+                gameBossForms(index).Close()
                 gameBossForms = {}
             Else
                 Dim originalSize As Integer = gameBossForms.Length - 1
