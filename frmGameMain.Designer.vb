@@ -33,6 +33,7 @@ Partial Class frmGameMain
         Me.tmrTriE = New System.Windows.Forms.Timer(Me.components)
         Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.tmrBoss = New System.Windows.Forms.Timer(Me.components)
+        Me.lblToolTip = New System.Windows.Forms.Label()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -57,7 +58,7 @@ Partial Class frmGameMain
         Me.lblHealth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(247, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(290, 9)
         Me.lblHealth.Name = "lblHealth"
         Me.lblHealth.Size = New System.Drawing.Size(98, 24)
         Me.lblHealth.TabIndex = 1
@@ -85,12 +86,25 @@ Partial Class frmGameMain
         '
         Me.tmrBoss.Interval = 4000
         '
+        'lblToolTip
+        '
+        Me.lblToolTip.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.lblToolTip.AutoSize = True
+        Me.lblToolTip.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblToolTip.ForeColor = System.Drawing.Color.White
+        Me.lblToolTip.Location = New System.Drawing.Point(100, 337)
+        Me.lblToolTip.Name = "lblToolTip"
+        Me.lblToolTip.Size = New System.Drawing.Size(180, 13)
+        Me.lblToolTip.TabIndex = 2
+        Me.lblToolTip.Text = "use the arrows or WASD to move"
+        '
         'frmGameMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(357, 322)
+        Me.ClientSize = New System.Drawing.Size(392, 359)
+        Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.lblHealth)
         Me.Controls.Add(Me.picCanvas)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -104,6 +118,7 @@ Partial Class frmGameMain
         Me.TopMost = True
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -116,4 +131,5 @@ Partial Class frmGameMain
     Friend WithEvents tmrCircleE As Timer
     Friend WithEvents tmrTriE As Timer
     Friend WithEvents tmrBoss As Timer
+    Friend WithEvents lblToolTip As Label
 End Class

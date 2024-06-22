@@ -16,6 +16,7 @@ Public Class frmGameMain
     Public XPs() As XP
     'An array of the class XP to store all of the XP dot information.
     Dim colors As New ColorPalette
+    'A class to store the tooltips to show.
 
 
     Dim pressedKeys As New PressedKeys
@@ -80,6 +81,7 @@ Public Class frmGameMain
         'Switch the background forms.
 
         lblHealth.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
+        lblToolTip.Font = New Font(frmStart.fonts.Families(0), 9, FontStyle.Regular)
         'Import fonts.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
@@ -335,13 +337,13 @@ Public Class frmGameMain
     'Update the correct variables when a key is pressed.
     Private Sub frmGameMain_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp, formMainBackground.KeyUp
         Select Case e.KeyCode
-            Case Keys.Up
+            Case Keys.Up, Keys.W
                 pressedKeys.up = False
-            Case Keys.Down
+            Case Keys.Down, Keys.S
                 pressedKeys.down = False
-            Case Keys.Left
+            Case Keys.Left, Keys.A
                 pressedKeys.left = False
-            Case Keys.Right
+            Case Keys.Right, Keys.D
                 pressedKeys.right = False
         End Select
     End Sub
@@ -796,9 +798,11 @@ Public Class frmGameMain
         tmrSquareE.Enabled = False
         tmrBoss.Enabled = False
         frmStats.stats.timeAlive = $"{(DateAndTime.Now - startTime).Minutes}:{Format((DateAndTime.Now - startTime).Seconds, "00")}"
-        For Each boss In gameBossForms
-            boss.tmrTick.Enabled = False
-        Next
+        If gameBossForms IsNot Nothing Then
+            For Each boss In gameBossForms
+                boss.tmrTick.Enabled = False
+            Next
+        End If
 
 
         frmStats.Show()
@@ -809,6 +813,10 @@ Public Class frmGameMain
         e.Cancel = True
     End Sub
     'Do not allow the player to close the form.
+
+    Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+    End Sub
 
 End Class
 
@@ -881,7 +889,7 @@ Public Class ColorPalette
 End Class
 'Class to store all the custom colors.
 Public Class ToolTips
-    Public Property moveText As String = "use ←↑↓→ or WASD to move"
+    Public Property moveText As String = "use the arrows keys or WASD to move"
     Public Property moveShow As Boolean = True
     Public Property shotText As String = "hold/click the left mouse button to shoot bullets"
     Public Property shotShow As Boolean = True
