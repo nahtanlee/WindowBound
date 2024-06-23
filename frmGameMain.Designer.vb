@@ -48,7 +48,7 @@ Partial Class frmGameMain
         '
         'tmrSquareE
         '
-        Me.tmrSquareE.Interval = 600
+        Me.tmrSquareE.Interval = 1800
         '
         'tmrShrink
         '
@@ -67,7 +67,7 @@ Partial Class frmGameMain
         '
         'tmrCircleE
         '
-        Me.tmrCircleE.Interval = 1800
+        Me.tmrCircleE.Interval = 600
         '
         'tmrTriE
         '

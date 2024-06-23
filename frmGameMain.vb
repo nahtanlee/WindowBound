@@ -225,6 +225,19 @@ Public Class frmGameMain
             Case 2000
                 tmrBoss.Enabled = True
                 'Start generating bosses in a new window.
+            Case > 4000
+                If tickCount Mod 200 = 0 Then
+                    If tmrCircleE.Interval > 200 Then
+                        tmrCircleE.Interval -= 100
+                    End If
+                    If tmrSquareE.Interval > 200 Then
+                        tmrSquareE.Interval -= 100
+                    End If
+                    If tmrTriE.Interval > 200 Then
+                        tmrTriE.Interval -= 100
+                    End If
+                End If
+                'Increase the spawning rate of the enemies.
         End Select
         'Delay actions.
 
