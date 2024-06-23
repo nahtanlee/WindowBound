@@ -6,6 +6,7 @@ Public Class frmGameBoss
     Public bossPoints(8) As Point
     Dim bossShrink As Boolean = True
     Dim bossHealth As Integer = 8
+    Dim bossXP As Integer = 12
     Dim wait As Integer = 2
 
     Dim speed As Integer = 2.8
@@ -35,7 +36,6 @@ Public Class frmGameBoss
         'Start the timers.
     End Sub
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
-
         tickCount += 1
         If frmGameMain.tmrTick.Enabled = False Then
             tmrTick.Enabled = False

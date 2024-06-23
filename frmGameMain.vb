@@ -60,6 +60,12 @@ Public Class frmGameMain
         {"triangle", 20}
     }
     'Initialize a dictionary with the size of each type of object.
+    Dim objectXPs As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
+        {"circle", 2},
+        {"square", 5},
+        {"triangle", 8}
+    }
+    'Initialize a dictionary with the amount of XP that each enemy drops when killed.
 
     Public shots() As Tuple(Of Point, Point, Point, Integer)
     'An array of tuples that stores the [1] current location, [2] end destination, [3] the calculated movement and [4] the size of the shots.
@@ -165,6 +171,16 @@ Public Class frmGameMain
             'Draw each moving enemy and update and recalculate its position.
         End If
         'Draw the moving enemies and update properties.
+
+        If XPs IsNot Nothing Then
+            For i As Integer = 0 To (XPs.Length - 1)
+                XPs(i).loc = New Point(XPs(i).loc.X + XPs(i).mov.X, XPs(i).loc.Y + XPs(i).mov.Y)
+                Using pen As New SolidBrush(colors.purple)
+                    e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(XPs(i).loc), New Size(XPs(i).size, XPs(i).size)))
+                End Using
+            Next
+        End If
+        'Draw the XP dots and update its position.
 
         If player.red > 0 Then
             Using pen As New Pen(colors.red, 14)
@@ -312,7 +328,7 @@ Public Class frmGameMain
     End Sub
     'Add a new square enemy.
     Private Sub tmrCircleE_Tick(sender As Object, e As EventArgs) Handles tmrCircleE.Tick
-        If Rnd() > 0.91 Then
+        If Rnd() > 0.81 Then
             addObject("circle")
         End If
         'Add circle enemies randomly
@@ -623,6 +639,7 @@ Public Class frmGameMain
                      .loc = PointToScreen(New Point(locX, locY)),
                      .size = objectSizes(type),
                      .speed = objectSpeeds(type) + (Rnd() / 10),
+                     .XP = objectXPs(type),
                      .health = objectMaxHealth(type)
                    }
                 }
@@ -633,6 +650,7 @@ Public Class frmGameMain
                     .loc = PointToScreen(New Point(locX, locY)),
                     .size = objectSizes(type),
                     .speed = objectSpeeds(type) + (Rnd() / 5),
+                    .XP = objectXPs(type),
                     .health = objectMaxHealth(type)
                 }
             End If
@@ -643,6 +661,32 @@ Public Class frmGameMain
         End If
     End Function
     'Adds the specified object as a new element in its respective array.
+
+    ''' <summary>
+    ''' This function creates XP dots.
+    ''' </summary>
+    ''' <param name="loc">is the location that the enemy was killed</param>
+    ''' <param name="count">is the number of XP dots to create</param>
+    ''' <returns></returns>
+    Public Function dropXP(loc As Point, count As Integer)
+        For i As Integer = 1 To count
+            If XPs Is Nothing Then
+                XPs = {New XP}
+                XPs(0).loc = New Point((loc.X - 50) + (Rnd() * 50), (loc.Y - 50) + (Rnd() * 50))
+                XPs(0).size = 4 + (Rnd() * 7)
+                XPs(0).mov = New Point(0, 0)
+            Else
+                ReDim Preserve XPs(XPs.Length)
+                XPs(XPs.Length - 1) = New XP With {
+                    .loc = New Point((loc.X - 50) + (Rnd() * 50), (loc.Y - 50) + (Rnd() * 50)),
+                    .size = 4 + (Rnd() * 7),
+                    .mov = New Point(0, 0)
+                }
+            End If
+            'Create a new XP.
+        Next
+    End Function
+    'Create XP dots.
 
     ''' <summary>
     ''' This function checks if any of the fired shots have hit an enemy. If it has, the shot is removed and the enemy's health decreases.
@@ -656,6 +700,7 @@ Public Class frmGameMain
                 If enemies(e).loc.X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (enemies(e).loc.X + enemies(e).size) And (enemies(e).loc.Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size + shot.Item3.X + 10) Then
                     removeElement("shots", s)
                     If enemies(e).health <= 1 Then
+                        dropXP(enemies(e).loc, enemies(e).XP)
                         removeElement("enemies", e)
                         frmStats.stats.enemiesKilled += 1
                     Else
@@ -881,8 +926,9 @@ Public Class Enemy
     Public Property loc As Point 'the current location of the enemy (top-left).
     Public Property mov As Point 'the calculated x and y axis movements of the enemy.
     Public Property size As Integer 'the size of the enemy.
-    Public Property speed As Integer 'the speed of the enemy.
+    Public Property speed As Double 'the speed of the enemy.
     Public Property health As Integer 'the current health of the enemy.
+    Public Property XP As Integer 'the amount of XP that the enemy drops when killed.
     Public Property white As Integer 'the number of white frames to show.
 End Class
 'Class to store enemy information.
@@ -898,6 +944,7 @@ Public Class XP
     Public Property size As Integer 'the size of the XP dot.
     Public Property mov As Point '(0, 0) if the XP hasn't been 'picked up'.
 End Class
+'Class to store the XP information
 Public Class PressedKeys
     Public Property up As Boolean = False
     Public Property down As Boolean = False
