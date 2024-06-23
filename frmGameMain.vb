@@ -30,6 +30,8 @@ Public Class frmGameMain
     'The time the game was started (used to calculate stats.timeAlive)
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
+    Dim playerRadius As Integer = 100
+    'How close the player has to be to the dropped XP to pick it up.
 
     Dim gameBossForms() As frmGameBoss
     'The window to show to the boss in.
@@ -172,12 +174,23 @@ Public Class frmGameMain
         End If
         'Draw the moving enemies and update properties.
 
+        Using pen As New SolidBrush(colors.purple)
+            e.Graphics.FillEllipse(pen, New Rectangle(New Point(10, 13.5), New Size(12, 12)))
+        End Using
         If XPs IsNot Nothing Then
             For i As Integer = 0 To (XPs.Length - 1)
                 XPs(i).loc = New Point(XPs(i).loc.X + XPs(i).mov.X, XPs(i).loc.Y + XPs(i).mov.Y)
                 Using pen As New SolidBrush(colors.purple)
                     e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(XPs(i).loc), New Size(XPs(i).size, XPs(i).size)))
                 End Using
+                'Draw the dot.
+                If XPs(i).mov <> New Point(0, 0) Then
+                    If XPs(i).speed < 12 Then
+                        XPs(i).speed += 0.8
+                    End If
+                    XPs(i).mov = calcMovePoint(XPs(i).loc, player.loc(9), XPs(i).speed)
+                End If
+                'Update its movement, slowly increasing the speed.
             Next
         End If
         'Draw the XP dots and update its position.
@@ -201,6 +214,7 @@ Public Class frmGameMain
     '---- TIMERS ----
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         tickCount += 1
+        lblTick.Text = tickCount
         Select Case tickCount
             Case 1
                 startTime = DateAndTime.Now
@@ -235,10 +249,10 @@ Public Class frmGameMain
             Case 200
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
-            Case 1000
+            Case 500
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
-            Case 2000
+            Case 800
                 tmrBoss.Enabled = True
                 'Start generating bosses in a new window.
             Case > 4000
@@ -257,10 +271,10 @@ Public Class frmGameMain
         End Select
         'Delay actions.
 
-        If (tickCount Mod 2) = 0 Then
+        If (tickCount Mod 1) = 0 Then
             picCanvas.Invalidate()
         End If
-        'Redraw all the shots and player every second tick.
+        'Redraw the canvas every second tick.
 
         If player.red > 0 Then
             player.red -= 1
@@ -304,7 +318,11 @@ Public Class frmGameMain
         If enemies IsNot Nothing Then
             checkPlayerCollisions()
         End If
-        'Check collisions between the window, shots, enemies and player.
+        If XPs IsNot Nothing Then
+            checkXPProx()
+            checkXPCollisions()
+        End If
+        'Check collisions between the window, shots, enemies, player and XP.
 
         extendSides()
         'Resize the window accordingly.
@@ -522,8 +540,9 @@ Public Class frmGameMain
     ''' </summary>
     ''' <param name="startPoint">is the first point.</param>
     ''' <param name="endPoint">is the second point.</param>
+    ''' <param name="speed">is the optional speed multiplier.</param>
     ''' <returns>The calculated movement as a point.</returns>
-    Public Function calcMovePoint(startPoint As Point, endPoint As Point) As Point
+    Public Function calcMovePoint(startPoint As Point, endPoint As Point, Optional speed As Integer = 1) As Point
         Dim move As Point
 
         Dim b As Integer = endPoint.Y - startPoint.Y
@@ -556,18 +575,19 @@ Public Class frmGameMain
 
         Select Case v
             Case Is <= 0.25
-                move.X = (4 * v)
-                move.Y = ((4 * v) - 1)
+                move.X = (4 * v) * speed
+                move.Y = ((4 * v) - 1) * speed
             Case Is <= 0.5
-                move.Y = (1 - 4 * (v - 0.25))
-                move.X = (4 * (v - 0.25))
+                move.Y = (1 - 4 * (v - 0.25)) * speed
+                move.X = (4 * (v - 0.25)) * speed
             Case Is <= 0.75
-                move.X = (-4 * (v - 0.5))
-                move.Y = (1 - 4 * (v - 0.5))
+                move.X = (-4 * (v - 0.5)) * speed
+                move.Y = (1 - 4 * (v - 0.5)) * speed
             Case Is <= 1
-                move.Y = (-1 + 4 * (v - 0.75))
-                move.X = (-4 * (v - 0.75))
+                move.Y = (-1 + 4 * (v - 0.75)) * speed
+                move.X = (-4 * (v - 0.75)) * speed
         End Select
+
         'Calculate the movement per tick of the shot.
 
         Return move
@@ -577,7 +597,7 @@ Public Class frmGameMain
     ''' <summary>
     ''' This function adds a new element to the corresponding array dictated by the <paramref name="type"/> and sets the correct values.
     ''' </summary>
-    ''' <param name="type">is the type of the object that should be added</param>
+    ''' <param name="type">is the type of the object that should be added.</param>
     ''' <returns></returns>
     Private Function addObject(type As String)
         If type = "shot" Or type = "extraShot" Then
@@ -665,8 +685,8 @@ Public Class frmGameMain
     ''' <summary>
     ''' This function creates XP dots.
     ''' </summary>
-    ''' <param name="loc">is the location that the enemy was killed</param>
-    ''' <param name="count">is the number of XP dots to create</param>
+    ''' <param name="loc">is the location that the enemy was killed.</param>
+    ''' <param name="count">is the number of XP dots to create.</param>
     ''' <returns></returns>
     Public Function dropXP(loc As Point, count As Integer)
         For i As Integer = 1 To count
@@ -675,12 +695,14 @@ Public Class frmGameMain
                 XPs(0).loc = New Point((loc.X - 50) + (Rnd() * 50), (loc.Y - 50) + (Rnd() * 50))
                 XPs(0).size = 4 + (Rnd() * 7)
                 XPs(0).mov = New Point(0, 0)
+                XPs(0).speed = 1
             Else
                 ReDim Preserve XPs(XPs.Length)
                 XPs(XPs.Length - 1) = New XP With {
                     .loc = New Point((loc.X - 50) + (Rnd() * 50), (loc.Y - 50) + (Rnd() * 50)),
                     .size = 4 + (Rnd() * 7),
-                    .mov = New Point(0, 0)
+                    .mov = New Point(0, 0),
+                    .speed = 1
                 }
             End If
             'Create a new XP.
@@ -689,7 +711,7 @@ Public Class frmGameMain
     'Create XP dots.
 
     ''' <summary>
-    ''' This function checks if any of the fired shots have hit an enemy. If it has, the shot is removed and the enemy's health decreases.
+    ''' This function checks if any of the fired shots have pickedUp an enemy. If it has, the shot is removed and the enemy's health decreases.
     ''' </summary>
     ''' <returns></returns>
     Private Function checkEnemyHits()
@@ -719,6 +741,41 @@ Public Class frmGameMain
         Next
     End Function
     'Check if the shots have collided with an enemy.
+
+    ''' <summary>
+    ''' This function checks if any of the XP dots are within the <c>playerRadius</c>. If so, the XP dot starts moving towards the player.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkXPProx()
+        For i As Integer = 0 To XPs.Length - 1
+            If XPs(i).mov = New Point(0, 0) Then
+                If XPs(i).loc.X <= (player.loc(9).X + playerRadius) And (player.loc(9).X - playerRadius) <= XPs(i).loc.X And XPs(i).loc.Y <= (player.loc(9).Y + playerRadius) And (player.loc(9).Y - playerRadius) <= XPs(i).loc.Y Then
+                    XPs(i).mov = calcMovePoint(XPs(i).loc, player.loc(9), XPs(i).speed)
+                    Exit For
+                    'Exit the loop.
+                End If
+            End If
+        Next
+    End Function
+    'Check the proximity of the XP dots to the player.
+
+    ''' <summary>
+    ''' This function checks if any of the XP dots have reached the player. If so, the XP dot is removed and the XP count increases.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkXPCollisions()
+        For i As Integer = 0 To XPs.Length - 1
+            If XPs(i).loc.X <= (player.loc(9).X + player.size + 5) And (player.loc(9).X - player.size - 5) <= XPs(i).loc.X And XPs(i).loc.Y <= (player.loc(9).Y + player.size + 5) And (player.loc(9).Y - player.size - 5) <= XPs(i).loc.Y Then
+                removeElement("XP", i)
+                frmStats.stats.xpCollected += 1
+                player.XP += 1
+                lblXP.Text = player.XP
+                Exit For
+                'Exit the loop.
+            End If
+        Next
+    End Function
+    'Check if the XP has been picked up by the player.
 
     ''' <summary>
     ''' This function checks if the player has collided with any of the enemies. If they have, the players health decreases.
@@ -785,7 +842,7 @@ Public Class frmGameMain
             End If
         Next
     End Function
-    'Check if the window has been hit by a shot.
+    'Check if the window has been pickedUp by a shot.
 
     ''' <summary>
     ''' This function removes the element at index <paramref name="index"/> in <paramref name="arrayName"/> and redimensions the array to one smaller.
@@ -794,24 +851,29 @@ Public Class frmGameMain
     ''' <param name="index">is the index of element to be removed</param>
     ''' <returns></returns>
     Public Function removeElement(arrayName As String, index As Integer)
-        If arrayName = "shots" Then
-            Dim originalSize As Integer = shots.Length - 1
-            shots(index) = shots(shots.Length - 1)
-            ReDim Preserve shots(originalSize - 1)
-        ElseIf arrayName = "enemies" Then
-            Dim originalSize As Integer = enemies.Length - 1
-            enemies(index) = enemies(enemies.Length - 1)
-            ReDim Preserve enemies(originalSize - 1)
-        ElseIf arrayName = "gameBossForms" Then
-            If gameBossForms.Length <= 1 Then
-                gameBossForms(index).Close()
-                gameBossForms = {}
-            Else
-                Dim originalSize As Integer = gameBossForms.Length - 1
-                gameBossForms(index) = gameBossForms(gameBossForms.Length - 1)
-                ReDim Preserve gameBossForms(originalSize - 1)
-            End If
-        End If
+        Select Case arrayName
+            Case "shots"
+                Dim originalSize As Integer = shots.Length - 1
+                shots(index) = shots(shots.Length - 1)
+                ReDim Preserve shots(originalSize - 1)
+            Case "enemies"
+                Dim originalSize As Integer = enemies.Length - 1
+                enemies(index) = enemies(enemies.Length - 1)
+                ReDim Preserve enemies(originalSize - 1)
+            Case "gameBossForms"
+                If gameBossForms.Length <= 1 Then
+                    gameBossForms(index).Close()
+                    gameBossForms = {}
+                Else
+                    Dim originalSize As Integer = gameBossForms.Length - 1
+                    gameBossForms(index) = gameBossForms(gameBossForms.Length - 1)
+                    ReDim Preserve gameBossForms(originalSize - 1)
+                End If
+            Case "XP"
+                Dim originalSize As Integer = XPs.Length - 1
+                XPs(index) = XPs(XPs.Length - 1)
+                ReDim Preserve XPs(originalSize - 1)
+        End Select
     End Function
     'Remove an element from the specified array and index.
 
@@ -899,6 +961,7 @@ Public Class frmGameMain
         e.Cancel = True
     End Sub
     'Do not allow the player to close the form.
+
     ''' <summary>
     ''' This function adjusts the location of <c>lblToolTip</c>
     ''' </summary>
@@ -916,6 +979,7 @@ Public Class Player
     Public Property loc As Point() 'an array that stores the last 10 (0-9) locations of the player (center).
     Public Property size As Integer 'the size of the player.
     Public Property health As Integer 'the current health of the player.
+    Public Property XP As Integer 'the current amount of XP the player has collected.
     Public Property red As Integer 'number of red frames to show.
     Public Property maxHealth As Integer 'the maximum health the player can have.
     'Public Property powerup As String
@@ -942,6 +1006,7 @@ End Class
 Public Class XP
     Public Property loc As Point 'the location of the XP dot.
     Public Property size As Integer 'the size of the XP dot.
+    Public Property speed As Integer 'the speed of the XP dot.
     Public Property mov As Point '(0, 0) if the XP hasn't been 'picked up'.
 End Class
 'Class to store the XP information
@@ -990,3 +1055,4 @@ Public Class ToolTips
     Public Property shotShow As Boolean = True 'whether or not the move tooltip should be shown.
     Public Property shotDelay As Integer = 0 'the tick count that the shot tooltip was hidden to delay any consequent tooltips.
 End Class
+'Class to store all of the tooltip information.

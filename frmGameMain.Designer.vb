@@ -34,6 +34,8 @@ Partial Class frmGameMain
         Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.tmrBoss = New System.Windows.Forms.Timer(Me.components)
         Me.lblToolTip = New System.Windows.Forms.Label()
+        Me.lblXP = New System.Windows.Forms.Label()
+        Me.lblTick = New System.Windows.Forms.Label()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -44,7 +46,7 @@ Partial Class frmGameMain
         'tmrShot
         '
         Me.tmrShot.Enabled = True
-        Me.tmrShot.Interval = 600
+        Me.tmrShot.Interval = 700
         '
         'tmrSquareE
         '
@@ -56,11 +58,12 @@ Partial Class frmGameMain
         'lblHealth
         '
         Me.lblHealth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblHealth.AutoSize = True
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(290, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(303, 9)
         Me.lblHealth.Name = "lblHealth"
-        Me.lblHealth.Size = New System.Drawing.Size(98, 24)
+        Me.lblHealth.Size = New System.Drawing.Size(62, 24)
         Me.lblHealth.TabIndex = 1
         Me.lblHealth.Text = "10/10"
         Me.lblHealth.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -92,19 +95,46 @@ Partial Class frmGameMain
         Me.lblToolTip.AutoSize = True
         Me.lblToolTip.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblToolTip.ForeColor = System.Drawing.Color.White
-        Me.lblToolTip.Location = New System.Drawing.Point(100, 337)
+        Me.lblToolTip.Location = New System.Drawing.Point(91, 354)
         Me.lblToolTip.Name = "lblToolTip"
         Me.lblToolTip.Size = New System.Drawing.Size(180, 13)
         Me.lblToolTip.TabIndex = 2
         Me.lblToolTip.Text = "use the arrows or WASD to move"
         Me.lblToolTip.Visible = False
         '
+        'lblXP
+        '
+        Me.lblXP.AutoSize = True
+        Me.lblXP.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblXP.ForeColor = System.Drawing.Color.White
+        Me.lblXP.Location = New System.Drawing.Point(28, 9)
+        Me.lblXP.Name = "lblXP"
+        Me.lblXP.Size = New System.Drawing.Size(23, 24)
+        Me.lblXP.TabIndex = 3
+        Me.lblXP.Text = "0"
+        Me.lblXP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lblTick
+        '
+        Me.lblTick.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblTick.AutoSize = True
+        Me.lblTick.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTick.ForeColor = System.Drawing.Color.White
+        Me.lblTick.Location = New System.Drawing.Point(12, 345)
+        Me.lblTick.Name = "lblTick"
+        Me.lblTick.Size = New System.Drawing.Size(23, 24)
+        Me.lblTick.TabIndex = 4
+        Me.lblTick.Text = "0"
+        Me.lblTick.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'frmGameMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(392, 359)
+        Me.ClientSize = New System.Drawing.Size(374, 376)
+        Me.Controls.Add(Me.lblTick)
+        Me.Controls.Add(Me.lblXP)
         Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.lblHealth)
         Me.Controls.Add(Me.picCanvas)
@@ -133,4 +163,6 @@ Partial Class frmGameMain
     Friend WithEvents tmrTriE As Timer
     Friend WithEvents tmrBoss As Timer
     Friend WithEvents lblToolTip As Label
+    Friend WithEvents lblXP As Label
+    Friend WithEvents lblTick As Label
 End Class
