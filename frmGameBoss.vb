@@ -282,6 +282,7 @@ Public Class frmGameBoss
 
                 'Update the player's health.
                 If bossHealth < 1 Then
+                    frmGameMain.dropXP(bossLoc, 15)
                     frmStats.stats.bossesKilled += 1
                     frmGameMain.removeElement("gameBossForms", Me.Tag)
                     tmrTick.Enabled = False
