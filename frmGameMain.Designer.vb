@@ -35,7 +35,6 @@ Partial Class frmGameMain
         Me.tmrBoss = New System.Windows.Forms.Timer(Me.components)
         Me.lblToolTip = New System.Windows.Forms.Label()
         Me.lblXP = New System.Windows.Forms.Label()
-        Me.lblTick = New System.Windows.Forms.Label()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -114,26 +113,12 @@ Partial Class frmGameMain
         Me.lblXP.Text = "0"
         Me.lblXP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lblTick
-        '
-        Me.lblTick.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblTick.AutoSize = True
-        Me.lblTick.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTick.ForeColor = System.Drawing.Color.White
-        Me.lblTick.Location = New System.Drawing.Point(12, 345)
-        Me.lblTick.Name = "lblTick"
-        Me.lblTick.Size = New System.Drawing.Size(23, 24)
-        Me.lblTick.TabIndex = 4
-        Me.lblTick.Text = "0"
-        Me.lblTick.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'frmGameMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
         Me.ClientSize = New System.Drawing.Size(374, 376)
-        Me.Controls.Add(Me.lblTick)
         Me.Controls.Add(Me.lblXP)
         Me.Controls.Add(Me.lblToolTip)
         Me.Controls.Add(Me.lblHealth)
@@ -164,5 +149,4 @@ Partial Class frmGameMain
     Friend WithEvents tmrBoss As Timer
     Friend WithEvents lblToolTip As Label
     Friend WithEvents lblXP As Label
-    Friend WithEvents lblTick As Label
 End Class

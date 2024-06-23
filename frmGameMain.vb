@@ -92,6 +92,7 @@ Public Class frmGameMain
         lblHealth.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
         lblToolTip.Font = New Font(frmStart.fonts.Families(0), 9, FontStyle.Regular)
         lblToolTip.ForeColor = colors.tertiary
+        lblXP.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
         'Import fonts and colors.
 
         player.loc = {PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2))), PointToScreen(New Point((Me.Width / 2), (Me.Height / 2)))}
@@ -214,7 +215,6 @@ Public Class frmGameMain
     '---- TIMERS ----
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
         tickCount += 1
-        lblTick.Text = tickCount
         Select Case tickCount
             Case 1
                 startTime = DateAndTime.Now
@@ -410,6 +410,9 @@ Public Class frmGameMain
                 pressedKeys.left = True
             Case Keys.Right, Keys.D
                 pressedKeys.right = True
+            Case Keys.Space 'Open shop.
+                toggleGame(True)
+                frmGameShop.ShowDialog()
         End Select
     End Sub
     'Update the correct variables when a key is pressed.
@@ -968,6 +971,37 @@ Public Class frmGameMain
         frmStats.Show()
     End Function
     'End the game
+
+    Public Function toggleGame(pause As Boolean)
+        If pause Then
+            tmrTick.Enabled = False
+            tmrShrink.Enabled = False
+            tmrShot.Enabled = False
+            tmrCircleE.Enabled = False
+            tmrTriE.Enabled = False
+            tmrSquareE.Enabled = False
+            tmrBoss.Enabled = False
+            If gameBossForms IsNot Nothing Then
+                For Each bossForm In gameBossForms
+                    bossForm.tmrShot.Enabled = False
+                    bossForm.tmrTick.Enabled = False
+                Next
+            End If
+        Else
+                tmrTick.Enabled = True
+            tmrShrink.Enabled = True
+            tmrShot.Enabled = True
+            tmrCircleE.Enabled = True
+            tmrTriE.Enabled = True
+            tmrSquareE.Enabled = True
+            tmrBoss.Enabled = True
+            For Each bossForm In gameBossForms
+                bossForm.tmrShot.Enabled = True
+                bossForm.tmrTick.Enabled = True
+            Next
+        End If
+    End Function
+    'Pauses or resumes the game.
 
 End Class
 
