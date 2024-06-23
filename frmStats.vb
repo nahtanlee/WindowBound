@@ -30,9 +30,6 @@ Public Class frmStats
                 Dim bestVal = Regex.Match(line, "[a-zA-Z]+\:\s([0-9\:]+)").Groups(1).Value
                 Dim currentVal = CallByName(stats, name, CallType.Get)
 
-                Debug.WriteLine($"name: {name}, bestVal: {bestVal}, currentVal: {currentVal}")
-                Debug.WriteLine($"{CInt(Replace(bestVal, ":", ""))} > {CInt(Replace(currentVal, ":", ""))}")
-
                 If CInt(Replace(bestVal, ":", "")) < CInt(Replace(currentVal, ":", "")) Then
                     CallByName(Me.bestStats, name, CallType.Set, currentVal.ToString)
                     updatedTxtFile = $"{updatedTxtFile}{name}: {currentVal}{vbNewLine}"

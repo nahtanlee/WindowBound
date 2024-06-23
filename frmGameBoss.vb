@@ -48,7 +48,6 @@ Public Class frmGameBoss
                     bossRadius -= 1.4
                     If bossRadius < 48 Then
                         wait = 19
-                        Debug.WriteLine("shrink")
                     End If
                 Else
                     bossRadius += 1.4

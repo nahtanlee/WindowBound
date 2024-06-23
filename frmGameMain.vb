@@ -43,7 +43,7 @@ Public Class frmGameMain
         {"square", 2},
         {"triangle", 2.9}
     }
-    'Initialize a dictionary that stores {object type, speeed}.
+    'Initialize a dictionary that stores {object type, speed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"player", 10},
         {"circle", 1},
@@ -417,18 +417,20 @@ Public Class frmGameMain
             startPoint = shots(index).Item1
             endPoint = shots(index).Item2
             shotSize = shots(index).Item4
+            Try
+                speed = objectSpeeds(type)
+            Catch err As System.Collections.Generic.KeyNotFoundException
+                Console.WriteLine($"Type not found as a key in objectSpeeds: '{type}', default automatically set...")
+                speed = 10
+            End Try
+            'Catch errors when finding the speed of an object.
         Else
+            speed = enemies(index).speed
             startPoint = enemies(index).loc
             endPoint = New Point(player.loc(0).X, player.loc(0).Y)
         End If
 
-        Try
-            speed = objectSpeeds(type)
-        Catch err As System.Collections.Generic.KeyNotFoundException
-            Console.WriteLine($"Type not found as a key in objectSpeeds: '{type}', defau automatically set...")
-            speed = 10
-        End Try
-        'Stop errors when finding t of an object
+
 
         Dim b As Integer = endPoint.Y - startPoint.Y
         Dim c As Integer = endPoint.X - startPoint.X
@@ -562,6 +564,7 @@ Public Class frmGameMain
             'Calculate the movement of the shot.
             toolTips.shotShow = False
             'Do not show the move tooltip.
+
         ElseIf type = "boss" Then
             If gameBossForms Is Nothing Then
                 gameBossForms = {New frmGameBoss}
@@ -606,6 +609,7 @@ Public Class frmGameMain
                      .type = type,
                      .loc = PointToScreen(New Point(locX, locY)),
                      .size = objectSizes(type),
+                     .speed = objectSpeeds(type) + (Rnd() / 10),
                      .health = objectMaxHealth(type)
                    }
                 }
@@ -615,10 +619,10 @@ Public Class frmGameMain
                     .type = type,
                     .loc = PointToScreen(New Point(locX, locY)),
                     .size = objectSizes(type),
+                    .speed = objectSpeeds(type) + (Rnd() / 5),
                     .health = objectMaxHealth(type)
                 }
             End If
-
             'Create a new enemy of the specified with default values 
 
             calcMoveObject(type, enemies.Length - 1)
@@ -637,7 +641,6 @@ Public Class frmGameMain
             For s As Integer = 0 To shots.Length - 1
                 Dim shot = shots(s)
                 If enemies(e).loc.X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (enemies(e).loc.X + enemies(e).size) And (enemies(e).loc.Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size + shot.Item3.X + 10) Then
-                    Debug.WriteLine("Hit")
                     removeElement("shots", s)
                     If enemies(e).health <= 1 Then
                         removeElement("enemies", e)
@@ -706,22 +709,18 @@ Public Class frmGameMain
         For i = 0 To shots.Length - 1
             Dim shot = shots(i)
             If shot.Item1.X < (Me.Location.X - 10) Then 'shot collided with left of the window.
-                Debug.WriteLine("left")
                 removeElement("shots", i)
                 storedExtend.left = 9.5
                 Exit For
             ElseIf shot.Item1.X > (Me.Location.X + Me.Width + 10) Then 'shot collided with right of the window.
-                Debug.WriteLine("right")
                 removeElement("shots", i)
                 storedExtend.right = 9.5
                 Exit For
             ElseIf shot.Item1.Y < (Me.Location.Y - 10) Then 'shot collided with top of the the window.
-                Debug.WriteLine("top")
                 removeElement("shots", i)
                 storedExtend.top = 9.5
                 Exit For
             ElseIf shot.Item1.Y > (Me.Location.Y + Me.Height + 10) Then 'shot collided with bottom of the window.
-                Debug.WriteLine("bottom")
                 removeElement("shots", i)
                 storedExtend.bottom = 9.5
                 Exit For
@@ -869,6 +868,7 @@ Public Class Enemy
     Public Property loc As Point 'the current location of the enemy (top-left).
     Public Property mov As Point 'the calculated x and y axis movements of the enemy.
     Public Property size As Integer 'the size of the enemy.
+    Public Property speed As Integer 'the speed of the enemy.
     Public Property health As Integer 'the current health of the enemy.
     Public Property white As Integer 'the number of white frames to show.
 End Class
