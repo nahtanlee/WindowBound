@@ -43,7 +43,7 @@ Public Class frmGameMain
         {"extraShot", 23},
         {"circle", 2.4},
         {"square", 2},
-        {"triangle", 2.9}
+        {"triangle", 2.75}
     }
     'Initialize a dictionary that stores {object type, speed}.
     Dim objectMaxHealth As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
@@ -226,33 +226,23 @@ Public Class frmGameMain
                 storedExtend.right = 10
                 tmrShrink.Enabled = True
                 'Delay the initial window expand animation and start the shrinking of the window.
-            Case 10
+            Case 50
+                addObject("circle")
                 tmrCircleE.Enabled = True
                 'Start generating circle enemies.
-            Case > 200
-                If toolTips.moveShow Then
-                    lblToolTip.Text = toolTips.moveText
-                    lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
-                    lblToolTip.Visible = True
-                ElseIf toolTips.moveDelay = 0 Then
-                    lblToolTip.Visible = False
-                    toolTips.moveDelay = tickCount
-                End If
-                If Not toolTips.moveShow And toolTips.shotShow And tickCount > (toolTips.moveDelay + 50) Then
-                    lblToolTip.Text = toolTips.shotText
-                    lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
-                    lblToolTip.Visible = True
-                ElseIf toolTips.shotDelay = 0 And Not toolTips.shotShow Then
-                    lblToolTip.Visible = False
-                    toolTips.shotDelay = tickCount
-                End If
-            Case 200
+            Case 600
+                Debug.WriteLine("500 tick")
+                addObject("square")
                 tmrSquareE.Enabled = True
                 'Start generating square enemies.
-            Case 500
+            Case 2000
+                Debug.WriteLine("1000 tick")
+                addObject("triangle")
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
-            Case 800
+            Case 5000
+                Debug.WriteLine("2500 tick")
+                addObject("boss")
                 tmrBoss.Enabled = True
                 'Start generating bosses in a new window.
             Case > 4000
@@ -269,6 +259,24 @@ Public Class frmGameMain
                 End If
                 'Increase the spawning rate of the enemies.
         End Select
+        If tickCount > 200 Then
+            If toolTips.moveShow Then
+                lblToolTip.Text = toolTips.moveText
+                lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+                lblToolTip.Visible = True
+            ElseIf toolTips.moveDelay = 0 Then
+                lblToolTip.Visible = False
+                toolTips.moveDelay = tickCount
+            End If
+            If Not toolTips.moveShow And toolTips.shotShow And tickCount > (toolTips.moveDelay + 50) Then
+                lblToolTip.Text = toolTips.shotText
+                lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+                lblToolTip.Visible = True
+            ElseIf toolTips.shotDelay = 0 And Not toolTips.shotShow Then
+                lblToolTip.Visible = False
+                toolTips.shotDelay = tickCount
+            End If
+        End If
         'Delay actions.
 
         If (tickCount Mod 1) = 0 Then
@@ -346,7 +354,7 @@ Public Class frmGameMain
     End Sub
     'Add a new square enemy.
     Private Sub tmrCircleE_Tick(sender As Object, e As EventArgs) Handles tmrCircleE.Tick
-        If Rnd() > 0.81 Then
+        If Rnd() > 0.9 Then
             addObject("circle")
         End If
         'Add circle enemies randomly
@@ -442,7 +450,14 @@ Public Class frmGameMain
         End If
     End Sub
     'Update the correct variables when a mouse button is released.
-
+    Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        e.Cancel = True
+    End Sub
+    'Do not allow the player to close the form.
+    Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+    End Sub
+    'Anchor lblToolTip to the bottom center of the window.
 
     '----------------------------------------------------------------------------- FUNCTIONS -----------------------------------------------------------------------------
     ''' <summary>
@@ -600,6 +615,7 @@ Public Class frmGameMain
     ''' <param name="type">is the type of the object that should be added.</param>
     ''' <returns></returns>
     Private Function addObject(type As String)
+        Debug.WriteLine("add new object: " + type)
         If type = "shot" Or type = "extraShot" Then
             If shots Is Nothing Then
                 shots = {New Tuple(Of Point, Point, Point, Integer)(New Point(player.loc(9).X, player.loc(9).Y), MousePosition, Nothing, If(type = "extraShot", 17, 10))}
@@ -952,25 +968,6 @@ Public Class frmGameMain
         frmStats.Show()
     End Function
     'End the game
-    ''' <summary>
-    ''' This function cancels the close event when the user tries to close the form.
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        e.Cancel = True
-    End Sub
-    'Do not allow the player to close the form.
-
-    ''' <summary>
-    ''' This function adjusts the location of <c>lblToolTip</c>
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
-    End Sub
-    'Anchor lblToolTip to the bottom center of the window.
 
 End Class
 
@@ -986,7 +983,7 @@ Public Class Player
 End Class
 'Class to store the player information.
 Public Class Enemy
-    Public Property type As String 'the type of the enemy (square).
+    Public Property type As String 'the type of the enemy.
     Public Property loc As Point 'the current location of the enemy (top-left).
     Public Property mov As Point 'the calculated x and y axis movements of the enemy.
     Public Property size As Integer 'the size of the enemy.

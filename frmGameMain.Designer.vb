@@ -87,7 +87,7 @@ Partial Class frmGameMain
         '
         'tmrBoss
         '
-        Me.tmrBoss.Interval = 4000
+        Me.tmrBoss.Interval = 1000
         '
         'lblToolTip
         '

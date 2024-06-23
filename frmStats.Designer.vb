@@ -79,9 +79,9 @@ Partial Class frmStats
         Me.lblTip1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer))
         Me.lblTip1.Location = New System.Drawing.Point(78, 313)
         Me.lblTip1.Name = "lblTip1"
-        Me.lblTip1.Size = New System.Drawing.Size(189, 13)
+        Me.lblTip1.Size = New System.Drawing.Size(124, 9)
         Me.lblTip1.TabIndex = 1
-        Me.lblTip1.Text = "Press the spacebar to return home."
+        Me.lblTip1.Text = "press the spacebar to return home"
         '
         'statTitle1
         '
@@ -408,6 +408,7 @@ Partial Class frmStats
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.lblTip1)
         Me.Controls.Add(Me.lblTitle)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
