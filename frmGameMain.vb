@@ -32,12 +32,14 @@ Public Class frmGameMain
     'Stores whether or not there is a shot available.
     Dim playerRadius As Integer = 100
     'How close the player has to be to the dropped XP to pick it up.
+    Public piercing As Boolean = False
+    'Whether or not the shots pass through the enemy.
 
     Dim gameBossForms() As frmGameBoss
     'The window to show to the boss in.
 
 
-    Dim playerSpeed As Integer = 3
+    Public playerSpeed As Integer = 2.9
     Dim objectSpeeds As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
         {"shot", 14},
         {"extraShot", 23},
@@ -741,20 +743,22 @@ Public Class frmGameMain
             For s As Integer = 0 To shots.Length - 1
                 Dim shot = shots(s)
                 If enemies(e).loc.X <= (shot.Item1.X + shot.Item3.X + 10) And (shot.Item1.X - shot.Item3.X - 10) <= (enemies(e).loc.X + enemies(e).size) And (enemies(e).loc.Y - shot.Item3.Y - 10) <= shot.Item1.Y And shot.Item1.Y <= (enemies(e).loc.Y + enemies(e).size + shot.Item3.X + 10) Then
-                    removeElement("shots", s)
-                    If enemies(e).health <= 1 Then
-                        dropXP(enemies(e).loc, enemies(e).XP)
-                        removeElement("enemies", e)
-                        frmStats.stats.enemiesKilled += 1
-                    Else
-                        enemies(e).health -= 1
-                        enemies(e).white = 10
+                    If Not piercing Then
+                        removeElement("shots", s)
                     End If
-                    'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
-                    enemyHit = True
-                    'Exit the for loops.
-                    Exit For
-                End If
+                    If enemies(e).health <= 1 Then
+                            dropXP(enemies(e).loc, enemies(e).XP)
+                            removeElement("enemies", e)
+                            frmStats.stats.enemiesKilled += 1
+                        Else
+                            enemies(e).health -= 1
+                            enemies(e).white = 10
+                        End If
+                        'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
+                        enemyHit = True
+                        'Exit the for loops.
+                        Exit For
+                    End If
             Next
             If enemyHit Then
                 Exit For
@@ -807,10 +811,7 @@ Public Class frmGameMain
     End Function
     'Check if the XP has been picked up by the player.
 
-    ''' <summary>
-    ''' This function checks if the player has collided with any of the enemies. If they have, the players health decreases.
-    ''' </summary>
-    ''' <returns></returns>
+
     Private Function checkPlayerCollisions()
         For e As Integer = 0 To enemies.Length - 1
             Dim enemy = enemies(e)

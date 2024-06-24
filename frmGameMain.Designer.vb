@@ -31,10 +31,10 @@ Partial Class frmGameMain
         Me.lblHealth = New System.Windows.Forms.Label()
         Me.tmrCircleE = New System.Windows.Forms.Timer(Me.components)
         Me.tmrTriE = New System.Windows.Forms.Timer(Me.components)
-        Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.tmrBoss = New System.Windows.Forms.Timer(Me.components)
         Me.lblToolTip = New System.Windows.Forms.Label()
         Me.lblXP = New System.Windows.Forms.Label()
+        Me.picCanvas = New System.Windows.Forms.PictureBox()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -45,7 +45,7 @@ Partial Class frmGameMain
         'tmrShot
         '
         Me.tmrShot.Enabled = True
-        Me.tmrShot.Interval = 700
+        Me.tmrShot.Interval = 1100
         '
         'tmrSquareE
         '
@@ -60,7 +60,7 @@ Partial Class frmGameMain
         Me.lblHealth.AutoSize = True
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(303, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(295, 9)
         Me.lblHealth.Name = "lblHealth"
         Me.lblHealth.Size = New System.Drawing.Size(62, 24)
         Me.lblHealth.TabIndex = 1
@@ -74,15 +74,6 @@ Partial Class frmGameMain
         'tmrTriE
         '
         Me.tmrTriE.Interval = 3000
-        '
-        'picCanvas
-        '
-        Me.picCanvas.BackColor = System.Drawing.Color.Transparent
-        Me.picCanvas.Location = New System.Drawing.Point(1, 0)
-        Me.picCanvas.Name = "picCanvas"
-        Me.picCanvas.Size = New System.Drawing.Size(43690, 43690)
-        Me.picCanvas.TabIndex = 0
-        Me.picCanvas.TabStop = False
         '
         'tmrBoss
         '
@@ -112,6 +103,15 @@ Partial Class frmGameMain
         Me.lblXP.TabIndex = 3
         Me.lblXP.Text = "0"
         Me.lblXP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'picCanvas
+        '
+        Me.picCanvas.BackColor = System.Drawing.Color.Transparent
+        Me.picCanvas.Location = New System.Drawing.Point(1, 0)
+        Me.picCanvas.Name = "picCanvas"
+        Me.picCanvas.Size = New System.Drawing.Size(43690, 43690)
+        Me.picCanvas.TabIndex = 0
+        Me.picCanvas.TabStop = False
         '
         'frmGameMain
         '

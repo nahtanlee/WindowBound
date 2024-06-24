@@ -339,6 +339,20 @@ Public Class frmGameBoss
         Next
     End Function
     'Check if any of the boss shots have collided with the player.
+    ''' <summary>
+    ''' This function removes the shots if they have moved outside of the working screen area.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function cleanUpShots()
+        Dim screen = frmStart.selectedScreen.WorkingArea
+        For i As Integer = 0 To shots.Length - 1
+            Dim shot = shots(i)
+            If shot.Item1.X < screen.X Or shot.Item1.X > (screen.X + screen.Width) Or shot.Item1.Y < screen.Y Or shot.Item1.Y > (screen.Y + screen.Height) Then
+                removeShot(i)
+            End If
+        Next
+    End Function
+    'Remove the shot if it has moved outside of the screen.
 
     ''' <summary>
     ''' This function removes the shot at index <paramref name="index"/> and redimensions the array to one smaller.

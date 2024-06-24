@@ -36,7 +36,7 @@ Partial Class frmGameBoss
         '
         'tmrShot
         '
-        Me.tmrShot.Interval = 1600
+        Me.tmrShot.Interval = 4000
         '
         'picCanvas
         '
