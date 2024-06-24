@@ -22,6 +22,7 @@ Partial Class frmGamePause
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmGamePause))
         Me.picBTNresume = New System.Windows.Forms.PictureBox()
         Me.picBTNhome = New System.Windows.Forms.PictureBox()
         Me.lblTitle1 = New System.Windows.Forms.Label()
@@ -86,6 +87,7 @@ Partial Class frmGamePause
         Me.Controls.Add(Me.picBTNresume)
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmGamePause"

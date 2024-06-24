@@ -30,7 +30,7 @@ Public Class frmGameMain
     'The time the game was started (used to calculate stats.timeAlive)
     Dim shotStore As Boolean = False
     'Stores whether or not there is a shot available.
-    Dim playerRadius As Integer = 100
+    Dim playerRadius As Integer = 80
     'How close the player has to be to the dropped XP to pick it up.
     Public piercing As Boolean = False
     'Whether or not the shots pass through the enemy.
@@ -56,7 +56,7 @@ Public Class frmGameMain
     }
     'Initialize a dictionary that stores {object type, max health}.
     Dim objectSizes As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"player", 14},
+        {"player", 8},
         {"shot", 10},
         {"extraShot", 17},
         {"circle", 16},
@@ -463,9 +463,11 @@ Public Class frmGameMain
     End Sub
     'Update the correct variables when a mouse button is released.
     Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        toggleGame(True)
+        frmGamePause.ShowDialog()
         e.Cancel = True
     End Sub
-    'Do not allow the player to close the form.
+    'Do not allow the player to close the form but instead pause the game.
     Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
     End Sub
@@ -815,7 +817,6 @@ Public Class frmGameMain
         Next
     End Function
     'Check if the XP has been picked up by the player.
-
 
     Private Function checkPlayerCollisions()
         For e As Integer = 0 To enemies.Length - 1

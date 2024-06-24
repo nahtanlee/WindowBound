@@ -8,13 +8,17 @@ Public Class frmGameShop
         {"+5 lives", 50},
         {"full health", 125},
         {"speed", 30},
-        {"piercing", 60}
+        {"piercing", 60},
+        {"shrink", 45},
+        {"shot interval", 75}
     }
     Dim available As Dictionary(Of String, Boolean) = New Dictionary(Of String, Boolean) From {
         {"+5 lives", True},
         {"full health", True},
         {"speed", True},
-        {"piercing", True}
+        {"piercing", True},
+        {"shrink", True},
+        {"shot interval", True}
     }
     'The prices of all the upgrades.
     Private Sub frmGameShop_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -56,6 +60,16 @@ Public Class frmGameShop
             picUpgrade4.Image = My.Resources.UPG_piercing_C
         Else
             picUpgrade4.Image = My.Resources.UPG_piercing_B
+        End If
+        If XP >= prices("shot interval") And available("shot interval") Then
+            picUpgrade5.Image = My.Resources.UPG_shot_interval_C
+        Else
+            picUpgrade5.Image = My.Resources.UPG_shot_interval_B
+        End If
+        If XP >= prices("shrink") And available("shrink") Then
+            picUpgrade6.Image = My.Resources.UPG_shrink_C
+        Else
+            picUpgrade6.Image = My.Resources.UPG_shrink_B
         End If
         'Show whether the upgrade is available or not.
     End Sub
@@ -105,10 +119,24 @@ Public Class frmGameShop
             frmGameMain.piercing = True
         End If
     End Sub
-    'Increase the players speed.
-
-
-
-
-
+    'Allow the shots to go through the enemies.
+    Private Sub picUpgrade5_Click(sender As Object, e As EventArgs) Handles picUpgrade5.Click
+        If XP >= prices("shot interval") And available("shot interval") Then
+            frmGameMain.tmrShot.Interval -= 300
+            If frmGameMain.tmrShot.Interval <= 200 Then
+                available("shot interval") = False
+            End If
+            'Stop the timer interval from being less than 200.
+        End If
+    End Sub
+    'Decrease the shot interval.
+    Private Sub picUpgrade6_Click(sender As Object, e As EventArgs) Handles picUpgrade6.Click
+        If XP >= prices("shrink") And available("shrink") Then
+            frmGameMain.player.size -= 3
+            If frmGameMain.player.size <= 8 Then
+                available("shrink") = False
+            End If
+        End If
+    End Sub
+    'Shrink the player.
 End Class

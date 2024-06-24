@@ -203,6 +203,46 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property UPG_shot_interval_B() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("UPG_shot_interval_B", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property UPG_shot_interval_C() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("UPG_shot_interval_C", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property UPG_shrink_B() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("UPG_shrink_B", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property UPG_shrink_C() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("UPG_shrink_C", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property UPG_speed_1_B() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("UPG_speed_1_B", resourceCulture)

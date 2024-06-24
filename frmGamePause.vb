@@ -34,4 +34,7 @@ Public Class frmGamePause
         End If
     End Sub
 
+    Private Sub lblTitle2_Click(sender As Object, e As EventArgs) Handles lblTitle2.Click
+
+    End Sub
 End Class

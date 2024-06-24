@@ -28,16 +28,20 @@ Partial Class frmGameShop
         Me.tmrTick = New System.Windows.Forms.Timer(Me.components)
         Me.lblTip1 = New System.Windows.Forms.Label()
         Me.lblXP = New System.Windows.Forms.Label()
+        Me.picUpgrade6 = New System.Windows.Forms.PictureBox()
+        Me.picUpgrade5 = New System.Windows.Forms.PictureBox()
+        Me.picUpgrade4 = New System.Windows.Forms.PictureBox()
         Me.picUpgrade3 = New System.Windows.Forms.PictureBox()
         Me.picCanvas = New System.Windows.Forms.PictureBox()
         Me.picUpgrade2 = New System.Windows.Forms.PictureBox()
         Me.picUpgrade1 = New System.Windows.Forms.PictureBox()
-        Me.picUpgrade4 = New System.Windows.Forms.PictureBox()
+        CType(Me.picUpgrade6, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picUpgrade5, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picUpgrade4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picUpgrade3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picUpgrade2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picUpgrade1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.picUpgrade4, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -46,7 +50,7 @@ Partial Class frmGameShop
         Me.lblTitle.BackColor = System.Drawing.Color.Transparent
         Me.lblTitle.Font = New System.Drawing.Font("Presario", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTitle.ForeColor = System.Drawing.Color.White
-        Me.lblTitle.Location = New System.Drawing.Point(106, 9)
+        Me.lblTitle.Location = New System.Drawing.Point(178, 9)
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(133, 38)
         Me.lblTitle.TabIndex = 1
@@ -63,7 +67,7 @@ Partial Class frmGameShop
         Me.lblTip1.AutoSize = True
         Me.lblTip1.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTip1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer))
-        Me.lblTip1.Location = New System.Drawing.Point(61, 440)
+        Me.lblTip1.Location = New System.Drawing.Point(139, 425)
         Me.lblTip1.Name = "lblTip1"
         Me.lblTip1.Size = New System.Drawing.Size(211, 13)
         Me.lblTip1.TabIndex = 3
@@ -80,6 +84,39 @@ Partial Class frmGameShop
         Me.lblXP.TabIndex = 6
         Me.lblXP.Text = "0"
         Me.lblXP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'picUpgrade6
+        '
+        Me.picUpgrade6.Image = Global.WindowBound.My.Resources.Resources.UPG_shrink_B
+        Me.picUpgrade6.InitialImage = Global.WindowBound.My.Resources.Resources.UPG__5_lives_B
+        Me.picUpgrade6.Location = New System.Drawing.Point(328, 244)
+        Me.picUpgrade6.Name = "picUpgrade6"
+        Me.picUpgrade6.Size = New System.Drawing.Size(134, 165)
+        Me.picUpgrade6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picUpgrade6.TabIndex = 10
+        Me.picUpgrade6.TabStop = False
+        '
+        'picUpgrade5
+        '
+        Me.picUpgrade5.Image = Global.WindowBound.My.Resources.Resources.UPG_shot_interval_B
+        Me.picUpgrade5.InitialImage = Global.WindowBound.My.Resources.Resources.UPG__5_lives_B
+        Me.picUpgrade5.Location = New System.Drawing.Point(328, 64)
+        Me.picUpgrade5.Name = "picUpgrade5"
+        Me.picUpgrade5.Size = New System.Drawing.Size(134, 165)
+        Me.picUpgrade5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picUpgrade5.TabIndex = 9
+        Me.picUpgrade5.TabStop = False
+        '
+        'picUpgrade4
+        '
+        Me.picUpgrade4.Image = Global.WindowBound.My.Resources.Resources.UPG_piercing_B
+        Me.picUpgrade4.InitialImage = Global.WindowBound.My.Resources.Resources.UPG_piercing_B
+        Me.picUpgrade4.Location = New System.Drawing.Point(177, 244)
+        Me.picUpgrade4.Name = "picUpgrade4"
+        Me.picUpgrade4.Size = New System.Drawing.Size(134, 165)
+        Me.picUpgrade4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picUpgrade4.TabIndex = 8
+        Me.picUpgrade4.TabStop = False
         '
         'picUpgrade3
         '
@@ -122,23 +159,14 @@ Partial Class frmGameShop
         Me.picUpgrade1.TabIndex = 2
         Me.picUpgrade1.TabStop = False
         '
-        'picUpgrade4
-        '
-        Me.picUpgrade4.Image = Global.WindowBound.My.Resources.Resources.UPG_piercing_B
-        Me.picUpgrade4.InitialImage = Global.WindowBound.My.Resources.Resources.UPG_piercing_B
-        Me.picUpgrade4.Location = New System.Drawing.Point(177, 244)
-        Me.picUpgrade4.Name = "picUpgrade4"
-        Me.picUpgrade4.Size = New System.Drawing.Size(134, 165)
-        Me.picUpgrade4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picUpgrade4.TabIndex = 8
-        Me.picUpgrade4.TabStop = False
-        '
         'frmGameShop
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(332, 462)
+        Me.ClientSize = New System.Drawing.Size(488, 447)
+        Me.Controls.Add(Me.picUpgrade6)
+        Me.Controls.Add(Me.picUpgrade5)
         Me.Controls.Add(Me.picUpgrade4)
         Me.Controls.Add(Me.picUpgrade3)
         Me.Controls.Add(Me.lblXP)
@@ -155,11 +183,13 @@ Partial Class frmGameShop
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Shop"
         Me.TopMost = True
+        CType(Me.picUpgrade6, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picUpgrade5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picUpgrade4, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picUpgrade3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picCanvas, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picUpgrade2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picUpgrade1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.picUpgrade4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -174,4 +204,6 @@ Partial Class frmGameShop
     Friend WithEvents lblXP As Label
     Friend WithEvents picUpgrade3 As PictureBox
     Friend WithEvents picUpgrade4 As PictureBox
+    Friend WithEvents picUpgrade5 As PictureBox
+    Friend WithEvents picUpgrade6 As PictureBox
 End Class
