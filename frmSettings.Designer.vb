@@ -31,9 +31,13 @@ Partial Class frmSettings
         Me.picClear = New System.Windows.Forms.PictureBox()
         Me.picAutoFireTgl = New System.Windows.Forms.PictureBox()
         Me.picBackground = New System.Windows.Forms.PictureBox()
+        Me.lblTransparentDesc = New System.Windows.Forms.Label()
+        Me.picTransparentTgl = New System.Windows.Forms.PictureBox()
+        Me.lblTransparentTitle = New System.Windows.Forms.Label()
         CType(Me.picClear, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picAutoFireTgl, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBackground, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picTransparentTgl, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -65,7 +69,7 @@ Partial Class frmSettings
         Me.lblAutoFireDesc.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.lblAutoFireDesc.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAutoFireDesc.ForeColor = System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer))
-        Me.lblAutoFireDesc.Location = New System.Drawing.Point(40, 126)
+        Me.lblAutoFireDesc.Location = New System.Drawing.Point(41, 126)
         Me.lblAutoFireDesc.Name = "lblAutoFireDesc"
         Me.lblAutoFireDesc.Size = New System.Drawing.Size(191, 26)
         Me.lblAutoFireDesc.TabIndex = 4
@@ -76,7 +80,7 @@ Partial Class frmSettings
         Me.lblClearDesc.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.lblClearDesc.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblClearDesc.ForeColor = System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer))
-        Me.lblClearDesc.Location = New System.Drawing.Point(40, 207)
+        Me.lblClearDesc.Location = New System.Drawing.Point(41, 282)
         Me.lblClearDesc.Name = "lblClearDesc"
         Me.lblClearDesc.Size = New System.Drawing.Size(191, 26)
         Me.lblClearDesc.TabIndex = 7
@@ -88,7 +92,7 @@ Partial Class frmSettings
         Me.lblClearTitle.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.lblClearTitle.Font = New System.Drawing.Font("Presario", 14.0!)
         Me.lblClearTitle.ForeColor = System.Drawing.Color.White
-        Me.lblClearTitle.Location = New System.Drawing.Point(39, 179)
+        Me.lblClearTitle.Location = New System.Drawing.Point(39, 254)
         Me.lblClearTitle.Name = "lblClearTitle"
         Me.lblClearTitle.Size = New System.Drawing.Size(164, 21)
         Me.lblClearTitle.TabIndex = 5
@@ -98,7 +102,7 @@ Partial Class frmSettings
         '
         Me.picClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.picClear.Image = Global.WindowBound.My.Resources.Resources.BTN_clear_C
-        Me.picClear.Location = New System.Drawing.Point(282, 188)
+        Me.picClear.Location = New System.Drawing.Point(282, 263)
         Me.picClear.Name = "picClear"
         Me.picClear.Size = New System.Drawing.Size(38, 41)
         Me.picClear.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -120,19 +124,56 @@ Partial Class frmSettings
         '
         Me.picBackground.Image = Global.WindowBound.My.Resources.Resources.BGR_settings
         Me.picBackground.InitialImage = Global.WindowBound.My.Resources.Resources.BGR_settings
-        Me.picBackground.Location = New System.Drawing.Point(23, 58)
+        Me.picBackground.Location = New System.Drawing.Point(23, 74)
         Me.picBackground.Name = "picBackground"
-        Me.picBackground.Size = New System.Drawing.Size(330, 216)
+        Me.picBackground.Size = New System.Drawing.Size(330, 260)
         Me.picBackground.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picBackground.TabIndex = 8
         Me.picBackground.TabStop = False
+        '
+        'lblTransparentDesc
+        '
+        Me.lblTransparentDesc.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.lblTransparentDesc.Font = New System.Drawing.Font("Varela Round", 8.249999!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTransparentDesc.ForeColor = System.Drawing.Color.FromArgb(CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer), CType(CType(217, Byte), Integer))
+        Me.lblTransparentDesc.Location = New System.Drawing.Point(41, 204)
+        Me.lblTransparentDesc.Name = "lblTransparentDesc"
+        Me.lblTransparentDesc.Size = New System.Drawing.Size(191, 26)
+        Me.lblTransparentDesc.TabIndex = 11
+        Me.lblTransparentDesc.Text = "Make the black backrgound of the game transparent."
+        '
+        'picTransparentTgl
+        '
+        Me.picTransparentTgl.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.picTransparentTgl.Image = Global.WindowBound.My.Resources.Resources.TGL_false
+        Me.picTransparentTgl.Location = New System.Drawing.Point(282, 189)
+        Me.picTransparentTgl.Name = "picTransparentTgl"
+        Me.picTransparentTgl.Size = New System.Drawing.Size(49, 27)
+        Me.picTransparentTgl.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picTransparentTgl.TabIndex = 10
+        Me.picTransparentTgl.TabStop = False
+        '
+        'lblTransparentTitle
+        '
+        Me.lblTransparentTitle.AutoSize = True
+        Me.lblTransparentTitle.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.lblTransparentTitle.Font = New System.Drawing.Font("Presario", 14.0!)
+        Me.lblTransparentTitle.ForeColor = System.Drawing.Color.White
+        Me.lblTransparentTitle.Location = New System.Drawing.Point(39, 176)
+        Me.lblTransparentTitle.Name = "lblTransparentTitle"
+        Me.lblTransparentTitle.Size = New System.Drawing.Size(200, 21)
+        Me.lblTransparentTitle.TabIndex = 9
+        Me.lblTransparentTitle.Text = "Transparency"
         '
         'frmSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(376, 280)
+        Me.ClientSize = New System.Drawing.Size(376, 356)
+        Me.Controls.Add(Me.lblTransparentDesc)
+        Me.Controls.Add(Me.picTransparentTgl)
+        Me.Controls.Add(Me.lblTransparentTitle)
         Me.Controls.Add(Me.lblClearDesc)
         Me.Controls.Add(Me.picClear)
         Me.Controls.Add(Me.lblClearTitle)
@@ -152,6 +193,7 @@ Partial Class frmSettings
         CType(Me.picClear, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picAutoFireTgl, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBackground, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picTransparentTgl, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -165,4 +207,7 @@ Partial Class frmSettings
     Friend WithEvents picClear As PictureBox
     Friend WithEvents lblClearTitle As Label
     Friend WithEvents picBackground As PictureBox
+    Friend WithEvents lblTransparentDesc As Label
+    Friend WithEvents picTransparentTgl As PictureBox
+    Friend WithEvents lblTransparentTitle As Label
 End Class

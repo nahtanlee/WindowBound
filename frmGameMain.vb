@@ -36,6 +36,8 @@ Public Class frmGameMain
     'Whether or not the shots pass through the enemy.
     Public autoFire As Boolean = True
     'Whether auto fire is on.
+    Public transparentBgr As Boolean = False
+    'Whether the background is black or transparent.
 
     Dim gameBossForms() As frmGameBoss
     'The window to show to the boss in.
@@ -92,6 +94,13 @@ Public Class frmGameMain
         formMainBackground.Show()
         frmGameBackground.Hide()
         'Switch the background forms.
+
+        If transparentBgr Then
+            Me.TransparencyKey = Color.Black
+        Else
+            Me.TransparencyKey = Nothing
+        End If
+        'Set the background.
 
         lblHealth.Font = New Font(frmStart.fonts.Families(2), 15.75, FontStyle.Bold)
         lblToolTip.Font = New Font(frmStart.fonts.Families(0), 9, FontStyle.Regular)
@@ -252,7 +261,7 @@ Public Class frmGameMain
                 addObject("triangle")
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
-            Case 10000
+            Case 20000
                 Debug.WriteLine("2500 tick")
                 addObject("boss")
                 tmrBoss.Enabled = True

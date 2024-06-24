@@ -29,6 +29,13 @@ Public Class frmGameBoss
 
     '------------------------------------------------------------------------------- EVENTS -------------------------------------------------------------------------------
     Private Sub frmGameBoss_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If frmGameMain.transparentBgr Then
+            Me.TransparencyKey = Color.Black
+        Else
+            Me.TransparencyKey = Nothing
+        End If
+        'Set the background.
+
         bossLoc = PointToScreen(New Point(Me.Width / 2 - 15, Me.Height / 2 - 15))
         calcOctagon()
         tmrTick.Enabled = True

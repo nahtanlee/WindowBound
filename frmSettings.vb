@@ -9,6 +9,10 @@ Public Class frmSettings
         lblAutoFireTitle.ForeColor = colors.primary
         lblAutoFireDesc.Font = New Font(frmStart.fonts.Families(0), 8.25)
         lblAutoFireDesc.ForeColor = colors.secondary
+        lblTransparentTitle.Font = New Font(frmStart.fonts.Families(1), 14)
+        lblTransparentTitle.ForeColor = colors.primary
+        lblTransparentDesc.Font = New Font(frmStart.fonts.Families(0), 8.25)
+        lblTransparentDesc.ForeColor = colors.secondary
         lblClearTitle.Font = New Font(frmStart.fonts.Families(1), 14)
         lblClearTitle.ForeColor = colors.primary
         lblClearDesc.Font = New Font(frmStart.fonts.Families(0), 8.25)
@@ -19,6 +23,11 @@ Public Class frmSettings
             picAutoFireTgl.Image = My.Resources.TGL_true
         Else
             picAutoFireTgl.Image = My.Resources.TGL_false
+        End If
+        If frmGameMain.transparentBgr Then
+            picTransparentTgl.Image = My.Resources.TGL_true
+        Else
+            picTransparentTgl.Image = My.Resources.TGL_false
         End If
         picClear.Image = My.Resources.BTN_clear_C
     End Sub
@@ -32,7 +41,16 @@ Public Class frmSettings
         End If
     End Sub
     'Toggle auto fire on or off.
-
+    Private Sub picTransparentTgl_Click(sender As Object, e As EventArgs) Handles picTransparentTgl.Click
+        If frmGameMain.transparentBgr Then
+            picTransparentTgl.Image = My.Resources.TGL_false
+            frmGameMain.transparentBgr = False
+        Else
+            picTransparentTgl.Image = My.Resources.TGL_true
+            frmGameMain.transparentBgr = True
+        End If
+    End Sub
+    'Toggle the transparent background
     Private Sub picClear_Click(sender As Object, e As EventArgs) Handles picClear.Click
         picClear.Image = My.Resources.BTN_clear_B
         Dim bestStatsFileWrite As StreamWriter = File.CreateText("Data\bestStats.txt")
