@@ -23,33 +23,13 @@ Partial Class frmGamePause
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmGamePause))
-        Me.picBTNresume = New System.Windows.Forms.PictureBox()
-        Me.picBTNhome = New System.Windows.Forms.PictureBox()
         Me.lblTitle1 = New System.Windows.Forms.Label()
         Me.lblTitle2 = New System.Windows.Forms.Label()
-        CType(Me.picBTNresume, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.picBTNhome = New System.Windows.Forms.PictureBox()
+        Me.picBTNresume = New System.Windows.Forms.PictureBox()
         CType(Me.picBTNhome, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picBTNresume, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'picBTNresume
-        '
-        Me.picBTNresume.Image = Global.WindowBound.My.Resources.Resources.BTN_resume
-        Me.picBTNresume.Location = New System.Drawing.Point(110, 145)
-        Me.picBTNresume.Name = "picBTNresume"
-        Me.picBTNresume.Size = New System.Drawing.Size(133, 26)
-        Me.picBTNresume.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picBTNresume.TabIndex = 2
-        Me.picBTNresume.TabStop = False
-        '
-        'picBTNhome
-        '
-        Me.picBTNhome.Image = Global.WindowBound.My.Resources.Resources.BTN_home
-        Me.picBTNhome.Location = New System.Drawing.Point(110, 177)
-        Me.picBTNhome.Name = "picBTNhome"
-        Me.picBTNhome.Size = New System.Drawing.Size(133, 26)
-        Me.picBTNhome.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picBTNhome.TabIndex = 3
-        Me.picBTNhome.TabStop = False
         '
         'lblTitle1
         '
@@ -57,7 +37,7 @@ Partial Class frmGamePause
         Me.lblTitle1.BackColor = System.Drawing.Color.Transparent
         Me.lblTitle1.Font = New System.Drawing.Font("Presario", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTitle1.ForeColor = System.Drawing.Color.White
-        Me.lblTitle1.Location = New System.Drawing.Point(105, 21)
+        Me.lblTitle1.Location = New System.Drawing.Point(64, 23)
         Me.lblTitle1.Name = "lblTitle1"
         Me.lblTitle1.Size = New System.Drawing.Size(140, 38)
         Me.lblTitle1.TabIndex = 4
@@ -69,18 +49,38 @@ Partial Class frmGamePause
         Me.lblTitle2.BackColor = System.Drawing.Color.Transparent
         Me.lblTitle2.Font = New System.Drawing.Font("Presario", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTitle2.ForeColor = System.Drawing.Color.White
-        Me.lblTitle2.Location = New System.Drawing.Point(79, 71)
+        Me.lblTitle2.Location = New System.Drawing.Point(38, 73)
         Me.lblTitle2.Name = "lblTitle2"
         Me.lblTitle2.Size = New System.Drawing.Size(191, 38)
         Me.lblTitle2.TabIndex = 5
         Me.lblTitle2.Text = "PAUSED"
+        '
+        'picBTNhome
+        '
+        Me.picBTNhome.Image = Global.WindowBound.My.Resources.Resources.BTN_home
+        Me.picBTNhome.Location = New System.Drawing.Point(69, 179)
+        Me.picBTNhome.Name = "picBTNhome"
+        Me.picBTNhome.Size = New System.Drawing.Size(133, 26)
+        Me.picBTNhome.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picBTNhome.TabIndex = 3
+        Me.picBTNhome.TabStop = False
+        '
+        'picBTNresume
+        '
+        Me.picBTNresume.Image = Global.WindowBound.My.Resources.Resources.BTN_resume
+        Me.picBTNresume.Location = New System.Drawing.Point(69, 147)
+        Me.picBTNresume.Name = "picBTNresume"
+        Me.picBTNresume.Size = New System.Drawing.Size(133, 26)
+        Me.picBTNresume.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picBTNresume.TabIndex = 2
+        Me.picBTNresume.TabStop = False
         '
         'frmGamePause
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(359, 226)
+        Me.ClientSize = New System.Drawing.Size(269, 226)
         Me.Controls.Add(Me.lblTitle2)
         Me.Controls.Add(Me.lblTitle1)
         Me.Controls.Add(Me.picBTNhome)
@@ -94,8 +94,8 @@ Partial Class frmGamePause
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Game Paused"
         Me.TopMost = True
-        CType(Me.picBTNresume, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBTNhome, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picBTNresume, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

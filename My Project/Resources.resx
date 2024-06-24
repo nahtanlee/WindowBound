@@ -121,8 +121,17 @@
   <data name="AppIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\AppIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BGR_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\BGR_settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BGR_stats" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\BGR_stats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BTN_clear_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\BTN_clear_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BTN_clear_C" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\BTN_clear_C.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BTN_exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\BTN_exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -141,6 +150,12 @@
   </data>
   <data name="ICN_star" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\ICN_star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TGL_false" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\TGL_false.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TGL_true" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\TGL_true.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="UPG_full_lives_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\UPG_full_lives_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

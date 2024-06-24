@@ -34,6 +34,8 @@ Public Class frmGameMain
     'How close the player has to be to the dropped XP to pick it up.
     Public piercing As Boolean = False
     'Whether or not the shots pass through the enemy.
+    Public autoFire As Boolean = False
+    'Whether auto fire is on.
 
     Dim gameBossForms() As frmGameBoss
     'The window to show to the boss in.
@@ -213,6 +215,16 @@ Public Class frmGameMain
         'Draw the player circle (circle + square).
     End Sub
     'Repaint all object on the canvas.
+    Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        toggleGame(True)
+        frmGamePause.ShowDialog()
+        e.Cancel = True
+    End Sub
+    'Do not allow the player to close the form but instead pause the game.
+    Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+    End Sub
+    'Anchor lblToolTip to the bottom center of the window.
 
     '---- TIMERS ----
     Private Sub tmrTick_Tick(sender As Object, e As EventArgs) Handles tmrTick.Tick
@@ -440,38 +452,32 @@ Public Class frmGameMain
     'Update the correct variables when a key is released.
     Public Sub picCanvas_MouseDown(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseDown, formMainBackground.MouseDown
         If e.Button = MouseButtons.Left Then
-            pressedKeys.mouseLeft = True
-            If shotStore Then
-                addObject("shot")
-                frmStats.stats.shotsFired += 1
-                tmrShot.Enabled = False
-                tmrShot.Enabled = True
-                'Reset the timer to ensure that the interval starts at 0 again.
-                shotStore = False
+            If autoFire Then
+                pressedKeys.mouseLeft = True
             End If
-        ElseIf e.Button = MouseButtons.Right Then
-            pressedKeys.mouseRight = True
+            If shotStore Then
+                    addObject("shot")
+                    frmStats.stats.shotsFired += 1
+                    tmrShot.Enabled = False
+                    tmrShot.Enabled = True
+                    'Reset the timer to ensure that the interval starts at 0 again.
+                    shotStore = False
+                End If
+            ElseIf e.Button = MouseButtons.Right Then
+                pressedKeys.mouseRight = True
         End If
     End Sub
     'Update the correct variables when a mouse button is pressed.
     Private Sub picCanvas_MouseUp(sender As Object, e As MouseEventArgs) Handles picCanvas.MouseUp, formMainBackground.MouseUp
         If e.Button = MouseButtons.Left Then
-            pressedKeys.mouseLeft = False
+            If autoFire Then
+                pressedKeys.mouseLeft = False
+            End If
         ElseIf e.Button = MouseButtons.Right Then
-            pressedKeys.mouseRight = False
+                pressedKeys.mouseRight = False
         End If
     End Sub
     'Update the correct variables when a mouse button is released.
-    Private Sub frmGameMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        toggleGame(True)
-        frmGamePause.ShowDialog()
-        e.Cancel = True
-    End Sub
-    'Do not allow the player to close the form but instead pause the game.
-    Private Sub frmGameMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
-    End Sub
-    'Anchor lblToolTip to the bottom center of the window.
 
     '----------------------------------------------------------------------------- FUNCTIONS -----------------------------------------------------------------------------
     ''' <summary>

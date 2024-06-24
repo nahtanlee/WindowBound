@@ -80,7 +80,9 @@ Public Class frmStart
         'play the out animation
     End Sub
     'Start a new game
-
+    Private Sub picBTNsettings_Click(sender As Object, e As EventArgs) Handles picBTNsettings.Click
+        frmSettings.ShowDialog()
+    End Sub
     Private Sub picBTNexit_Click(sender As Object, e As EventArgs) Handles picBTNexit.Click
         End
     End Sub

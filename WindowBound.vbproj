@@ -171,9 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +210,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Assets\BGR_settings.png" />
+    <None Include="Assets\BTN_clear_C.png" />
+    <None Include="Assets\BTN_clear_B.png" />
+    <None Include="Assets\TGL_false.png" />
+    <None Include="Assets\TGL_true.png" />
     <None Include="Assets\UPG_shot_interval_C.png" />
     <None Include="Assets\UPG_shot_interval_B.png" />
     <None Include="Assets\UPG_shrink_C.png" />

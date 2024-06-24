@@ -339,6 +339,7 @@ Public Class frmGameBoss
         Next
     End Function
     'Check if any of the boss shots have collided with the player.
+
     ''' <summary>
     ''' This function removes the shots if they have moved outside of the working screen area.
     ''' </summary>
