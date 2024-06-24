@@ -192,6 +192,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Assets\UPG_full_lives_B.png" />
+    <None Include="Assets\UPG_full_lives_C.png" />
     <None Include="Assets\UPG_+5_lives_C.png" />
     <None Include="Assets\UPG_+5_lives_B.png" />
     <None Include="Assets\ICN_star.png" />

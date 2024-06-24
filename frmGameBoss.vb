@@ -205,6 +205,23 @@ Public Class frmGameBoss
             e.Graphics.FillRectangle(brush, New Rectangle(PointToClient(New Point(frmGameMain.player.loc(9).X - (frmGameMain.player.size / 2) + (frmGameMain.player.size / 20), frmGameMain.player.loc(9).Y - (frmGameMain.player.size / 2) + (frmGameMain.player.size / 20))), New Size(frmGameMain.player.size - (frmGameMain.player.size / 10), frmGameMain.player.size - (frmGameMain.player.size / 10))))
         End Using
         'Draw the player circle (circle + square).
+        If frmGameMain.XPs IsNot Nothing Then
+            For i As Integer = 0 To (frmGameMain.XPs.Length - 1)
+                frmGameMain.XPs(i).loc = New Point(frmGameMain.XPs(i).loc.X + frmGameMain.XPs(i).mov.X, frmGameMain.XPs(i).loc.Y + frmGameMain.XPs(i).mov.Y)
+                Using pen As New SolidBrush(colors.purple)
+                    e.Graphics.FillEllipse(pen, New Rectangle(PointToClient(frmGameMain.XPs(i).loc), New Size(frmGameMain.XPs(i).size, frmGameMain.XPs(i).size)))
+                End Using
+                'Draw the dot.
+                If frmGameMain.XPs(i).mov <> New Point(0, 0) Then
+                    If frmGameMain.XPs(i).speed < 12 Then
+                        frmGameMain.XPs(i).speed += 0.8
+                    End If
+                    frmGameMain.XPs(i).mov = frmGameMain.calcMovePoint(frmGameMain.XPs(i).loc, frmGameMain.player.loc(9), frmGameMain.XPs(i).speed)
+                End If
+                'Update its movement, slowly increasing the speed.
+            Next
+        End If
+        'Draw the XP dots and update its position.
     End Sub
     'Paint all the objects on the canvas.
     Private Sub frmGameBoss_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus

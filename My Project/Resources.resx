@@ -136,6 +136,12 @@
   <data name="ICN_star" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\ICN_star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="UPG_full_lives_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\UPG_full_lives_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UPG_full_lives_C" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\UPG_full_lives_C.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="UPG__5_lives_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\UPG_+5_lives_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

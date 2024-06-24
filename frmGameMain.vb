@@ -259,6 +259,7 @@ Public Class frmGameMain
                 End If
                 'Increase the spawning rate of the enemies.
         End Select
+        'Delay actions.
         If tickCount > 200 Then
             If toolTips.moveShow Then
                 lblToolTip.Text = toolTips.moveText
@@ -277,7 +278,7 @@ Public Class frmGameMain
                 toolTips.shotDelay = tickCount
             End If
         End If
-        'Delay actions.
+        'Show tooltips progressively if needed.
 
         If (tickCount Mod 1) = 0 Then
             picCanvas.Invalidate()
@@ -412,6 +413,7 @@ Public Class frmGameMain
                 pressedKeys.right = True
             Case Keys.Space 'Open shop.
                 toggleGame(True)
+                toolTips.XPShow = False
                 frmGameShop.ShowDialog()
         End Select
     End Sub
@@ -789,6 +791,15 @@ Public Class frmGameMain
                 frmStats.stats.xpCollected += 1
                 player.XP += 1
                 lblXP.Text = player.XP
+                If Not toolTips.moveShow And Not toolTips.shotShow And tickCount > (toolTips.shotDelay + 50) And player.XP > 60 Then
+                    lblToolTip.Text = toolTips.XPText
+                    lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
+                    lblToolTip.Visible = True
+                ElseIf toolTips.XPDelay = 0 And Not toolTips.XPShow Then
+                    lblToolTip.Visible = False
+                    toolTips.XPDelay = tickCount
+                End If
+                'Show tooltip if needed.
                 Exit For
                 'Exit the loop.
             End If
@@ -972,6 +983,11 @@ Public Class frmGameMain
     End Function
     'End the game
 
+    ''' <summary>
+    ''' This function pauses or resumes the game by stopping all of the in-game timers.
+    ''' </summary>
+    ''' <param name="pause">whether or not the game is being paused or resumed.</param>
+    ''' <returns></returns>
     Public Function toggleGame(pause As Boolean)
         If pause Then
             tmrTick.Enabled = False
@@ -995,10 +1011,12 @@ Public Class frmGameMain
             tmrTriE.Enabled = True
             tmrSquareE.Enabled = True
             tmrBoss.Enabled = True
-            For Each bossForm In gameBossForms
-                bossForm.tmrShot.Enabled = True
-                bossForm.tmrTick.Enabled = True
-            Next
+            If gameBossForms IsNot Nothing Then
+                For Each bossForm In gameBossForms
+                    bossForm.tmrShot.Enabled = True
+                    bossForm.tmrTick.Enabled = True
+                Next
+            End If
         End If
     End Function
     'Pauses or resumes the game.
@@ -1085,5 +1103,8 @@ Public Class ToolTips
     Public Property shotText As String = "hold/click the left mouse button to shoot bullets" 'the text to display on the tooltip.
     Public Property shotShow As Boolean = True 'whether or not the move tooltip should be shown.
     Public Property shotDelay As Integer = 0 'the tick count that the shot tooltip was hidden to delay any consequent tooltips.
+    Public Property XPText As String = "press the spacebar to open the shop"
+    Public Property XPShow As Boolean = False
+    Public Property XPDelay As Integer = 0
 End Class
 'Class to store all of the tooltip information.
