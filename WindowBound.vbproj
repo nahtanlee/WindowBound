@@ -97,6 +97,12 @@
       <DependentUpon>frmGameMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmGamePause.Designer.vb">
+      <DependentUpon>frmGamePause.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmGamePause.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmGameShop.Designer.vb">
       <DependentUpon>frmGameShop.vb</DependentUpon>
     </Compile>
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmGameMain.resx">
       <DependentUpon>frmGameMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGamePause.resx">
+      <DependentUpon>frmGamePause.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmGameShop.resx">
       <DependentUpon>frmGameShop.vb</DependentUpon>
@@ -192,6 +201,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
+    <None Include="Assets\BTN_home.png" />
+    <None Include="Assets\BTN_resume.png" />
     <None Include="Assets\UPG_piercing_B.png" />
     <None Include="Assets\UPG_piercing_C.png" />
     <None Include="Assets\UPG_speed_1_C.png" />

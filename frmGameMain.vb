@@ -417,6 +417,9 @@ Public Class frmGameMain
                 toggleGame(True)
                 toolTips.XPShow = False
                 frmGameShop.ShowDialog()
+            Case Keys.Escape 'Pause the game
+                toggleGame(True)
+                frmGamePause.ShowDialog()
         End Select
     End Sub
     'Update the correct variables when a key is pressed.
