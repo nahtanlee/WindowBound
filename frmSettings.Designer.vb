@@ -98,9 +98,9 @@ Partial Class frmSettings
         '
         Me.picClear.BackColor = System.Drawing.Color.FromArgb(CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.picClear.Image = Global.WindowBound.My.Resources.Resources.BTN_clear_C
-        Me.picClear.Location = New System.Drawing.Point(282, 189)
+        Me.picClear.Location = New System.Drawing.Point(282, 188)
         Me.picClear.Name = "picClear"
-        Me.picClear.Size = New System.Drawing.Size(30, 41)
+        Me.picClear.Size = New System.Drawing.Size(38, 41)
         Me.picClear.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picClear.TabIndex = 6
         Me.picClear.TabStop = False
@@ -132,7 +132,7 @@ Partial Class frmSettings
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
-        Me.ClientSize = New System.Drawing.Size(376, 538)
+        Me.ClientSize = New System.Drawing.Size(376, 280)
         Me.Controls.Add(Me.lblClearDesc)
         Me.Controls.Add(Me.picClear)
         Me.Controls.Add(Me.lblClearTitle)

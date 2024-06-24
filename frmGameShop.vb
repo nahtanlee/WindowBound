@@ -76,12 +76,15 @@ Public Class frmGameShop
 
     Private Sub frmGameShop_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.KeyCode = Keys.Space Then
+            frmGameMain.lblXP.Text = frmGameMain.player.XP
             frmGameMain.toggleGame(False)
             Me.Hide()
             frmGameMain.Activate()
         End If
     End Sub
     Private Sub frmGameShop_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        frmGameMain.lblXP.Text = frmGameMain.player.XP
+
         frmGameMain.toggleGame(False)
         Me.Hide()
         frmGameMain.Activate()
@@ -90,7 +93,7 @@ Public Class frmGameShop
 
     Private Sub picUpgrade1_Click(sender As Object, e As EventArgs) Handles picUpgrade1.Click
         If XP >= prices("+5 lives") And available("+5 lives") Then
-            XP -= prices("+5 lives")
+            frmGameMain.player.XP -= prices("+5 lives")
             frmGameMain.player.maxHealth += 5
             frmGameMain.player.health += 5
             frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
@@ -99,7 +102,7 @@ Public Class frmGameShop
     'Add 5 lives.
     Private Sub picUpgrade2_Click(sender As Object, e As EventArgs) Handles picUpgrade2.Click
         If XP >= prices("full health") And available("full health") Then
-            XP -= prices("full health")
+            frmGameMain.player.XP -= prices("full health")
             frmGameMain.player.health = frmGameMain.player.maxHealth
             frmGameMain.lblHealth.Text = ($"{frmGameMain.player.health}/{frmGameMain.player.maxHealth}")
         End If
@@ -107,22 +110,23 @@ Public Class frmGameShop
     'Restore all lives to full.
     Private Sub picUpgrade3_Click(sender As Object, e As EventArgs) Handles picUpgrade3.Click
         If XP >= prices("speed") And available("speed") Then
-            XP -= prices("speed")
+            frmGameMain.player.XP -= prices("speed")
             frmGameMain.playerSpeed += 0.2
         End If
     End Sub
     'Increase the players speed.
     Private Sub picUpgrade4_Click(sender As Object, e As EventArgs) Handles picUpgrade4.Click
         If XP >= prices("piercing") And available("piercing") Then
+            frmGameMain.player.XP -= prices("piercing")
             available("piercing") = False
-            XP -= prices("piercing")
             frmGameMain.piercing = True
         End If
     End Sub
     'Allow the shots to go through the enemies.
     Private Sub picUpgrade5_Click(sender As Object, e As EventArgs) Handles picUpgrade5.Click
         If XP >= prices("shot interval") And available("shot interval") Then
-            frmGameMain.tmrShot.Interval -= 300
+            frmGameMain.tmrShot.Interval -= 250
+            frmGameMain.player.XP -= prices("shot interval")
             If frmGameMain.tmrShot.Interval <= 200 Then
                 available("shot interval") = False
             End If
@@ -132,6 +136,7 @@ Public Class frmGameShop
     'Decrease the shot interval.
     Private Sub picUpgrade6_Click(sender As Object, e As EventArgs) Handles picUpgrade6.Click
         If XP >= prices("shrink") And available("shrink") Then
+            frmGameMain.player.XP -= prices("shrink")
             frmGameMain.player.size -= 3
             If frmGameMain.player.size <= 8 Then
                 available("shrink") = False

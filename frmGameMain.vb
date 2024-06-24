@@ -34,7 +34,7 @@ Public Class frmGameMain
     'How close the player has to be to the dropped XP to pick it up.
     Public piercing As Boolean = False
     'Whether or not the shots pass through the enemy.
-    Public autoFire As Boolean = False
+    Public autoFire As Boolean = True
     'Whether auto fire is on.
 
     Dim gameBossForms() As frmGameBoss
@@ -58,7 +58,7 @@ Public Class frmGameMain
     }
     'Initialize a dictionary that stores {object type, max health}.
     Dim objectSizes As Dictionary(Of String, Integer) = New Dictionary(Of String, Integer) From {
-        {"player", 8},
+        {"player", 14},
         {"shot", 10},
         {"extraShot", 17},
         {"circle", 16},
@@ -132,11 +132,9 @@ Public Class frmGameMain
                 If boss.shots IsNot Nothing Then
                     For i As Integer = 0 To (boss.shots.Length - 1)
                         Dim shot = boss.shots(i)
-                        shot = New Tuple(Of Point, Point, Point, Integer)(New Point(shot.Item1.X + shot.Item3.X, shot.Item1.Y + shot.Item3.Y), shot.Item2, shot.Item3, shot.Item4)
                         Using pen As New Pen(colors.red, 2)
                             e.Graphics.DrawEllipse(pen, New Rectangle(PointToClient(shot.Item1).X, PointToClient(shot.Item1).Y, shot.Item4, shot.Item4))
                         End Using
-                        boss.shots(i) = shot
                     Next
                     'Draw each shot and update its position.
                 End If
@@ -254,7 +252,7 @@ Public Class frmGameMain
                 addObject("triangle")
                 tmrTriE.Enabled = True
                 'Start generating triangle enemies.
-            Case 5000
+            Case 10000
                 Debug.WriteLine("2500 tick")
                 addObject("boss")
                 tmrBoss.Enabled = True
@@ -385,7 +383,7 @@ Public Class frmGameMain
     End Sub
     'Add a new triangle enemy.
     Private Sub tmrBoss_Tick(sender As Object, e As EventArgs) Handles tmrBoss.Tick
-        If Rnd() > 0.52 And gameBossForms Is Nothing Then
+        If Rnd() > 0.3 And gameBossForms Is Nothing Then
             addObject("boss")
         End If
         'Add bosses randomly
@@ -760,18 +758,18 @@ Public Class frmGameMain
                         removeElement("shots", s)
                     End If
                     If enemies(e).health <= 1 Then
-                            dropXP(enemies(e).loc, enemies(e).XP)
-                            removeElement("enemies", e)
-                            frmStats.stats.enemiesKilled += 1
-                        Else
-                            enemies(e).health -= 1
-                            enemies(e).white = 10
-                        End If
-                        'Remove the enemy if it has 0 health, otherwise, lower the health and make it white. 
-                        enemyHit = True
-                        'Exit the for loops.
-                        Exit For
+                        dropXP(enemies(e).loc, enemies(e).XP)
+                        removeElement("enemies", e)
+                        frmStats.stats.enemiesKilled += 1
+                    Else
+                        enemies(e).health -= 1
+                        enemies(e).white = 10
                     End If
+                    'Remove the enemy If it has 0 health, otherwise, lower the health And make it white. 
+                    enemyHit = True
+                    'Exit the for loops.
+                    Exit For
+                End If
             Next
             If enemyHit Then
                 Exit For

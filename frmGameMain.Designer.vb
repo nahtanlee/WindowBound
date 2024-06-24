@@ -45,7 +45,7 @@ Partial Class frmGameMain
         'tmrShot
         '
         Me.tmrShot.Enabled = True
-        Me.tmrShot.Interval = 1100
+        Me.tmrShot.Interval = 950
         '
         'tmrSquareE
         '
@@ -60,7 +60,7 @@ Partial Class frmGameMain
         Me.lblHealth.AutoSize = True
         Me.lblHealth.Font = New System.Drawing.Font("Boldena", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblHealth.ForeColor = System.Drawing.Color.White
-        Me.lblHealth.Location = New System.Drawing.Point(295, 9)
+        Me.lblHealth.Location = New System.Drawing.Point(293, 9)
         Me.lblHealth.Name = "lblHealth"
         Me.lblHealth.Size = New System.Drawing.Size(62, 24)
         Me.lblHealth.TabIndex = 1
