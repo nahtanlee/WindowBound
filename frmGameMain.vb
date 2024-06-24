@@ -285,7 +285,7 @@ Public Class frmGameMain
         If (tickCount Mod 1) = 0 Then
             picCanvas.Invalidate()
         End If
-        'Redraw the canvas every second tick.
+        'Redraw the canvas every tick.
 
         If player.red > 0 Then
             player.red -= 1
@@ -335,6 +335,8 @@ Public Class frmGameMain
         End If
         'Check collisions between the window, shots, enemies, player and XP.
 
+        checkPlayerBounds()
+        'Ensure that the player doesn't leave the window.
         extendSides()
         'Resize the window accordingly.
     End Sub
@@ -823,9 +825,9 @@ Public Class frmGameMain
                 If Not hit Then
                     For enemyY As Integer = enemies(e).loc.Y To enemies(e).loc.Y + enemies(e).size
                         If ((player.loc(9).X - (player.size / 2)) < enemyX) And (enemyX < (player.loc(9).X + (player.size / 2))) And ((player.loc(9).Y - (player.size / 2)) < enemyY) And (enemyY < (player.loc(9).Y + (player.size / 2))) Then
-                            Dim move As Point = calcMovePoint(enemies(e).loc, player.loc(9))
+                            Dim move As Point = calcMovePoint(enemies(e).loc, player.loc(0))
                             enemies(e).loc = New Point(enemies(e).loc.X - (move.X * 35), enemies(e).loc.Y - (move.Y * 35))
-                            updatePlayerLoc(New Point(player.loc(0).X + (move.X * 35), player.loc(0).Y + (move.Y * 35)))
+                            updatePlayerLoc(New Point(player.loc(9).X + (move.X * 35), player.loc(9).Y + (move.Y * 35)))
                             'Move the enemy and player.
 
                             player.red = 10
@@ -849,6 +851,23 @@ Public Class frmGameMain
         Next
     End Function
     'Check if the player has collided with an enemy.
+
+    ''' <summary>
+    ''' This function checks to see if the player has exited the bounds of the window.
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function checkPlayerBounds()
+        If player.loc(9).X < (Me.Location.X - 10) Then
+            updatePlayerLoc(New Point(Me.Location.X + 20, player.loc(9).Y))
+        ElseIf player.loc(9).X > (Me.Location.X + Me.Width + 10) Then
+            updatePlayerLoc(New Point(Me.Location.X + Me.Width - 20, player.loc(9).Y))
+        ElseIf player.loc(9).Y < (Me.Location.Y - 10) Then
+            updatePlayerLoc(New Point(player.loc(9).X, Me.Location.Y + 20))
+        ElseIf player.loc(9).Y > (Me.Location.Y + Me.Height + 10) Then
+            updatePlayerLoc(New Point(player.loc(9).X, Me.Location.Y - Me.Height - 20))
+        End If
+    End Function
+    'Check if the window has been hit by a shot.
 
     ''' <summary>
     ''' This function checks to see if a shot fired by the player has collided with the edge of the window on either of the 4 sides and increases the <c>storedExtend</c> appropriately.
@@ -876,7 +895,7 @@ Public Class frmGameMain
             End If
         Next
     End Function
-    'Check if the window has been pickedUp by a shot.
+    'Check if the window has been hit by a shot.
 
     ''' <summary>
     ''' This function removes the element at index <paramref name="index"/> in <paramref name="arrayName"/> and redimensions the array to one smaller.

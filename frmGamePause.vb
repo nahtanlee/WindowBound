@@ -26,5 +26,12 @@ Public Class frmGamePause
         Application.Restart()
     End Sub
     'Go back home and end the game.
+    Private Sub frmGamePause_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            frmGameMain.toggleGame(False)
+            Me.Hide()
+            frmGameMain.Activate()
+        End If
+    End Sub
 
 End Class

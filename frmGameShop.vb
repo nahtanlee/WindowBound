@@ -61,9 +61,11 @@ Public Class frmGameShop
     End Sub
 
     Private Sub frmGameShop_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        frmGameMain.toggleGame(False)
-        Me.Hide()
-        frmGameMain.Activate()
+        If e.KeyCode = Keys.Space Then
+            frmGameMain.toggleGame(False)
+            Me.Hide()
+            frmGameMain.Activate()
+        End If
     End Sub
     Private Sub frmGameShop_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         frmGameMain.toggleGame(False)
