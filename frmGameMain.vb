@@ -815,7 +815,7 @@ Public Class frmGameMain
                 frmStats.stats.xpCollected += 1
                 player.XP += 1
                 lblXP.Text = player.XP
-                If Not toolTips.moveShow And Not toolTips.shotShow And tickCount > (toolTips.shotDelay + 50) And player.XP > 60 Then
+                If Not toolTips.moveShow And Not toolTips.shotShow And tickCount > (toolTips.shotDelay + 50) And player.XP > 25 Then
                     lblToolTip.Text = toolTips.XPText
                     lblToolTip.Left = (Me.Width / 2) - (lblToolTip.Width / 2)
                     lblToolTip.Visible = True
